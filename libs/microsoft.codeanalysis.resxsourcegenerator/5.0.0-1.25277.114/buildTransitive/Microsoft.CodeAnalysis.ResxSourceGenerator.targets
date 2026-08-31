@@ -1,0 +1,90 @@
+<Project>
+  <Target Name="AddGlobalAnalyzerConfigForPackage_MicrosoftCodeAnalysisResxSourceGenerator" BeforeTargets="CoreCompile" Condition="'$(SkipGlobalAnalyzerConfigForPackage)' != 'true'">
+    <!-- PropertyGroup to compute global analyzer config file to be used -->
+    <PropertyGroup>
+      <!-- Set the default analysis mode, if not set by the user -->
+      <_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator>$(AnalysisLevelSuffix)</_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator>
+      <_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator Condition="'$(_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator)' == ''">$(AnalysisMode)</_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator>
+      <_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator Condition="'$(_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator)' == 'AllEnabledByDefault'">All</_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator>
+      <_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator Condition="'$(_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator)' == 'AllDisabledByDefault'">None</_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator>
+      <_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator Condition="'$(_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator)' == ''">Default</_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator>
+
+      <!-- Default 'EffectiveCodeAnalysisTreatWarningsAsErrors' to 'CodeAnalysisTreatWarningsAsErrors' for escalating relevant code analysis warnings to errors. -->
+      <!-- We use a separate property to allow users to override 'CodeAnalysisTreatWarningsAsErrors' implementation from .NET7 or older SDK, which had a known issue: https://github.com/dotnet/roslyn-analyzers/issues/6281 -->
+      <EffectiveCodeAnalysisTreatWarningsAsErrors Condition="'$(EffectiveCodeAnalysisTreatWarningsAsErrors)' == ''">$(CodeAnalysisTreatWarningsAsErrors)</EffectiveCodeAnalysisTreatWarningsAsErrors>
+      <!-- Choose GlobalAnalyzerConfig file with '_warnaserror' suffix if 'EffectiveCodeAnalysisTreatWarningsAsErrors' is 'true'. -->
+      <_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator_WarnAsErrorSuffix Condition="'$(EffectiveCodeAnalysisTreatWarningsAsErrors)' == 'true'">_warnaserror</_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator_WarnAsErrorSuffix>
+
+      <!-- GlobalAnalyzerConfig file name based on user specified package version 'MicrosoftCodeAnalysisResxSourceGeneratorRulesVersion', if any. We replace '.' with '_' to map the version string to file name suffix. -->
+      <_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator Condition="'$(MicrosoftCodeAnalysisResxSourceGeneratorRulesVersion)' != ''">AnalysisLevel_$(MicrosoftCodeAnalysisResxSourceGeneratorRulesVersion.Replace(".","_"))_$(_GlobalAnalyzerConfigAnalysisMode_MicrosoftCodeAnalysisResxSourceGenerator)$(_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator_WarnAsErrorSuffix).globalconfig</_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator>
+      <_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator>$(_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator.ToLowerInvariant())</_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator>
+
+      <_GlobalAnalyzerConfigDir_MicrosoftCodeAnalysisResxSourceGenerator Condition="'$(_GlobalAnalyzerConfigDir_MicrosoftCodeAnalysisResxSourceGenerator)' == ''">$(MSBuildThisFileDirectory)config</_GlobalAnalyzerConfigDir_MicrosoftCodeAnalysisResxSourceGenerator>
+      <_GlobalAnalyzerConfigFile_MicrosoftCodeAnalysisResxSourceGenerator Condition="'$(_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator)' != ''">$(_GlobalAnalyzerConfigDir_MicrosoftCodeAnalysisResxSourceGenerator)\$(_GlobalAnalyzerConfigFileName_MicrosoftCodeAnalysisResxSourceGenerator)</_GlobalAnalyzerConfigFile_MicrosoftCodeAnalysisResxSourceGenerator>
+    </PropertyGroup>
+
+    <ItemGroup Condition="Exists('$(_GlobalAnalyzerConfigFile_MicrosoftCodeAnalysisResxSourceGenerator)')">
+      <EditorConfigFiles Include="$(_GlobalAnalyzerConfigFile_MicrosoftCodeAnalysisResxSourceGenerator)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- MSBuild properties to thread to the analyzers as options -->
+  <ItemGroup>
+    <CompilerVisibleProperty Include="TargetFramework" />
+    <CompilerVisibleProperty Include="TargetFrameworkIdentifier" />
+    <CompilerVisibleProperty Include="TargetFrameworkVersion" />
+    <CompilerVisibleProperty Include="TargetPlatformMinVersion" />
+    <CompilerVisibleProperty Include="UsingMicrosoftNETSdkWeb" />
+    <CompilerVisibleProperty Include="ProjectTypeGuids" />
+    <CompilerVisibleProperty Include="InvariantGlobalization" />
+    <CompilerVisibleProperty Include="PlatformNeutralAssembly" />
+    <CompilerVisibleProperty Include="EnforceExtendedAnalyzerRules" />
+  </ItemGroup>
+
+  <!-- MSBuild item metadata to thread to the analyzers as options -->
+  <PropertyGroup>
+    <_SupportedPlatformList>@(SupportedPlatform, ',')</_SupportedPlatformList>
+  </PropertyGroup>
+
+  <!-- MSBuild properties to thread to the analyzers as options -->
+  <ItemGroup>
+    <CompilerVisibleProperty Include="_SupportedPlatformList" />
+  </ItemGroup>
+
+  <!--
+    Design-time target to handle 'CodeAnalysisTreatWarningsAsErrors = false' for the CA rule ids implemented in this package.
+    Note that a similar 'WarningsNotAsErrors' property group is present in the generated props file to ensure this functionality on command line builds.
+  -->
+  <Target Name="_CodeAnalysisTreatWarningsAsErrors" BeforeTargets="CoreCompile" Condition="'$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true'">
+    <PropertyGroup>
+      <EffectiveCodeAnalysisTreatWarningsAsErrors Condition="'$(EffectiveCodeAnalysisTreatWarningsAsErrors)' == ''">$(CodeAnalysisTreatWarningsAsErrors)</EffectiveCodeAnalysisTreatWarningsAsErrors>
+      <WarningsNotAsErrors Condition="'$(EffectiveCodeAnalysisTreatWarningsAsErrors)' == 'false' and '$(TreatWarningsAsErrors)' == 'true'">$(WarningsNotAsErrors);$(CodeAnalysisRuleIds)</WarningsNotAsErrors>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Special handling for embedded resources to show as nested in Solution Explorer -->
+  <ItemGroup>
+    <!-- Localized embedded resources are just dependent on the parent RESX -->
+    <EmbeddedResource Update="**\*.??.resx;**\*.??-??.resx;**\*.??-????.resx" DependentUpon="$([System.IO.Path]::ChangeExtension($([System.IO.Path]::GetFileNameWithoutExtension(%(Identity))), '.resx'))" />
+  </ItemGroup>
+
+  <!-- Target to add all 'EmbeddedResource' files with '.resx' extension as analyzer additional files -->
+  <Target Name="AddAllResxFilesAsAdditionalFiles" DependsOnTargets="PrepareResourceNames" BeforeTargets="GenerateMSBuildEditorConfigFileCore;CoreCompile" Condition="'@(EmbeddedResource)' != '' AND '$(SkipAddAllResxFilesAsAdditionalFiles)' != 'true'">
+    <ItemGroup>
+      <EmbeddedResourceWithResxExtension Include="@(EmbeddedResource)" Condition="'%(Extension)' == '.resx'" />
+      <AdditionalFiles Include="@(EmbeddedResourceWithResxExtension)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Target to add 'EmbeddedResource' files with '.resx' extension and explicit- or implicit-GenerateSource as analyzer additional files. This only needs to run when SkipAddAllResxFilesAsAdditionalFiles is set to true.
+         Explicit GenerateSource: The embedded resource has GenerateSource="true"
+         Implicit GenerateSource: The embedded resource did not set GenerateSource, and also does not have WithCulture set to true
+  -->
+  <Target Name="AddGenerateSourceResxFilesAsAdditionalFiles" BeforeTargets="GenerateMSBuildEditorConfigFileCore;CoreCompile" Condition="'@(EmbeddedResource)' != '' AND '$(SkipAddAllResxFilesAsAdditionalFiles)' == 'true' AND '$(SkipAddGenerateSourceResxFilesAsAdditionalFiles)' != 'true'">
+    <ItemGroup>
+      <EmbeddedResourceWithResxExtensionAndGenerateSource Include="@(EmbeddedResource)" Condition="'%(Extension)' == '.resx' AND ('%(EmbeddedResource.GenerateSource)' == 'true' OR ('%(EmbeddedResource.GenerateSource)' != 'false' AND '%(EmbeddedResource.WithCulture)' != 'true'))" />
+      <AdditionalFiles Include="@(EmbeddedResourceWithResxExtensionAndGenerateSource)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

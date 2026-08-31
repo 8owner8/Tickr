@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tickr</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body class="loading">
+
+  <div class="startup-loader" id="startup-loader" role="status" aria-live="polite">
+    <div class="loader-ambient loader-ambient-one"></div>
+    <div class="loader-ambient loader-ambient-two"></div>
+    <div class="loader-content">
+      <div class="loader-logo-wrap">
+        <div class="loader-orbit"></div>
+        <img class="loader-logo" src="tickr-logo.jpg" alt="Tickr">
+      </div>
+      <div class="loader-brand">Tickr</div>
+      <div class="loader-tagline">Steam time manager</div>
+      <div class="loader-progress"><div class="loader-progress-bar"></div></div>
+      <div class="loader-status" id="startup-loader-status">Starting secure local services…</div>
+    </div>
+  </div>
+
+  <!-- Custom Titlebar -->
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-drag" id="titlebar-drag"></div>
+    <div class="titlebar-app">
+      <div class="titlebar-logo">
+        <img src="tickr-logo.jpg" alt="" onerror="this.style.display='none'">
+      </div>
+      <span class="titlebar-name">Tickr</span>
+    </div>
+    <div class="titlebar-controls">
+      <button class="tbtn tbtn-min" id="btn-tb-min" title="Minimize"></button>
+      <button class="tbtn tbtn-max" id="btn-tb-max" title="Maximize"></button>
+      <button class="tbtn tbtn-close" id="btn-tb-close" title="Close"></button>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span class="nav-label">Overview</span>
+        </button>
+        <button class="nav-item" data-tab="games">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg>
+          <span class="nav-label">Games</span>
+        </button>
+        <button class="nav-item" data-tab="twofa">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span class="nav-label">Authenticator</span>
+        </button>
+        <button class="nav-item" data-tab="redeemer">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <span class="nav-label">Keys</span>
+        </button>
+        <button class="nav-item" data-tab="terminal">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          <span class="nav-label">Console</span>
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-status">
+          <div class="status-indicator" id="sidebar-conn-dot"></div>
+          <span id="sidebar-conn-label">Connecting…</span>
+        </div>
+        <button class="btn-add-account" id="btn-add-bot">+ Add account</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+      <div class="stats-bar">
+        <div class="stat-chip">
+          <span class="stat-value" id="stat-bots-count">0</span>
+          <span class="stat-label">Accounts</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-chip">
+          <span class="stat-value" id="stat-cards-remaining">0</span>
+          <span class="stat-label">Games running</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-chip">
+          <span class="stat-value" id="stat-wallet-balance">0.00 €</span>
+          <span class="stat-label">Wallet</span>
+        </div>
+        <div class="stats-actions">
+          <button class="action-btn icon-btn" id="btn-refresh-data" title="Refresh data">↻</button>
+        </div>
+      </div>
+
+      <div class="view-container">
+        <div class="tab-view active" id="view-dashboard">
+          <div class="bot-grid" id="bot-grid-container"></div>
+        </div>
+
+        <div class="tab-view" id="view-games">
+          <div class="farming-toolbar">
+            <div class="farming-toolbar-copy">
+              <strong>Select games to track playtime</strong>
+              <span>Run up to 32 games at once. Steam will count them as active; no download is required.</span>
+            </div>
+            <div class="farming-toolbar-actions">
+              <span class="selection-count" id="games-selection-count">Selected: 0</span>
+              <button class="action-btn danger-btn" id="btn-stop-farming">Stop</button>
+              <button class="action-btn accent-btn" id="btn-start-selected" disabled>Start selected</button>
+            </div>
+          </div>
+          <div class="filter-row">
+            <input type="text" class="filter-input" id="games-search-input" placeholder="Find a game…">
+            <select class="filter-select" id="games-bot-filter"><option value="all">All accounts</option></select>
+            <select class="filter-select" id="games-sort">
+              <option value="name">Name</option>
+              <option value="running">Running first</option>
+              <option value="playtime">Playtime</option>
+              <option value="recent">Recently played</option>
+            </select>
+          </div>
+          <div class="library-status" id="games-library-status">Connect an account to load your Steam library.</div>
+          <div class="games-grid" id="games-grid-container"></div>
+        </div>
+
+        <div class="tab-view" id="view-twofa">
+          <div class="twofa-layout">
+            <div class="twofa-code-panel">
+              <div class="twofa-select-row">
+                <label class="field-label">Account</label>
+                <select class="filter-select" id="twofa-bot-select"><option value="">Select account</option></select>
+              </div>
+              <div class="twofa-code-display">
+                <div class="code-digits" id="twofa-code-val">— — — — —</div>
+                <div class="code-timer-row">
+                  <div class="code-timer-bar"><div class="code-timer-fill" id="twofa-timer-fill"></div></div>
+                  <span class="code-timer-label" id="twofa-countdown">30s</span>
+                </div>
+              </div>
+              <div class="twofa-code-actions">
+                <button class="action-btn" id="btn-copy-2fa">Copy Code</button>
+                <button class="action-btn" id="btn-2fa-accept-all">Accept All</button>
+                <button class="action-btn danger-btn" id="btn-2fa-reject-all">Reject All</button>
+              </div>
+            </div>
+            <div class="twofa-confirmations-panel">
+              <div class="panel-header"><span class="panel-title">Pending Confirmations</span></div>
+              <div class="confirmations-list" id="twofa-confirmations-list">
+                <div class="empty-state">No pending confirmations.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-view" id="view-redeemer">
+          <div class="redeemer-layout">
+            <div class="redeemer-input-panel">
+              <div class="field-group">
+                <label class="field-label">Account</label>
+                <select class="filter-select" id="redeemer-bot-select"><option value="@ALL">All Accounts</option></select>
+              </div>
+              <div class="field-group" style="flex:1">
+                <label class="field-label">CD-Keys — one per line</label>
+                <textarea class="keys-textarea" id="redeemer-keys-input" placeholder="XXXXX-XXXXX-XXXXX"></textarea>
+              </div>
+              <div class="redeemer-actions">
+                <button class="action-btn accent-btn" id="btn-redeem-keys">Redeem</button>
+                <button class="action-btn" id="btn-clear-keys">Clear</button>
+              </div>
+            </div>
+            <div class="redeemer-results-panel" id="redeemer-results-box" style="display:none">
+              <div class="panel-header"><span class="panel-title">Results</span></div>
+              <div class="results-list" id="redeemer-results-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-view" id="view-terminal">
+          <div class="terminal-layout">
+            <div class="terminal-header-row">
+              <span class="panel-title">Command Interface</span>
+              <button class="action-btn" id="btn-clear-terminal">Clear</button>
+            </div>
+            <div class="terminal-logs" id="terminal-logs-container">
+              <div class="log-entry log-info">[Tickr] Ready.</div>
+            </div>
+            <div class="terminal-input-row">
+              <span class="terminal-prompt">›</span>
+              <input type="text" class="terminal-input" id="terminal-cmd-input" placeholder="Enter a Tickr command…" autocomplete="off">
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-add-bot">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Add Steam Account</span>
+        <button class="modal-close" id="btn-close-modal">✕</button>
+      </div>
+      <div class="modal-auth-tabs">
+        <button class="auth-tab-btn active" data-auth-tab="credentials">Password</button>
+        <button class="auth-tab-btn" data-auth-tab="qr">QR Code</button>
+        <button class="auth-tab-btn" data-auth-tab="mafile">.maFile</button>
+      </div>
+      <div class="auth-panel active" id="auth-tab-credentials">
+        <p class="auth-description">Sign in with your Steam credentials. If Steam Guard is enabled, you will be prompted for the code.</p>
+        <div class="field-group">
+          <label class="field-label">Steam Username</label>
+          <input type="text" class="field-input" id="modal-steam-login" placeholder="your_steam_login">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input type="password" class="field-input" id="modal-steam-password" placeholder="••••••••">
+        </div>
+        <button class="action-btn accent-btn full-width" id="btn-submit-credentials">Sign in</button>
+        <div class="trust-card" id="credentials-progress" style="display:none">
+          <strong id="credentials-status">Connecting to Steam…</strong>
+          <span id="credentials-help">Please wait while Steam checks the account.</span>
+        </div>
+        <div class="steam-mobile-approval" id="steam-mobile-approval" style="display:none" role="status" aria-live="polite">
+          <div class="steam-mobile-icon">✓</div>
+          <div>
+            <strong>Approve this sign-in in Steam Mobile</strong>
+            <span>Open the Steam app on your phone, tap the sign-in notification and choose <b>Approve</b>. Keep Tickr open — login will continue automatically.</span>
+          </div>
+        </div>
+        <div class="field-group" id="credentials-code-group" style="display:none">
+          <label class="field-label" id="credentials-code-label">Steam Guard code</label>
+          <input type="text" class="field-input" id="credentials-code" inputmode="text" autocomplete="one-time-code" maxlength="10" placeholder="Enter the code">
+          <button class="action-btn accent-btn full-width" id="btn-submit-guard-code">Continue</button>
+        </div>
+      </div>
+      <div class="auth-panel" id="auth-tab-qr" style="display:none">
+        <div class="trust-card">
+          <strong>Passwordless Steam QR</strong>
+          <span>Scan with the official Steam Mobile app and confirm the sign-in.</span>
+        </div>
+        <p class="auth-description">Creates a persistent Steam session without typing your password.</p>
+        <div class="qr-placeholder">
+          <div class="qr-mock" id="qr-mock">QR</div>
+          <span id="qr-status">Start the login to generate a secure QR code...</span>
+        </div>
+        <div class="auth-actions-row">
+          <button class="action-btn accent-btn full-width" id="btn-qr-start">Start QR Login</button>
+          <button class="action-btn danger-btn full-width" id="btn-qr-cancel" style="display:none">Cancel</button>
+        </div>
+      </div>
+      <div class="auth-panel" id="auth-tab-mafile" style="display:none">
+        <p class="auth-description">Paste the contents of your .maFile (Steam Desktop Authenticator).</p>
+        <div class="field-group" style="flex:1">
+          <label class="field-label">.maFile JSON</label>
+          <textarea class="keys-textarea" id="modal-mafile-content" placeholder='{"shared_secret": "..."}'></textarea>
+        </div>
+        <button class="action-btn accent-btn full-width" id="btn-submit-mafile">Import .maFile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Remove Account Confirmation -->
+  <div class="modal-overlay" id="modal-remove-account">
+    <div class="modal modal-confirm">
+      <div class="confirm-icon danger">!</div>
+      <div class="confirm-copy">
+        <h2>Remove this account?</h2>
+        <p id="remove-account-message">This will remove the local Tickr profile and its saved session.</p>
+        <div class="confirm-note">Your Steam account, games, inventory, and Steam credentials will not be changed.</div>
+      </div>
+      <div class="confirm-actions">
+        <button class="action-btn" id="btn-cancel-remove-account">Cancel</button>
+        <button class="action-btn danger-btn" id="btn-confirm-remove-account">Remove account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IPC Password Modal -->
+  <div class="modal-overlay" id="modal-ipc-password">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">IPC Password Required</span>
+      </div>
+      <div class="auth-panel active">
+        <p class="auth-description">This Tickr instance is protected by an IPC password (IPCPassword in config/Tickr.json). Enter it to continue.</p>
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <input type="password" class="field-input" id="ipc-password-input" placeholder="••••••••">
+        </div>
+        <button class="action-btn accent-btn full-width" id="btn-submit-ipc-password">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+  <script src="qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

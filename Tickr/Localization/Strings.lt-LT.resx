@@ -1,0 +1,807 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns="" id="root">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<data name="AcceptingTrade" xml:space="preserve">
+		<value>Priimami mainai: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="AutoUpdateCheckInfo" xml:space="preserve">
+		<value>Tickr automatiškai patikrins ar yra nauja versija kas {0}.</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "24 hours")</comment>
+	</data>
+	<data name="Content" xml:space="preserve">
+		<value>Turinys:
+{0}</value>
+		<comment>{0} will be replaced by content string. Please note that this string should include newline for formatting.</comment>
+	</data>
+	<data name="ErrorConfigPropertyInvalid" xml:space="preserve">
+		<value>Sukonfigūruotas {0} objektas yra neteisingas: {1}</value>
+		<comment>{0} will be replaced by name of the configuration property, {1} will be replaced by invalid value</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionInfo" xml:space="preserve">
+		<value>Tickr V{0} susidūrė su lemtinga išimties klaida prieš įsijungiant pagrindiniam žurnalo moduliui!</value>
+		<comment>{0} will be replaced by version number</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionPrint" xml:space="preserve">
+		<value>Išimtis: {0}() {1}
+StackTrace:
+{2}</value>
+		<comment>{0} will be replaced by function name, {1} will be replaced by exception message, {2} will be replaced by entire stack trace. Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="ErrorExitingWithNonZeroErrorCode" xml:space="preserve">
+		<value>Išjungiama su {0} klaidos kodu!</value>
+		<comment>{0} will be replaced by error code (number)</comment>
+	</data>
+	<data name="ErrorFailingRequest" xml:space="preserve">
+		<value>Užklausa nutrūksta: {0}</value>
+		<comment>{0} will be replaced by URL of the request</comment>
+	</data>
+	<data name="ErrorGlobalConfigNotLoaded" xml:space="preserve">
+		<value>Pagrindinė konfigūracija negalėjo būti įkelta, įsitikinkite, kad {0} egzistuoja ir yra galiojantis! Sekite nustatymo vadovą Wiki, jei esate pasimetę.</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorIsInvalid" xml:space="preserve">
+		<value>{0} yra neteisingas!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorNoBotsDefined" xml:space="preserve">
+		<value>Neaprašyti jokie botai. Galbūt pamiršote sukonfigūruoti Tickr? Sekite nustatymo vadovą Wiki, jei esate pasimetę.</value>
+	</data>
+	<data name="ErrorObjectIsNull" xml:space="preserve">
+		<value>{0} yra tuščias!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorParsingObject" xml:space="preserve">
+		<value>{0} apdorojimas nepavyko!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorRequestFailedTooManyTimes" xml:space="preserve">
+		<value>Užklausa nepavyko po {0} bandymų!</value>
+		<comment>{0} will be replaced by maximum number of tries</comment>
+	</data>
+	<data name="ErrorUpdateCheckFailed" xml:space="preserve">
+		<value>Nepavyko patikrinti naujausios versijos!</value>
+	</data>
+	<data name="ErrorUpdateNoAssetForThisVersion" xml:space="preserve">
+		<value>Nebuvo galima tęsti naujinimo, nes nėra jokio objekto, kuris yra susijęs su šiuo metu įdiegta versija! Automatinis naujinimas į tą versiją yra neįmanomas.</value>
+	</data>
+	<data name="ErrorUpdateNoAssets" xml:space="preserve">
+		<value>Nebuvo galima tęsti naujinimo, nes ta versija neturi jokių failų!</value>
+	</data>
+	<data name="ErrorUserInputRunningInHeadlessMode" xml:space="preserve">
+		<value>Gautas prašymas reikalaujantis naudotojo įvesties, bet procesas veikia „headless“ režime!</value>
+	</data>
+	<data name="Exiting" xml:space="preserve">
+		<value>Išeinama...</value>
+	</data>
+	<data name="WarningFailed" xml:space="preserve">
+		<value>Nepavyko!</value>
+	</data>
+	<data name="GlobalConfigChanged" xml:space="preserve">
+		<value>Pagrindinis konfigūracijos failas buvo pakeistas!</value>
+	</data>
+	<data name="ErrorGlobalConfigRemoved" xml:space="preserve">
+		<value>Pagrindinis konfigūracijos failas buvo pašalintas!</value>
+	</data>
+	<data name="IgnoringTrade" xml:space="preserve">
+		<value>Ignoruojami mainai: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="LoggingIn" xml:space="preserve">
+		<value>Prisijungiama prie {0}...</value>
+		<comment>{0} will be replaced by service's name</comment>
+	</data>
+	<data name="NoBotsAreRunning" xml:space="preserve">
+		<value>Nėra aktyvių botų, išeinama...</value>
+	</data>
+	<data name="RefreshingOurSession" xml:space="preserve">
+		<value>Atnaujinama sesija!</value>
+	</data>
+	<data name="RejectingTrade" xml:space="preserve">
+		<value>Atmetami mainai: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="Restarting" xml:space="preserve">
+		<value>Paleidžiama iš naujo...</value>
+	</data>
+	<data name="Starting" xml:space="preserve">
+		<value>Paleidžiama...</value>
+	</data>
+	<data name="Success" xml:space="preserve">
+		<value>Pavyko!</value>
+	</data>
+	<data name="UnlockingParentalAccount" xml:space="preserve">
+		<value>Atrakinama tėvų paskyra...</value>
+	</data>
+	<data name="UpdateCheckingNewVersion" xml:space="preserve">
+		<value>Ieškoma naujos versijos...</value>
+	</data>
+	<data name="UpdateDownloadingNewVersion" xml:space="preserve">
+		<value>Atsiunčiama nauja versija: {0} ({1} MB)... Kol laukiate, apsvarstykite, gal norite paaukoti, jei vertinate mūsų darbą! :)</value>
+		<comment>{0} will be replaced by version string, {1} will be replaced by update size (in megabytes)</comment>
+	</data>
+	<data name="UpdateFinished" xml:space="preserve">
+		<value>Naujinimo procesas baigtas!</value>
+	</data>
+	<data name="UpdateNewVersionAvailable" xml:space="preserve">
+		<value>Yra nauja Tickr versija! Apsvarstykite atsinaujinti!</value>
+	</data>
+	<data name="UpdateVersionInfo" xml:space="preserve">
+		<value>Vietinė versija: {0} | Versija serveryje: {1}</value>
+		<comment>{0} will be replaced by current version, {1} will be replaced by remote version</comment>
+	</data>
+	<data name="UserInputDeviceConfirmation" xml:space="preserve">
+		<value>Patikrinkite jūsų Steam programėlę telefone, jūs turėjote gauti prisijungimo patvirtinimo pranešima. Parašykite Y jei jūs gavote ir patvirtinote pranešimą, N jei jūs norite pateikti kodą vietoje patvirtinimo pranešimo: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteam2FA" xml:space="preserve">
+		<value>Prašome įvesti 2FA kodą iš jūsų Steam autentifikavimo programėlės: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamGuard" xml:space="preserve">
+		<value>Prašome įvesti „Steam Guard“ autentifikavimo kodą, kuris buvo išsiųstas į jūsų el. paštą: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamLogin" xml:space="preserve">
+		<value>Prašome įvesti savo Steam prisijungimo vardą: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamParentalCode" xml:space="preserve">
+		<value>Prašome įvesti Steam tėvų kontrolės kodą: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamPassword" xml:space="preserve">
+		<value>Prašome įvesti savo Steam slaptažodį: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="WarningUnknownValuePleaseReport" xml:space="preserve">
+		<value>Gauta nežinoma reikšmė, {0}, prašome pranešti apie tai: {1}</value>
+		<comment>{0} will be replaced by object's name, {1} will be replaced by value for that object</comment>
+	</data>
+	<data name="IPCReady" xml:space="preserve">
+		<value>IPC serveris paruoštas!</value>
+	</data>
+	<data name="IPCStarting" xml:space="preserve">
+		<value>Paleidžiamas IPC serveris...</value>
+	</data>
+	<data name="BotAlreadyStopped" xml:space="preserve">
+		<value>Šis botas jau sustabdytas!</value>
+	</data>
+	<data name="BotNotFound" xml:space="preserve">
+		<value>Nepavyko rasti jokio boto su pavadinimu {0}!</value>
+		<comment>{0} will be replaced by bot's name query (string)</comment>
+	</data>
+	<data name="BotStatusOverview" xml:space="preserve">
+		<value>Šiuo metu veikia {0}/{1} botai, iš viso yra {2} žaidimų ({3} kortelių) su likusiomis rinkti kortelėmis.</value>
+		<comment>{0} will be replaced by number of active bots, {1} will be replaced by total number of bots, {2} will be replaced by total number of games left to farm, {3} will be replaced by total number of cards left to farm</comment>
+	</data>
+	<data name="BotStatusIdling" xml:space="preserve">
+		<value>Botas renka korteles iš: {0} ({1},{2} likusių kortelių) iš viso {3} žaidimų ({4} kortelių) likę surinkti (liko ~{5}).</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm, {3} will be replaced by total number of games to farm, {4} will be replaced by total number of cards to farm, {5} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="BotStatusIdlingList" xml:space="preserve">
+		<value>Botas renka korteles iš: {0} iš {1} žaidimų ({2} kortelių), kuriuos reikia rinkti (liko ~{3}).</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), {1} will be replaced by total number of games to farm, {2} will be replaced by total number of cards to farm, {3} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="CheckingFirstBadgePage" xml:space="preserve">
+		<value>Tikrinamas pirmasis ženklelių puslapis...</value>
+	</data>
+	<data name="CheckingOtherBadgePages" xml:space="preserve">
+		<value>Tikrinami kiti ženklelių puslapiai...</value>
+	</data>
+	<data name="ChosenFarmingAlgorithm" xml:space="preserve">
+		<value>Pasirinktas kortelių rinkimo algoritmas: {0}</value>
+		<comment>{0} will be replaced by the name of chosen farming algorithm</comment>
+	</data>
+	<data name="Done" xml:space="preserve">
+		<value>Baigta!</value>
+	</data>
+	<data name="GamesToIdle" xml:space="preserve">
+		<value>Mes iš viso turime {0} žaidimus ({1} korteles), kuriuos reikia rinkti (liko ~{2})...</value>
+		<comment>{0} will be replaced by number of games, {1} will be replaced by number of cards, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinished" xml:space="preserve">
+		<value>Kortelių rinkimas baigtas!</value>
+	</data>
+	<data name="IdlingFinishedForGame" xml:space="preserve">
+		<value>Kortelių rinkimas užbaigtas: {0} ({1}) po {2} žaidimo laiko!</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinishedForGames" xml:space="preserve">
+		<value>Užbaigta rinkti korteles: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="IdlingStatusForGame" xml:space="preserve">
+		<value>Kortelių rinkimo statusas {0} ({1}): liko kortelių: {2}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm</comment>
+	</data>
+	<data name="IdlingStopped" xml:space="preserve">
+		<value>Kortelių rinkimas sustabdytas!</value>
+	</data>
+	<data name="IgnoredPermanentPauseEnabled" xml:space="preserve">
+		<value>Šis prašymas ignoruojamas, nes nuolatinė pauzė yra įjungta!</value>
+	</data>
+	<data name="NothingToIdle" xml:space="preserve">
+		<value>Mes neturime nieko, ką galėtume rinkti šioje paskyroje!</value>
+	</data>
+	<data name="NowIdling" xml:space="preserve">
+		<value>Dabar renkama: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="NowIdlingList" xml:space="preserve">
+		<value>Dabar renkama: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="PlayingNotAvailable" xml:space="preserve">
+		<value>Kortelių rinkimas dabar negalimas, bandysime dar kartą vėliau!</value>
+	</data>
+	<data name="StillIdling" xml:space="preserve">
+		<value>Vis dar renkama: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StillIdlingList" xml:space="preserve">
+		<value>Vis dar renkama: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="StoppedIdling" xml:space="preserve">
+		<value>Rinkimas sustabdytas: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StoppedIdlingList" xml:space="preserve">
+		<value>Rinkimas sustabdytas: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="UnknownCommand" xml:space="preserve">
+		<value>Nežinoma komanda!</value>
+	</data>
+	<data name="WarningCouldNotCheckBadges" xml:space="preserve">
+		<value>Nepavyko gauti ženklelių informacijos, bandysime dar kartą vėliau!</value>
+	</data>
+	<data name="WarningCouldNotCheckCardsStatus" xml:space="preserve">
+		<value>Nepavyko patikrinti kortelių statuso: {0} ({1}), bandysime dar kartą vėliau!</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotAcceptingGift" xml:space="preserve">
+		<value>Priimama dovana: {0}...</value>
+		<comment>{0} will be replaced by giftID (number)</comment>
+	</data>
+	<data name="BotAccountLimited" xml:space="preserve">
+		<value>Ši paskyra yra apribota, kortelių rinkimo procesas negalimas kol apribojimas nebus pašalintas!</value>
+	</data>
+	<data name="BotAddLicense" xml:space="preserve">
+		<value>ID: {0} | Būsena: {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotAddLicenseWithItems" xml:space="preserve">
+		<value>ID: {0} | Būsena: {1} | Item'ai: {2}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string, {2} will be replaced by list of granted IDs (numbers), separated by a comma</comment>
+	</data>
+	<data name="BotAlreadyRunning" xml:space="preserve">
+		<value>Šis botas jau įjungtas!</value>
+	</data>
+	<data name="BotAuthenticatorConverting" xml:space="preserve">
+		<value>.maFile verčiamas į Tickr formatą...</value>
+	</data>
+	<data name="BotAuthenticatorImportFinished" xml:space="preserve">
+		<value>Mobilusis autentifikatorius sėkmingai baigtas importuoti!</value>
+	</data>
+	<data name="BotAuthenticatorToken" xml:space="preserve">
+		<value>2FA kodas: {0}</value>
+		<comment>{0} will be replaced by generated 2FA token (string)</comment>
+	</data>
+	<data name="BotAutomaticIdlingNowPaused" xml:space="preserve">
+		<value>Automatinis kortelių rinkimas sustabdytas!</value>
+	</data>
+	<data name="BotAutomaticIdlingNowResumed" xml:space="preserve">
+		<value>Automatinis kortelių rinkimas tęsiamas!</value>
+	</data>
+	<data name="BotAutomaticIdlingPausedAlready" xml:space="preserve">
+		<value>Automatinis kortelių rinkimas jau sustabdytas!</value>
+	</data>
+	<data name="BotAutomaticIdlingResumedAlready" xml:space="preserve">
+		<value>Automatinis kortelių rinkimas jau pratęstas!</value>
+	</data>
+	<data name="BotConnected" xml:space="preserve">
+		<value>Prisijungta prie Steam!</value>
+	</data>
+	<data name="BotDisconnected" xml:space="preserve">
+		<value>Atsijungta nuo Steam!</value>
+	</data>
+	<data name="BotDisconnecting" xml:space="preserve">
+		<value>Atsijungiama...</value>
+	</data>
+	<data name="BotInstanceNotStartingBecauseDisabled" xml:space="preserve">
+		<value>Nepradedamas ši boto egzempliorius, nes jis yra išjungtas konfigūracijos faile!</value>
+	</data>
+	<data name="BotInvalidAuthenticatorDuringLogin" xml:space="preserve">
+		<value>Klaida TwoFactorCodeMismatch gauta {0} kartus iš eilės. Arba jūsų 2FA kredencialai nebegalioja, arba jūsų laikrodis blogai nustatytas, nutraukiama!</value>
+		<comment>{0} will be replaced by maximum allowed number of failed 2FA attempts</comment>
+	</data>
+	<data name="BotLoggedOff" xml:space="preserve">
+		<value>Atsijungta nuo Steam: {0}</value>
+		<comment>{0} will be replaced by logging off reason (string)</comment>
+	</data>
+	<data name="BotLoggedOn" xml:space="preserve">
+		<value>Sėkmingai prisijungta kaip {0}.</value>
+		<comment>{0} will be replaced by steam ID (number)</comment>
+	</data>
+	<data name="BotLoggingIn" xml:space="preserve">
+		<value>Prisijungiama...</value>
+	</data>
+	<data name="BotLogonSessionReplaced" xml:space="preserve">
+		<value>Atrodo, kad ši paskyra yra naudojama su kitu Tickr atveju, tai yra neapibrėžtas elgesys, atsisakoma laikyti ją įjungtą!</value>
+	</data>
+	<data name="BotLootingFailed" xml:space="preserve">
+		<value>Mainų pasiūlymas nepavyko!</value>
+	</data>
+	<data name="BotLootingMasterNotDefined" xml:space="preserve">
+		<value>Mainai nebuvo išsiųsti, nes nėra apibrėžto jokio vartotojo su šeimininko leidimais!</value>
+	</data>
+	<data name="BotLootingSuccess" xml:space="preserve">
+		<value>Mainai išsiųsti sėkmingai!</value>
+	</data>
+	<data name="BotSendingTradeToYourself" xml:space="preserve">
+		<value>Negalite siųsti mainų sau!</value>
+	</data>
+	<data name="BotNoTickrAuthenticator" xml:space="preserve">
+		<value>Šis botas neturi įjungto Tickr 2FA! Ar jūs pamiršote importuoti savo autentifikatorių kaip Tickr 2FA?</value>
+	</data>
+	<data name="BotNotConnected" xml:space="preserve">
+		<value>Šis boto egzempliorius nėra prijungtas!</value>
+	</data>
+	<data name="BotNotOwnedYet" xml:space="preserve">
+		<value>Dar neturima: {0}</value>
+		<comment>{0} will be replaced by query (string)</comment>
+	</data>
+	<data name="BotOwnedAlreadyWithName" xml:space="preserve">
+		<value>Jau turima: {0} | {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotPointsBalance" xml:space="preserve">
+		<value>Taškų balansas: {0}</value>
+		<comment>{0} will be replaced by the points balance value (integer)</comment>
+	</data>
+	<data name="BotRateLimitExceeded" xml:space="preserve">
+		<value>Dažnio limitas viršytas, bandysime dar kartą po {0} pauzės...</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "25 minutes")</comment>
+	</data>
+	<data name="BotReconnecting" xml:space="preserve">
+		<value>Jungiamasi iš naujo...</value>
+	</data>
+	<data name="BotRedeem" xml:space="preserve">
+		<value>Raktas: {0} | Būsena: {1}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotRedeemWithItems" xml:space="preserve">
+		<value>Raktas: {0} | Būsena: {1} | Item'ai: {2}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string, {2} will be replaced by list of key-value pairs, separated by a comma</comment>
+	</data>
+	<data name="BotRemovedExpiredLoginKey" xml:space="preserve">
+		<value>Pašalintas nebegaliojantis prisijungimo raktas!</value>
+	</data>
+	<data name="BotStatusNotIdling" xml:space="preserve">
+		<value>Botas nerenka kortelių.</value>
+	</data>
+	<data name="BotStatusLimited" xml:space="preserve">
+		<value>Botas turi apribojimą ir negali gauti jokių kortelių iš rinkimo.</value>
+	</data>
+	<data name="BotStatusConnecting" xml:space="preserve">
+		<value>Botas jungiasi prie Steam tinklo.</value>
+	</data>
+	<data name="BotStatusNotRunning" xml:space="preserve">
+		<value>Botas nėra įjungtas.</value>
+	</data>
+	<data name="BotStatusPaused" xml:space="preserve">
+		<value>Botas yra sustabdytas arba veikia rankiniu rėžimu.</value>
+	</data>
+	<data name="BotStatusPlayingNotAvailable" xml:space="preserve">
+		<value>Botas šiuo metu yra naudojamas.</value>
+	</data>
+	<data name="BotUnableToLogin" xml:space="preserve">
+		<value>Nepavyko prisijungti prie Steam: {0}/{1}</value>
+		<comment>{0} will be replaced by failure reason (string), {1} will be replaced by extended failure reason (string)</comment>
+	</data>
+	<data name="ErrorIsEmpty" xml:space="preserve">
+		<value>{0} yra tuščias!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="UnusedKeys" xml:space="preserve">
+		<value>Nepanaudoti raktai: {0}</value>
+		<comment>{0} will be replaced by list of cd-keys (strings), separated by a comma</comment>
+	</data>
+	<data name="WarningFailedWithError" xml:space="preserve">
+		<value>Nepavyko dėl klaidos: {0}</value>
+		<comment>{0} will be replaced by failure reason (string)</comment>
+	</data>
+	<data name="BotConnectionLost" xml:space="preserve">
+		<value>Ryšys su Steam tinklu prarastas. Bandoma jungtis iš naujo...</value>
+	</data>
+	<data name="BotAccountFree" xml:space="preserve">
+		<value>Paskyra nebėra užimta: kortelių rinkimo procesas tęsiamas!</value>
+	</data>
+	<data name="BotAccountOccupied" xml:space="preserve">
+		<value>Paskyra šiuo metu yra naudojama: Tickr tęs kortelių rinkimą, kai ji atsilaisvins...</value>
+	</data>
+	<data name="BotConnecting" xml:space="preserve">
+		<value>Jungiamasi...</value>
+	</data>
+	<data name="BotHeartBeatFailed" xml:space="preserve">
+		<value>Nepavyko atjungti kliento. Apleidžiamas šis boto egzempliorius!</value>
+	</data>
+	<data name="BotStopping" xml:space="preserve">
+		<value>Stabdoma...</value>
+	</data>
+	<data name="ErrorBotConfigInvalid" xml:space="preserve">
+		<value>Jūsų boto konfigūracija yra klaidinga. Prašome patikrinti {0} turinį ir bandyti vėl!</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorDatabaseInvalid" xml:space="preserve">
+		<value>Nepavyko įkelti nuolatinės duomenų bazės, jei problema pasikartoja, prašome pašalinti {0} siekiant atkurti duomenų bazę!</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="Initializing" xml:space="preserve">
+		<value>Inicijuojama {0}...</value>
+		<comment>{0} will be replaced by service name that is being initialized</comment>
+	</data>
+	<data name="WarningPrivacyPolicy" xml:space="preserve">
+		<value>Prašome peržiūrėti mūsų privatumo politikos skiltį mūsų wiki, jei jūs esate susirūpinęs ką iš tikro daro Tickr!</value>
+	</data>
+	<data name="Welcome" xml:space="preserve">
+		<value>Atrodo, jog tai jūsų pirmasis kartas paleidžiant šią programą, Sveiki!</value>
+	</data>
+	<data name="ErrorInvalidCurrentCulture" xml:space="preserve">
+		<value>Jūsų pateikta CurrentCulture yra negaliojanti, Tickr toliau veiks su numatytąja!</value>
+	</data>
+	<data name="TranslationIncomplete" xml:space="preserve">
+		<value>Tickr bandys naudoti jūsų pageidaujamą {0} lokalę, tačiau vertimas į tą kalba buvo užbaigtas tik {1}. Galbūt jūs galėtumėte mums padėti pagerinti Tickr vertimą į šią kalbą?</value>
+		<comment>{0} will be replaced by culture code, such as "en-US", {1} will be replaced by completeness percentage, such as "78.5%"</comment>
+	</data>
+	<data name="IdlingGameNotPossible" xml:space="preserve">
+		<value>Kortelių rinkimas iš {0} ({1}) laikinai sustabdytas, nes Tickr šiuo momentu neturi galimybės paleisti šio žaidimo.</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningIdlingGameMismatch" xml:space="preserve">
+		<value>Tickr aptiko ID neatitikimą {0}({1}) ir vietoj to naudos ID {2}.</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotVersion" xml:space="preserve">
+		<value>{0} V{1}</value>
+		<comment>{0} will be replaced by program's name (e.g. "Tickr"), {1} will be replaced by program's version (e.g. "1.0.0.0"). This string typically has nothing to translate and you should leave it as it is, unless you need to change the format, e.g. in RTL languages.</comment>
+	</data>
+	<data name="BotAccountLocked" xml:space="preserve">
+		<value>Ši paskyra užrakinta, kortelių rinkimas nebegalimas!</value>
+	</data>
+	<data name="BotStatusLocked" xml:space="preserve">
+		<value>Botas turi apribojimą ir negali gauti jokių kortelių iš rinkimo.</value>
+	</data>
+	<data name="ErrorFunctionOnlyInHeadlessMode" xml:space="preserve">
+		<value>Ši funkcija yra galima tik „headless“ rėžime!</value>
+	</data>
+	<data name="BotOwnedAlready" xml:space="preserve">
+		<value>Jau turima: {0}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="ErrorAccessDenied" xml:space="preserve">
+		<value>Prieiga negalima!</value>
+	</data>
+	<data name="WarningPreReleaseVersion" xml:space="preserve">
+		<value>Jūs naudojate versiją kuri yra naujesnė nei paskutinė išleista versija jūsų naujinimo kanale. Atkreipkite dėmesį, kad išankstinio išleidimo versija yra skirta vartotojams, kurie žino, kaip išsispręsti klaidas, problemas - techninė parama nebus suteikiama.</value>
+	</data>
+	<data name="BotStats" xml:space="preserve">
+		<value>Dabartinis atminties naudojimas: {0} MB.
+Proceso veikimo laikas: {1}</value>
+		<comment>{0} will be replaced by number (in megabytes) of memory being used, {1} will be replaced by translated TimeSpan string (such as "25 minutes"). Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="BotOwnsOverviewPerGame" xml:space="preserve">
+		<value>{0}/{1} botai jau turi šį žaidimą {2}.</value>
+		<comment>{0} will be replaced by number of bots that already own particular game being checked, {1} will be replaced by total number of bots that were checked during the process, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotRefreshingPackagesData" xml:space="preserve">
+		<value>Atnaujinami duomenų paketai...</value>
+	</data>
+	<data name="WarningDeprecated" xml:space="preserve">
+		<value>Naudojimas {0} yra nebeaktualus ir bus pašalintas būsimose programos versijose. Vietoj to naudokite {1}.</value>
+		<comment>{0} will be replaced by the name of deprecated property (such as argument, config property or likewise), {1} will be replaced by the name of valid replacement (such as another argument or config property)</comment>
+	</data>
+	<data name="BotAcceptedDonationTrade" xml:space="preserve">
+		<value>Priimti dovanos mainai: {0}</value>
+		<comment>{0} will be replaced by trade's ID (number)</comment>
+	</data>
+	<data name="WarningWorkaroundTriggered" xml:space="preserve">
+		<value>Sprendimas klaidai {0} buvo suaktyvintas.</value>
+		<comment>{0} will be replaced by the bug's name provided by Tickr</comment>
+	</data>
+	<data name="TargetBotNotConnected" xml:space="preserve">
+		<value>Šis boto egzempliorius nėra prijungtas!</value>
+	</data>
+	<data name="BotWalletBalance" xml:space="preserve">
+		<value>Piniginės likutis: {0} {1}</value>
+		<comment>{0} will be replaced by wallet balance value, {1} will be replaced by currency name</comment>
+	</data>
+	<data name="BotHasNoWallet" xml:space="preserve">
+		<value>Botas neturi piniginės.</value>
+	</data>
+	<data name="BotLevel" xml:space="preserve">
+		<value>Botas neturi {0} lygio.</value>
+		<comment>{0} will be replaced by bot's level</comment>
+	</data>
+	<data name="BotInventory" xml:space="preserve">
+		<value>{0}/{1} ({2}/{3}): {4} daiktai</value>
+		<comment>{0} will be replaced by appID (number), {1} will be replaced by contextID (number), {2} will be replaced by app's name (string), {3} will be replaced by name of the context (string), {4} will be replaced by number of assets in the specified inventory (number).</comment>
+	</data>
+	<data name="ActivelyMatchingItems" xml:space="preserve">
+		<value>Derinami Steam item'ai, #{0} raundas...</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="DoneActivelyMatchingItems" xml:space="preserve">
+		<value>Baigta derinti Steam item'us, #{0} raundas.</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="ErrorAborted" xml:space="preserve">
+		<value>Nutraukta!</value>
+	</data>
+	<data name="WarningExcessiveBotsCount" xml:space="preserve">
+		<value>Jūs esate paleidęs daugiau asmeninių botų paskyrų negu mūsų rekomenduojamas limitas ({0}). Turėkite omeny jok tokia sąranka nėra palaikoma ir gali sukelti įvairių problemų, susijusių su Steam, kaip paskyrų nutraukimas. Dėl papildomos informacijos kreipkitės į DUK.</value>
+		<comment>{0} will be replaced by our maximum recommended bots count (number)</comment>
+	</data>
+	<data name="PluginLoaded" xml:space="preserve">
+		<value>{0} buvo užkrautas sėkmingai!</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin</comment>
+	</data>
+	<data name="PluginLoading" xml:space="preserve">
+		<value>Kraunamas {0}, V{1}...</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin, {1} will be replaced by its version</comment>
+	</data>
+	<data name="NothingFound" xml:space="preserve">
+		<value>Nieko nerasta!</value>
+	</data>
+	<data name="PluginsWarning" xml:space="preserve">
+		<value>Jūs užkrovėte vieną ar daugiau trečiųjų šalių papildinių į TickrApp. Kadangi mes negalime teikti pagalbos modifikuotoms sąrankoms, kilus problemoms prašome kreiptis į jūsų naudojamų papildinių kūrėjus.</value>
+	</data>
+	<data name="PleaseWait" xml:space="preserve">
+		<value>Prašome palaukti...</value>
+	</data>
+	<data name="EnterCommand" xml:space="preserve">
+		<value>Įveskite komandą: </value>
+	</data>
+	<data name="Executing" xml:space="preserve">
+		<value>Vykdoma...</value>
+	</data>
+	<data name="InteractiveConsoleEnabled" xml:space="preserve">
+		<value>Interaktyvi konsolė aktyvuota, norėdami pateikti į komandų rėžimą paspauskite „c“.</value>
+	</data>
+	<data name="BotGamesToRedeemInBackgroundCount" xml:space="preserve">
+		<value>Boto foninėje eilėje yra likę {0} žaidimai.</value>
+		<comment>{0} will be replaced by remaining number of games in BGR's queue</comment>
+	</data>
+	<data name="ErrorSingleInstanceRequired" xml:space="preserve">
+		<value>Tickr procesas jau yra įjungtas šiame darbiniame kataloge, nutraukiama!</value>
+	</data>
+	<data name="BotHandledConfirmations" xml:space="preserve">
+		<value>Sėkmingai susitvarkyta su {0} patvirtinimais!</value>
+		<comment>{0} will be replaced by number of confirmations</comment>
+	</data>
+	<data name="BotExtraIdlingCooldown" xml:space="preserve">
+		<value>Laukiama iki {0} norint užtikrinti, kad mes galime laisvai rinkti korteles...</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "1 minute")</comment>
+	</data>
+	<data name="UpdateCleanup" xml:space="preserve">
+		<value>Valomi seni failai po atnaujinimo...</value>
+	</data>
+	<data name="BotGeneratingSteamParentalCode" xml:space="preserve">
+		<value>Generuojamas Steam tėvų kontrolės kodas, tai gali užtrukti, apsvarstykite saugoti kodą konfigūracijoje...</value>
+	</data>
+	<data name="IPCConfigChanged" xml:space="preserve">
+		<value>IPC konfigūracija buvo pakeista!</value>
+	</data>
+	<data name="BotTradeOfferResult" xml:space="preserve">
+		<value>Mainų pasiūlymas {0} yra determinuotas {1}, nes {2}.</value>
+		<comment>{0} will be replaced by trade offer ID (number), {1} will be replaced by internal Tickr enum name, {2} will be replaced by technical reason why the trade was determined to be in this state</comment>
+	</data>
+	<data name="BotInvalidPasswordDuringLogin" xml:space="preserve">
+		<value>Gautas BlogasSlaptažodis klaidos kodas {0} kartų iš eilės. Jūsų slaptažodis šiai paskyrai galima yra blogas, atšaukiama!</value>
+		<comment>{0} will be replaced by maximum allowed number of failed login attempts</comment>
+	</data>
+	<data name="Result" xml:space="preserve">
+		<value>Rezultatas: {0}</value>
+		<comment>{0} will be replaced by generic result of various functions that use this string</comment>
+	</data>
+	<data name="WarningUnsupportedEnvironment" xml:space="preserve">
+		<value>Jūs bandote paleisti {0} Tickr versiją, kuri yra nepalaikomoje aplinkoje: {1} Paleiskite su --ignore-unsupported-environment argumentą, jeigu tikrai žinote ką darote.</value>
+	</data>
+	<data name="WarningUnknownCommandLineArgument" xml:space="preserve">
+		<value>Nežinomas komandų-eilutės argumentas: {0}</value>
+		<comment>{0} will be replaced by unrecognized command that has been provided</comment>
+	</data>
+	<data name="ErrorConfigDirectoryNotFound" xml:space="preserve">
+		<value>Konfigūracijos vieta nerasta, nutraukiama!</value>
+	</data>
+	<data name="BotIdlingSelectedGames" xml:space="preserve">
+		<value>Šiuo metu žaidžiama {0}: {1}</value>
+		<comment>{0} will be replaced by internal name of the config property (e.g. "GamesPlayedWhileIdle"), {1} will be replaced by comma-separated list of appIDs that user has chosen</comment>
+	</data>
+	<data name="AutomaticFileMigration" xml:space="preserve">
+		<value>{0} konfigūracinis failas bus migruojamas į naujausią sintaksę...</value>
+		<comment>{0} will be replaced with the relative path to the affected config file</comment>
+	</data>
+	<data name="WarningTooShortCryptKey" xml:space="preserve">
+		<value>Jūsų šifravimo raktas yra per trumpas. Rekomenduojame naudoti raktą, kuris yra bent {0} baitų (simbolių) ilgio.</value>
+		<comment>{0} will be replaced by the number of bytes (characters) recommended</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForHashing" xml:space="preserve">
+		<value>Jūs naudojate {0} nustatymą is {1} ypatybės, tačiau nenurodėte tinkintos --cryptkey savybės. Turėtumėte pateikti tinkintą --cryptkey savybę padidintai apsaugai.</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "SCrypt"), {1} will be replaced by the name of the property (e.g. "IPCPassword")</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForEncryption" xml:space="preserve">
+		<value>Jūs naudojate {0} nustatymą is {1} ypatybės, tačiau nenurodėte tinkintos --cryptkey savybės. Tai prieštarauja apsaugai, kadangi Tickr bus priversta naudoti savo (žinomą) raktą. Reiktų nurodyti tinkintą --cryptkey savybę, kad šio gautumėte šio nustatymo naudą.</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "AES"), {1} will be replaced by the name of the property (e.g. "SteamPassword")</comment>
+	</data>
+	<data name="WarningRunningAsRoot" xml:space="preserve">
+		<value>Bandote paleisti Tickr kaip administratorius (root vartotojas). Tai gali sukelti reikšmingą apsaugos riziką jūsų kompiuteriui, kadangi Tickr nereikalauja administratoriaus teisių savo veikimui. Rekomenduojame Tickr paleisti kaip ne administratoriui jei įmanoma.</value>
+	</data>
+	<data name="WarningRunningInUnsupportedEnvironment" xml:space="preserve">
+		<value>Jūs bandote paleisti Tickr, kuri yra nepalaikomoje aplinkoje su --ignore-unsupported-environment argumentu. Atkreipkite dėmesį, jog tokiais atvejais mes neteikiame jokio palaikymo ir jūsų pasirinkimas yra jūsų atsakomybėje. Jūs buvote įspėtas.</value>
+	</data>
+	<data name="FetchingChecksumFromRemoteServer" xml:space="preserve">
+		<value>Gaunama kontrolinė suma iš nuotolinio serverio...</value>
+	</data>
+	<data name="VerifyingChecksumWithRemoteServer" xml:space="preserve">
+		<value>Tikrinama atsiųstų dvejetainių failų kontrolinė suma pagal kontrolinę sumą iš nuotolinio serverio...</value>
+	</data>
+	<data name="ChecksumMissing" xml:space="preserve">
+		<value>Nuotolinis serveris nežino apie išleidimą, į kurį bandote atsinaujinti. Ši situacija galima, jeigu išleidimas buvo neseniai paskelbtas - neleidžiama atnaujinti iš karto dėl papildomos apsaugos.</value>
+	</data>
+	<data name="ChecksumTimeout" xml:space="preserve">
+		<value>Nepavyko gauti atsisiųsto dvejetainio failo kontrolinės sumos – dėl papildomos saugumo priemonės šiuo metu atsisakoma tęsti atnaujinimo procedūrą.</value>
+	</data>
+	<data name="ChecksumWrong" xml:space="preserve">
+		<value>Nuotolinis serveris atsakė su nesutampančia kontroline suma. Tai gali būti dėl sugadinto atsisiuntimo arba MITM atakos. Atsisakoma tęsti atnaujinimo procesą!</value>
+	</data>
+	<data name="PatchingFiles" xml:space="preserve">
+		<value>Taisomi Tickr failai...</value>
+	</data>
+	<data name="UserInputCryptkey" xml:space="preserve">
+		<value>Prašome įvesti savo šifravimo raktą: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="ErrorIPNotBanned" xml:space="preserve">
+		<value>IP adresas {0} nėra užblokuotas!</value>
+		<comment>{0} will be replaced by an IP address which was requested to be unbanned from using IPC</comment>
+	</data>
+	<data name="WarningNoLicense" xml:space="preserve">
+		<value>Jūs bandote naudoti mokamą funkciją {0}, tačiau jūs neturite tinkamo LicenseID nustatyto globalioje konfigūracijoje. Prašome patikrinti savo konfigūraciją, kadangi funkcija neveiks be papildomų detalių.</value>
+		<comment>{0} will be replaced by feature name (e.g. MatchActively)</comment>
+	</data>
+	<data name="WarningRegionRestrictedPackage" xml:space="preserve">
+		<value>Tickr negali paleisti programėlės {0}, nes jai taikomi su regionu susiję apribojimai {1} šalyje, kurie galioja iki {2}.</value>
+		<comment>{0} will be replaced by app ID (number), {1} will be replaced by short country code (string, such as "PL"), {2} will be replaced by human-readable date (string).</comment>
+	</data>
+	<data name="WarningUnsupportedOfficialPlugins" xml:space="preserve">
+		<value>Bandote paleisti oficialų {0} įskiepį, kuris neatitinka Tickr versijos: {1} (tikėtasi {2}). Tai rodo, kad darote kažką labai negerai. Jei tikrai žinote, ką darote, pataisykite nustatymus arba pateikite argumentą --ignore-unsupported-environment.</value>
+		<comment>{0} will be replaced by plugin name, {1} will be replaced by plugin's version number, {2} will be replaced by Tickr's version number.</comment>
+	</data>
+	<data name="ErrorTooManyCrashes" xml:space="preserve">
+		<value>Jūsų Tickr pastaruoju metu per daug kartų užstrigo, todėl proceso inicijavimas buvo išjungtas. Arba ištirkite, pataisykite nustatymus, tada pašalinkite TickrApp.crash failą iš konfigūracijos katalogo, arba pateikite argumentą --ignore-unsupported-environment, jei tikrai žinote, ką darote.</value>
+	</data>
+	<data name="IdlingGameNotPossiblePrivate" xml:space="preserve">
+		<value>Žaidimo {0} ({1}) farminimas yra išjungtas, nes šis žaidimas šiuo metu pažymėtas kaip privatus. Jei ketinate iš Tickr farminti šiame žaidime, apsvarstykite galimybę pakeisti jo privatumo nustatymus.</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningSkipping" xml:space="preserve">
+		<value>Praleidžiama: {0}...</value>
+		<comment>{0} will be replaced by text value (string) of entry being skipped.</comment>
+	</data>
+	<data name="PluginUpdatesChecking" xml:space="preserve">
+		<value>Ieškomi įskiepių atnaujinimai...</value>
+	</data>
+	<data name="PluginUpdateChecking" xml:space="preserve">
+		<value>Ieškomas atnaujinimas {0} įskiepiui...</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateNotFound" xml:space="preserve">
+		<value>Atnaujino įskiepiui {0} nėra: {1} ≥ {2}.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNewVersionAvailable" xml:space="preserve">
+		<value>Yra nauja {0} įskiepio versija! Apsvarstykite atsinaujinti!</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFound" xml:space="preserve">
+		<value>Galimas {0} įskiepio atnaujinimas iš {1} versijos į {2}...</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNoAssetFound" xml:space="preserve">
+		<value>Nėra išteklių, skirtų {0} įskiepio atnaujinimui iš {1} versijos į {2}, tai paprastai reiškia, kad atnaujinimas bus pasiekiamas vėliau.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateConflictingAssetsFound" xml:space="preserve">
+		<value>Nepavyko nustatyti jokio ištekliaus {0} įskiepio atnaujinimui iš {1} versijos į {2}. Taip gali nutikti, jei leidimas dar nebaigtas – jei tai kartojasi, turėtumėte apie tai pranešti įskiepio kūrėjui.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateInProgress" xml:space="preserve">
+		<value>Atnaujinamas {0} įskiepis...</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFinished" xml:space="preserve">
+		<value>Įskiepio {0} atnaujinimas sėkmingas, pakeitimai bus įkelti kitą kartą paleidus TickrApp.</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateEnabled" xml:space="preserve">
+		<value>{0}/{1} įskiepis užregistruotas ir įjungti automatiniai atnaujinimai.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="PluginUpdateDisabled" xml:space="preserve">
+		<value>{0} ({1}) įskiepio automatiniai atnaujinimai išjungti, nors palaiko šią funkciją.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="CustomPluginUpdatesEnabled" xml:space="preserve">
+		<value>Tinkinti įskiepiai buvo užregistruoti automatiniams atnaujinimams. Tickr komanda primena, kad dėl savo pačių saugumo turėtumėte įjungti automatinius atnaujinimus tik iš patikimų šalių. Jei neketinote to daryti, galite išjungti įskiepius atnaujinimus Tickr globalioje konfigūracijoje.</value>
+	</data>
+	<data name="Input" xml:space="preserve">
+		<value>Įvestis: {0}</value>
+		<comment>{0} will be replaced by text input from the user.</comment>
+	</data>
+	<data name="WarningBotDatabaseComponentDecryptionFailed" xml:space="preserve">
+		<value>Duomenų bazės komponento {0} iššifravimas nepavyko. Tai gali būti gerai, jei ką tik pakeitėte savo roboto {1}, kito paleidimo metu šio įspėjimo nebeturėtumėte matyti. Priešingu atveju turėtumėte ištirti ir išsiaiškinti tikslią nesėkmės priežastį.</value>
+		<comment>{0} will be replaced by bot database component's name (string), {1} will be replaced by bot config component's name (string).</comment>
+	</data>
+</root>

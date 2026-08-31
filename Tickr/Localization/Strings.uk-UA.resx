@@ -1,0 +1,825 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns="" id="root">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<data name="AcceptingTrade" xml:space="preserve">
+		<value>Прийняття обміну: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="AutoUpdateCheckInfo" xml:space="preserve">
+		<value>Tickr буде автоматично перевіряти оновлення кожні {0}.</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "24 hours")</comment>
+	</data>
+	<data name="Content" xml:space="preserve">
+		<value>Вміст:
+{0}</value>
+		<comment>{0} will be replaced by content string. Please note that this string should include newline for formatting.</comment>
+	</data>
+	<data name="ErrorConfigPropertyInvalid" xml:space="preserve">
+		<value>Параметр {0} має невірне значення: {1}</value>
+		<comment>{0} will be replaced by name of the configuration property, {1} will be replaced by invalid value</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionInfo" xml:space="preserve">
+		<value>У Tickr V{0} виникла фатальна помилка ще до того як запустився основний модуль журналювання!</value>
+		<comment>{0} will be replaced by version number</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionPrint" xml:space="preserve">
+		<value>Виняток: {0}() {1}
+Трасування стека:
+{2}</value>
+		<comment>{0} will be replaced by function name, {1} will be replaced by exception message, {2} will be replaced by entire stack trace. Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="ErrorExitingWithNonZeroErrorCode" xml:space="preserve">
+		<value>Вихід з кодом помилки {0}!</value>
+		<comment>{0} will be replaced by error code (number)</comment>
+	</data>
+	<data name="ErrorFailingRequest" xml:space="preserve">
+		<value>Помилка запиту до: {0}</value>
+		<comment>{0} will be replaced by URL of the request</comment>
+	</data>
+	<data name="ErrorGlobalConfigNotLoaded" xml:space="preserve">
+		<value>Не вдалося завантажити глобальну конфігурацію. Переконайтеся, що {0} існує і вірний! Якщо не розумієте, що робити - ознайомтеся зі статтею "setting up" у wiki.</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorIsInvalid" xml:space="preserve">
+		<value>{0} невірний!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorNoBotsDefined" xml:space="preserve">
+		<value>Не налаштовано жодного боту. Можливо ви забули налаштувати Tickr? Скористуйтеся розділом 'setting up' у нашій wiki, якщо не знаєте, що робити.</value>
+	</data>
+	<data name="ErrorObjectIsNull" xml:space="preserve">
+		<value>{0} має значення null!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorParsingObject" xml:space="preserve">
+		<value>Не вдалося обробити {0}!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorRequestFailedTooManyTimes" xml:space="preserve">
+		<value>Не вдалося виконати запит після {0} спроб!</value>
+		<comment>{0} will be replaced by maximum number of tries</comment>
+	</data>
+	<data name="ErrorUpdateCheckFailed" xml:space="preserve">
+		<value>Не вдалося перевірити наявність нової версії!</value>
+	</data>
+	<data name="ErrorUpdateNoAssetForThisVersion" xml:space="preserve">
+		<value>Неможливо провести оновлення, тому що немає файлів зв'язаних з запущеною зараз версією! Автоматичне оновлення до цієї версії неможливе.</value>
+	</data>
+	<data name="ErrorUpdateNoAssets" xml:space="preserve">
+		<value>Неможливо оновитися, оскільки ця версія не містить ніяких файлів!</value>
+	</data>
+	<data name="ErrorUserInputRunningInHeadlessMode" xml:space="preserve">
+		<value>Отримано запит на введення даних користувачем, однак процес діє у безінтерфейсному режимі!</value>
+	</data>
+	<data name="Exiting" xml:space="preserve">
+		<value>Вихід...</value>
+	</data>
+	<data name="WarningFailed" xml:space="preserve">
+		<value>Не вдалося!</value>
+	</data>
+	<data name="GlobalConfigChanged" xml:space="preserve">
+		<value>Глобальна конфігурація змінена!</value>
+	</data>
+	<data name="ErrorGlobalConfigRemoved" xml:space="preserve">
+		<value>Глобальна конфігурація видалена!</value>
+	</data>
+	<data name="IgnoringTrade" xml:space="preserve">
+		<value>Ігнорування обміну: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="LoggingIn" xml:space="preserve">
+		<value>Вхід до {0}...</value>
+		<comment>{0} will be replaced by service's name</comment>
+	</data>
+	<data name="NoBotsAreRunning" xml:space="preserve">
+		<value>Немає запущених ботів, вихід ...</value>
+	</data>
+	<data name="RefreshingOurSession" xml:space="preserve">
+		<value>Оновлення сесії!</value>
+	</data>
+	<data name="RejectingTrade" xml:space="preserve">
+		<value>Відхилення обміну: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="Restarting" xml:space="preserve">
+		<value>Перезапуск...</value>
+	</data>
+	<data name="Starting" xml:space="preserve">
+		<value>Запуск...</value>
+	</data>
+	<data name="Success" xml:space="preserve">
+		<value>Успіх!</value>
+	</data>
+	<data name="UnlockingParentalAccount" xml:space="preserve">
+		<value>Розблокування батьківського контролю...</value>
+	</data>
+	<data name="UpdateCheckingNewVersion" xml:space="preserve">
+		<value>Перевірка наявності нової версії...</value>
+	</data>
+	<data name="UpdateDownloadingNewVersion" xml:space="preserve">
+		<value>Завантаження нової версії: {0} ({1} MB)... Під час очікування подумайте про пожертвування на користь розробників, якщо ви цінуєте виконану роботу! :)</value>
+		<comment>{0} will be replaced by version string, {1} will be replaced by update size (in megabytes)</comment>
+	</data>
+	<data name="UpdateFinished" xml:space="preserve">
+		<value>Процесс оновлення закінчено!</value>
+	</data>
+	<data name="UpdateNewVersionAvailable" xml:space="preserve">
+		<value>Доступна нова версія Tickr! Ви можете оновитися на неї самостійно!</value>
+	</data>
+	<data name="UpdateVersionInfo" xml:space="preserve">
+		<value>Ваша версія: {0} | Остання версія: {1}</value>
+		<comment>{0} will be replaced by current version, {1} will be replaced by remote version</comment>
+	</data>
+	<data name="UserInputDeviceConfirmation" xml:space="preserve">
+		<value>Перевірте свій мобільний додаток Steam, ви повинні були отримати сповіщення про підтвердження входу. Введіть Y, якщо ви отримали та схвалили сповіщення, або N, якщо хочете ввести код: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteam2FA" xml:space="preserve">
+		<value>Будь ласка, введіть ваш код 2FA з додатку для автентифікації у Steam: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamGuard" xml:space="preserve">
+		<value>Будь ласка, введіть код SteamGuard, який був надісланий вам на електронну пошту: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamLogin" xml:space="preserve">
+		<value>Будь ласка, введіть свій логін Steam: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamParentalCode" xml:space="preserve">
+		<value>Будь ласка, введіть PIN-код батьківського контролю Steam: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamPassword" xml:space="preserve">
+		<value>Будь ласка, введіть ваш пароль Steam: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="WarningUnknownValuePleaseReport" xml:space="preserve">
+		<value>Отримано невідоме значення для {0}, будь ласка, повідомте про це: {1}</value>
+		<comment>{0} will be replaced by object's name, {1} will be replaced by value for that object</comment>
+	</data>
+	<data name="IPCReady" xml:space="preserve">
+		<value>Сервер IPC готовий!</value>
+	</data>
+	<data name="IPCStarting" xml:space="preserve">
+		<value>Запуск IPC серверу...</value>
+	</data>
+	<data name="BotAlreadyStopped" xml:space="preserve">
+		<value>Цей бот вже зупинений!</value>
+	</data>
+	<data name="BotNotFound" xml:space="preserve">
+		<value>Не вдалося знайти бота з ім'ям {0}!</value>
+		<comment>{0} will be replaced by bot's name query (string)</comment>
+	</data>
+	<data name="BotStatusOverview" xml:space="preserve">
+		<value>Запущено {0}/{1} ботів, усього залишилось {2} ігор ({3} карток) які потрібно фармити.</value>
+		<comment>{0} will be replaced by number of active bots, {1} will be replaced by total number of bots, {2} will be replaced by total number of games left to farm, {3} will be replaced by total number of cards left to farm</comment>
+	</data>
+	<data name="BotStatusIdling" xml:space="preserve">
+		<value>Бот фармить гру: {0} ({1}, {2} карток залишилося обробити). Всього залишилося {3} ігор ({4} карток), (приблизно {5}) які треба фармити.</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm, {3} will be replaced by total number of games to farm, {4} will be replaced by total number of cards to farm, {5} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="BotStatusIdlingList" xml:space="preserve">
+		<value>Бот фармить ігри: {0} з {1} ігор ({2} картки) які треба фармити (залишилось приблизно {3}).</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), {1} will be replaced by total number of games to farm, {2} will be replaced by total number of cards to farm, {3} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="CheckingFirstBadgePage" xml:space="preserve">
+		<value>Перевірка першої сторінки зі значками...</value>
+	</data>
+	<data name="CheckingOtherBadgePages" xml:space="preserve">
+		<value>Перевірка інших сторінок зі значками...</value>
+	</data>
+	<data name="ChosenFarmingAlgorithm" xml:space="preserve">
+		<value>Обраний алгоритм фарму: {0}</value>
+		<comment>{0} will be replaced by the name of chosen farming algorithm</comment>
+	</data>
+	<data name="Done" xml:space="preserve">
+		<value>Виконано!</value>
+	</data>
+	<data name="GamesToIdle" xml:space="preserve">
+		<value>Всього залишилось {0} ігор ({1} карток), які потрібно фармити (приблизно {2})...</value>
+		<comment>{0} will be replaced by number of games, {1} will be replaced by number of cards, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinished" xml:space="preserve">
+		<value>Фарм закінчено!</value>
+	</data>
+	<data name="IdlingFinishedForGame" xml:space="preserve">
+		<value>Закінчено фарм: {0} ({1}) після {2} ігрового часу!</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinishedForGames" xml:space="preserve">
+		<value>Закінчено фарм ігор: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="IdlingStatusForGame" xml:space="preserve">
+		<value>Статус фарма для {0} ({1}): залишилося {2} карт</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm</comment>
+	</data>
+	<data name="IdlingStopped" xml:space="preserve">
+		<value>Фарм зупинено!</value>
+	</data>
+	<data name="IgnoredPermanentPauseEnabled" xml:space="preserve">
+		<value>Ігнорування запиту, тому що ввімкнена постійна пауза!</value>
+	</data>
+	<data name="NothingToIdle" xml:space="preserve">
+		<value>На цьому акаунті нема чого фармити!</value>
+	</data>
+	<data name="NowIdling" xml:space="preserve">
+		<value>Зараз фармиться: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="NowIdlingList" xml:space="preserve">
+		<value>Зараз фармиться: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="PlayingNotAvailable" xml:space="preserve">
+		<value>Зараз запустити ігру неможливо, спробуємо пізніше!</value>
+	</data>
+	<data name="StillIdling" xml:space="preserve">
+		<value>Все ще фармиться: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StillIdlingList" xml:space="preserve">
+		<value>Все ще фармиться: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="StoppedIdling" xml:space="preserve">
+		<value>Зупинено фарм: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StoppedIdlingList" xml:space="preserve">
+		<value>Зупинено фарм: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="UnknownCommand" xml:space="preserve">
+		<value>Невідома команда!</value>
+	</data>
+	<data name="WarningCouldNotCheckBadges" xml:space="preserve">
+		<value>Не вдалося отримати інформацію про значки, ми спробуємо ще раз пізніше!</value>
+	</data>
+	<data name="WarningCouldNotCheckCardsStatus" xml:space="preserve">
+		<value>Не вдається перевірити статус карток для: {0} ({1}), ми спробуємо ще раз пізніше!</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotAcceptingGift" xml:space="preserve">
+		<value>Прийняття подарунку: {0}...</value>
+		<comment>{0} will be replaced by giftID (number)</comment>
+	</data>
+	<data name="BotAccountLimited" xml:space="preserve">
+		<value>Цей акаунт обмежений, фарм буде недоступним доки ви не позбудетесь обмежень!</value>
+	</data>
+	<data name="BotAddLicense" xml:space="preserve">
+		<value>ID: {0} | Стан: {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotAddLicenseWithItems" xml:space="preserve">
+		<value>ID: {0} | Стан: {1} | Продукти: {2}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string, {2} will be replaced by list of granted IDs (numbers), separated by a comma</comment>
+	</data>
+	<data name="BotAlreadyRunning" xml:space="preserve">
+		<value>Цей бот вже працює!</value>
+	</data>
+	<data name="BotAuthenticatorConverting" xml:space="preserve">
+		<value>Конвертування .maFile у Tickr формат...</value>
+	</data>
+	<data name="BotAuthenticatorImportFinished" xml:space="preserve">
+		<value>Імпортування мобільного автентифікатора завершено успішно!</value>
+	</data>
+	<data name="BotAuthenticatorToken" xml:space="preserve">
+		<value>2FA токен: {0}</value>
+		<comment>{0} will be replaced by generated 2FA token (string)</comment>
+	</data>
+	<data name="BotAutomaticIdlingNowPaused" xml:space="preserve">
+		<value>Автоматичний фарм призупинено!</value>
+	</data>
+	<data name="BotAutomaticIdlingNowResumed" xml:space="preserve">
+		<value>Автоматичний фарм відновлено!</value>
+	</data>
+	<data name="BotAutomaticIdlingPausedAlready" xml:space="preserve">
+		<value>Автоматичний фарм вже на паузі!</value>
+	</data>
+	<data name="BotAutomaticIdlingResumedAlready" xml:space="preserve">
+		<value>Автоматичний фарм вже відновлено!</value>
+	</data>
+	<data name="BotConnected" xml:space="preserve">
+		<value>Підключено до Steam!</value>
+	</data>
+	<data name="BotDisconnected" xml:space="preserve">
+		<value>Відключено від Steam!</value>
+	</data>
+	<data name="BotDisconnecting" xml:space="preserve">
+		<value>Відключення...</value>
+	</data>
+	<data name="BotInstanceNotStartingBecauseDisabled" xml:space="preserve">
+		<value>Цей бот не запущений, тому що він відключений у конфігураційному файлі!</value>
+	</data>
+	<data name="BotInvalidAuthenticatorDuringLogin" xml:space="preserve">
+		<value>Помилка TwoFactorCodeMismatch виникла {0} разів поспіль. Дані 2FA більше не дійсні, або час на вашому пристрої не синхронізований, припиняю роботу!</value>
+		<comment>{0} will be replaced by maximum allowed number of failed 2FA attempts</comment>
+	</data>
+	<data name="BotLoggedOff" xml:space="preserve">
+		<value>Вийшов зі Steam: {0}</value>
+		<comment>{0} will be replaced by logging off reason (string)</comment>
+	</data>
+	<data name="BotLoggedOn" xml:space="preserve">
+		<value>Успішний вхід як {0}.</value>
+		<comment>{0} will be replaced by steam ID (number)</comment>
+	</data>
+	<data name="BotLoggingIn" xml:space="preserve">
+		<value>Здійснюється вхід...</value>
+	</data>
+	<data name="BotLogonSessionReplaced" xml:space="preserve">
+		<value>Ймовірно, цей акаунт зараз використовується в іншому екземплярі Tickr, це є позаштатною ситуацією, припиняемо роботу!</value>
+	</data>
+	<data name="BotLootingFailed" xml:space="preserve">
+		<value>Невдала спроба обміну!</value>
+	</data>
+	<data name="BotLootingMasterNotDefined" xml:space="preserve">
+		<value>Неможливо надіслати обмін, бо нe задано користувача з правами "master"!</value>
+	</data>
+	<data name="BotLootingSuccess" xml:space="preserve">
+		<value>Обмін успішно надіслано!</value>
+	</data>
+	<data name="BotSendingTradeToYourself" xml:space="preserve">
+		<value>Неможливо відправити обмін самому собі!</value>
+	</data>
+	<data name="BotNoTickrAuthenticator" xml:space="preserve">
+		<value>Цей бот не має включеного Tickr 2FA! Забули імпортувати автентифікатор у Tickr 2FA?</value>
+	</data>
+	<data name="BotNotConnected" xml:space="preserve">
+		<value>Цей екземпляр бота не підключений!</value>
+	</data>
+	<data name="BotNotOwnedYet" xml:space="preserve">
+		<value>Ще не має: {0}</value>
+		<comment>{0} will be replaced by query (string)</comment>
+	</data>
+	<data name="BotOwnedAlreadyWithName" xml:space="preserve">
+		<value>Вже має: {0} | {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotPointsBalance" xml:space="preserve">
+		<value>Поточний баланс: {0}</value>
+		<comment>{0} will be replaced by the points balance value (integer)</comment>
+	</data>
+	<data name="BotRateLimitExceeded" xml:space="preserve">
+		<value>Перевищений ліміт частоти запросів, ми спробуємо знову через {0} очікування...</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "25 minutes")</comment>
+	</data>
+	<data name="BotReconnecting" xml:space="preserve">
+		<value>Перепідключення...</value>
+	</data>
+	<data name="BotRedeem" xml:space="preserve">
+		<value>Ключ: {0} | Стан: {1}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotRedeemWithItems" xml:space="preserve">
+		<value>Ключ: {0} | Стан: {1} | Продукти: {2}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string, {2} will be replaced by list of key-value pairs, separated by a comma</comment>
+	</data>
+	<data name="BotRemovedExpiredLoginKey" xml:space="preserve">
+		<value>Видалений прострочений ключ авторизації!</value>
+	</data>
+	<data name="BotStatusNotIdling" xml:space="preserve">
+		<value>Бот нічого не фармить.</value>
+	</data>
+	<data name="BotStatusLimited" xml:space="preserve">
+		<value>Бот обмежений і не може отримувати карти від фарму.</value>
+	</data>
+	<data name="BotStatusConnecting" xml:space="preserve">
+		<value>Бот підключається до мережі Steam.</value>
+	</data>
+	<data name="BotStatusNotRunning" xml:space="preserve">
+		<value>Бот не запущений.</value>
+	</data>
+	<data name="BotStatusPaused" xml:space="preserve">
+		<value>Бот на паузі чи працює в ручному режимі.</value>
+	</data>
+	<data name="BotStatusPlayingNotAvailable" xml:space="preserve">
+		<value>Бот зараз використовується.</value>
+	</data>
+	<data name="BotUnableToLogin" xml:space="preserve">
+		<value>Неможливо увійти до Steam: {0}/{1}</value>
+		<comment>{0} will be replaced by failure reason (string), {1} will be replaced by extended failure reason (string)</comment>
+	</data>
+	<data name="ErrorIsEmpty" xml:space="preserve">
+		<value>{0} порожній!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="UnusedKeys" xml:space="preserve">
+		<value>Невикористані ключі: {0}</value>
+		<comment>{0} will be replaced by list of cd-keys (strings), separated by a comma</comment>
+	</data>
+	<data name="WarningFailedWithError" xml:space="preserve">
+		<value>Не вдалося через помилку: {0}</value>
+		<comment>{0} will be replaced by failure reason (string)</comment>
+	</data>
+	<data name="BotConnectionLost" xml:space="preserve">
+		<value>Підключення до мережі Steam втрачено. Підключаємось повторно...</value>
+	</data>
+	<data name="BotAccountFree" xml:space="preserve">
+		<value>Акаунт більше не зайнятий: фарм відновлено!</value>
+	</data>
+	<data name="BotAccountOccupied" xml:space="preserve">
+		<value>Обліковий запис зараз використовується: Tickr відновить роботу, коли стане вільним...</value>
+	</data>
+	<data name="BotConnecting" xml:space="preserve">
+		<value>Підключення...</value>
+	</data>
+	<data name="BotHeartBeatFailed" xml:space="preserve">
+		<value>Не вдалося відключити клієнт. Відмовляемось від цього бота!</value>
+	</data>
+	<data name="BotStopping" xml:space="preserve">
+		<value>Зупинення...</value>
+	</data>
+	<data name="ErrorBotConfigInvalid" xml:space="preserve">
+		<value>Конфігурація вашого боту невірна. Будь ласка, перевірте вміст {0}, та спробуйте ще!</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorDatabaseInvalid" xml:space="preserve">
+		<value>Не вдалося завантажити базу даних. Якщо проблема повторюватиметься, будь ласка, видаліть {0} для того, щоб повторно створити базу даних!</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="Initializing" xml:space="preserve">
+		<value>Ініціалізація {0}...</value>
+		<comment>{0} will be replaced by service name that is being initialized</comment>
+	</data>
+	<data name="WarningPrivacyPolicy" xml:space="preserve">
+		<value>Будь ласка, перегляньте наш розділ політики конфіденційності у wiki, якщо вас турбує те, що Tickr насправді робить!</value>
+	</data>
+	<data name="Welcome" xml:space="preserve">
+		<value>Схоже, що це ваш перший запуск програми, Ласкаво просимо!</value>
+	</data>
+	<data name="ErrorInvalidCurrentCulture" xml:space="preserve">
+		<value>Обраний вами CurrentCulture невірний, Tickr буде працювати згідно з базовим налаштуванням!</value>
+	</data>
+	<data name="TranslationIncomplete" xml:space="preserve">
+		<value>Tickr намагатиметься використовувати обрану мову {0}, але переклад цією мову завершено лише на {1}. Можливо ви б змогли допомогти в перекладі Tickr вашою мовою?</value>
+		<comment>{0} will be replaced by culture code, such as "en-US", {1} will be replaced by completeness percentage, such as "78.5%"</comment>
+	</data>
+	<data name="IdlingGameNotPossible" xml:space="preserve">
+		<value>Фермерство {0} ({1}) тимчасово вимкнено, оскільки Tickr наразі не може запустити цю гру.</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningIdlingGameMismatch" xml:space="preserve">
+		<value>Tickr виявив невідповідність ID для {0} ({1}) і буде натомість використовувати ID {2}.</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotVersion" xml:space="preserve">
+		<value>{0} V{1}</value>
+		<comment>{0} will be replaced by program's name (e.g. "Tickr"), {1} will be replaced by program's version (e.g. "1.0.0.0"). This string typically has nothing to translate and you should leave it as it is, unless you need to change the format, e.g. in RTL languages.</comment>
+	</data>
+	<data name="BotAccountLocked" xml:space="preserve">
+		<value>Цей обліковий запис заблоковано, робота з ним неможлива!</value>
+	</data>
+	<data name="BotStatusLocked" xml:space="preserve">
+		<value>Бот обмежений і не може отримувати карти.</value>
+	</data>
+	<data name="ErrorFunctionOnlyInHeadlessMode" xml:space="preserve">
+		<value>Ця функція доступна лише у безінтерфейсному режимі!</value>
+	</data>
+	<data name="BotOwnedAlready" xml:space="preserve">
+		<value>Вже має: {0}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="ErrorAccessDenied" xml:space="preserve">
+		<value>Доступ заборонено!</value>
+	</data>
+	<data name="WarningPreReleaseVersion" xml:space="preserve">
+		<value>Ви користуєтеся версією, яка новіша за останню версію у цьому каналі оновлення. Будь ласка, зверніть увагу, що підготовчі версії призначені для користувачів які вміють доповідати про помилки, вирішувати питання та надавати зворотній зв'язок - технічна підтримка не надається.</value>
+	</data>
+	<data name="BotStats" xml:space="preserve">
+		<value>Поточне використання пам'яті: {0} МБ.
+Час роботи: {1}</value>
+		<comment>{0} will be replaced by number (in megabytes) of memory being used, {1} will be replaced by translated TimeSpan string (such as "25 minutes"). Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="BotOwnsOverviewPerGame" xml:space="preserve">
+		<value>{0}/{1} вже мають гру {2}.</value>
+		<comment>{0} will be replaced by number of bots that already own particular game being checked, {1} will be replaced by total number of bots that were checked during the process, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotRefreshingPackagesData" xml:space="preserve">
+		<value>Оновлення даних про пакети...</value>
+	</data>
+	<data name="WarningDeprecated" xml:space="preserve">
+		<value>Параметр {0} є застарілим і його буде видалено в майбутніх версіях програми. Будь ласка, використовуйте {1} замість нього.</value>
+		<comment>{0} will be replaced by the name of deprecated property (such as argument, config property or likewise), {1} will be replaced by the name of valid replacement (such as another argument or config property)</comment>
+	</data>
+	<data name="BotAcceptedDonationTrade" xml:space="preserve">
+		<value>Прийнято пожертвування у обміні: {0}</value>
+		<comment>{0} will be replaced by trade's ID (number)</comment>
+	</data>
+	<data name="WarningWorkaroundTriggered" xml:space="preserve">
+		<value>Використано тимчасове рішення для помилки {0}.</value>
+		<comment>{0} will be replaced by the bug's name provided by Tickr</comment>
+	</data>
+	<data name="TargetBotNotConnected" xml:space="preserve">
+		<value>Бот-одержувач не підключений!</value>
+	</data>
+	<data name="BotWalletBalance" xml:space="preserve">
+		<value>Кошти в гаманці: {0} {1}</value>
+		<comment>{0} will be replaced by wallet balance value, {1} will be replaced by currency name</comment>
+	</data>
+	<data name="BotHasNoWallet" xml:space="preserve">
+		<value>Бот не має гаманця.</value>
+	</data>
+	<data name="BotLevel" xml:space="preserve">
+		<value>Рівень бота {0}.</value>
+		<comment>{0} will be replaced by bot's level</comment>
+	</data>
+	<data name="BotInventory" xml:space="preserve">
+		<value>{0}/{1} ({2}/{3}): {4} активів</value>
+		<comment>{0} will be replaced by appID (number), {1} will be replaced by contextID (number), {2} will be replaced by app's name (string), {3} will be replaced by name of the context (string), {4} will be replaced by number of assets in the specified inventory (number).</comment>
+	</data>
+	<data name="ActivelyMatchingItems" xml:space="preserve">
+		<value>Підбір предметів Steam, раунд #{0}...</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="DoneActivelyMatchingItems" xml:space="preserve">
+		<value>Завершено підбір предметів Steam, раунд #{0}.</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="ErrorAborted" xml:space="preserve">
+		<value>Перервано!</value>
+	</data>
+	<data name="WarningExcessiveBotsCount" xml:space="preserve">
+		<value>Ви використовуєте як ботів більше акаунтів ніж рекомендований нами ліміт ({0}). Пам'ятайте, що така конфігурація не підтримується та може призвести до різноманітних проблем, зв'язаних зі Steam, включаючи блокування акаунту. Подібніше читайте у нашому FAQ.</value>
+		<comment>{0} will be replaced by our maximum recommended bots count (number)</comment>
+	</data>
+	<data name="PluginLoaded" xml:space="preserve">
+		<value>{0} успішно завантажено!</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin</comment>
+	</data>
+	<data name="PluginLoading" xml:space="preserve">
+		<value>Завантаження {0} V{1}...</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin, {1} will be replaced by its version</comment>
+	</data>
+	<data name="NothingFound" xml:space="preserve">
+		<value>Нічого не знайдено!</value>
+	</data>
+	<data name="PluginsWarning" xml:space="preserve">
+		<value>Ви завантажили до Tickr один чи більше плаґінів. Оскільки ми не в змозі надавати підтримку для модифікованих конфігурацій, будь ласка у разі якихось проблем звертайтеся до розробників відповідного плаґіну.</value>
+	</data>
+	<data name="PleaseWait" xml:space="preserve">
+		<value>Будь ласка, зачекайте...</value>
+	</data>
+	<data name="EnterCommand" xml:space="preserve">
+		<value>Введіть команду: </value>
+	</data>
+	<data name="Executing" xml:space="preserve">
+		<value>Виконання...</value>
+	</data>
+	<data name="InteractiveConsoleEnabled" xml:space="preserve">
+		<value>Інтерактивну консоль активовано, натисніть 'c' щоб перейти до режиму команд.</value>
+	</data>
+	<data name="BotGamesToRedeemInBackgroundCount" xml:space="preserve">
+		<value>Бот має {0} ігор у фоновій черзі.</value>
+		<comment>{0} will be replaced by remaining number of games in BGR's queue</comment>
+	</data>
+	<data name="ErrorSingleInstanceRequired" xml:space="preserve">
+		<value>Процес Tickr вже працює для цього робочого каталогу, припиняю роботу!</value>
+	</data>
+	<data name="BotHandledConfirmations" xml:space="preserve">
+		<value>Успішно оброблено {0} підтверджень!</value>
+		<comment>{0} will be replaced by number of confirmations</comment>
+	</data>
+	<data name="BotExtraIdlingCooldown" xml:space="preserve">
+		<value>Чекаємо до {0}, щоб переконатися, що ми можемо розпочати фарм...</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "1 minute")</comment>
+	</data>
+	<data name="UpdateCleanup" xml:space="preserve">
+		<value>Видалення старих файлів після оновлення...</value>
+	</data>
+	<data name="BotGeneratingSteamParentalCode" xml:space="preserve">
+		<value>Генерація коду батьківського контролю Steam, зважте можливість вказати його у конфігураційному файлі замість цього...</value>
+	</data>
+	<data name="IPCConfigChanged" xml:space="preserve">
+		<value>Конфігурацію IPC було змінено!</value>
+	</data>
+	<data name="BotTradeOfferResult" xml:space="preserve">
+		<value>Пропозицію обміну {0} вирішено {1} через {2}.</value>
+		<comment>{0} will be replaced by trade offer ID (number), {1} will be replaced by internal Tickr enum name, {2} will be replaced by technical reason why the trade was determined to be in this state</comment>
+	</data>
+	<data name="BotInvalidPasswordDuringLogin" xml:space="preserve">
+		<value>Код помилки InvalidPassword отримано {0} разів поспіль. Найбільш імовірно що ваш пароль для цього акаунта невірний, припиняю роботу!</value>
+		<comment>{0} will be replaced by maximum allowed number of failed login attempts</comment>
+	</data>
+	<data name="Result" xml:space="preserve">
+		<value>Результат: {0}</value>
+		<comment>{0} will be replaced by generic result of various functions that use this string</comment>
+	</data>
+	<data name="WarningUnsupportedEnvironment" xml:space="preserve">
+		<value>Ви намагаєтеся запустити Tickr у варіанті {0} у непідтримуваному середовищі: {1}. Скористуйтеся аргументом --ignore-unsupported-environment якщо ви справді розумієте, що робите.</value>
+	</data>
+	<data name="WarningUnknownCommandLineArgument" xml:space="preserve">
+		<value>Невідомий аргумент командного рядка: {0}</value>
+		<comment>{0} will be replaced by unrecognized command that has been provided</comment>
+	</data>
+	<data name="ErrorConfigDirectoryNotFound" xml:space="preserve">
+		<value>Каталог з конфігураційними файлами не знайдено, припиняю роботу!</value>
+	</data>
+	<data name="BotIdlingSelectedGames" xml:space="preserve">
+		<value>Відтворення вибраного {0}: {1}</value>
+		<comment>{0} will be replaced by internal name of the config property (e.g. "GamesPlayedWhileIdle"), {1} will be replaced by comma-separated list of appIDs that user has chosen</comment>
+	</data>
+	<data name="AutomaticFileMigration" xml:space="preserve">
+		<value>Файл конфігурації {0} буде оновлено до поточного синтаксису...</value>
+		<comment>{0} will be replaced with the relative path to the affected config file</comment>
+	</data>
+	<data name="WarningTooShortCryptKey" xml:space="preserve">
+		<value>Ваш ключ шифрування закороткий. Ми рекомендуємо використовувати довжину принаймні {0} байтів (символів).</value>
+		<comment>{0} will be replaced by the number of bytes (characters) recommended</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForHashing" xml:space="preserve">
+		<value>Ви використовуєте налаштування {0} властивості {1}, але не надали спеціальний --cryptkey. Вам слід надати бажаний --cryptkey для підвищення безпеки.</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "SCrypt"), {1} will be replaced by the name of the property (e.g. "IPCPassword")</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForEncryption" xml:space="preserve">
+		<value>Ви використовуєте налаштування {0} властивості {1}, але не надали спеціальний --cryptkey. Це повністю втрачає захист, оскільки Tickr змушений використовувати власний (відомий) ключ. Вам слід надати спеціальний --cryptkey, щоб скористатися перевагами безпеки, які пропонує цей параметр.</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "AES"), {1} will be replaced by the name of the property (e.g. "SteamPassword")</comment>
+	</data>
+	<data name="WarningRunningAsRoot" xml:space="preserve">
+		<value>Ви намагаєтеся запустити Tickr як адміністратор (root). Це створює значний ризик для безпеки вашої машини, і оскільки для роботи Tickr не потрібен доступ root, ми рекомендуємо запускати його як користувач без прав адміністратора, якщо це можливо.</value>
+	</data>
+	<data name="WarningRunningInUnsupportedEnvironment" xml:space="preserve">
+		<value>Ви запускаєте Tickr у непідтримуваному середовищі, з допомогою параметру -ignore-unsupported-environment. Зверніть увагу, що ми не надаємо будь-якої допомоги у такій ситуації, і ви робите це цілком на власний ризик. Ми попереджали.</value>
+	</data>
+	<data name="FetchingChecksumFromRemoteServer" xml:space="preserve">
+		<value>Отримуємо контрольну суму з віддаленого сервера...</value>
+	</data>
+	<data name="VerifyingChecksumWithRemoteServer" xml:space="preserve">
+		<value>Перевіряємо контрольну суму завантаженого файлу з отриманою з віддаленого сервера...</value>
+	</data>
+	<data name="ChecksumMissing" xml:space="preserve">
+		<value>Віддалений сервер нічого не знає про версію, на яку ми оновлюємось. Це можливо якщо ця версія нещодавно опублікована - відмовляємось від оновлення в якості додаткового заходу безпеки.</value>
+	</data>
+	<data name="ChecksumTimeout" xml:space="preserve">
+		<value>Не вдалося отримати контрольну суму завантаженого бінарного файлу - відмовляємось продовжувати процедуру оновлення на цей час як додатковий захід безпеки.</value>
+	</data>
+	<data name="ChecksumWrong" xml:space="preserve">
+		<value>Віддалений сервер відповів з іншою контрольною сумою, це може свідчити про пошкоджене завантаження або атаку MITM, відмовляємось від процедури оновлення!</value>
+	</data>
+	<data name="PatchingFiles" xml:space="preserve">
+		<value>Виправлення файлів TickrApp...</value>
+	</data>
+	<data name="UserInputCryptkey" xml:space="preserve">
+		<value>Будь ласка, введіть свій крипто-ключ: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="ErrorIPNotBanned" xml:space="preserve">
+		<value>IP-адреса {0} не заборонена!</value>
+		<comment>{0} will be replaced by an IP address which was requested to be unbanned from using IPC</comment>
+	</data>
+	<data name="WarningNoLicense" xml:space="preserve">
+		<value>Ви намагалися скористатися платною функцією {0}, але у вас не встановлено дійсний LicenseID у глобальній конфігурації TickrApp. Перегляньте свою конфігурацію, оскільки функція не працюватиме без додаткових деталей.</value>
+		<comment>{0} will be replaced by feature name (e.g. MatchActively)</comment>
+	</data>
+	<data name="WarningRegionRestrictedPackage" xml:space="preserve">
+		<value>Tickr не може запустити додаток {0}, оскільки він має регіональне обмеження для країни {1}, яке триває до {2}.</value>
+		<comment>{0} will be replaced by app ID (number), {1} will be replaced by short country code (string, such as "PL"), {2} will be replaced by human-readable date (string).</comment>
+	</data>
+	<data name="WarningUnsupportedOfficialPlugins" xml:space="preserve">
+		<value>Ви намагаєтеся запустити офіційний плагін {0} у невідповідній версії Tickr: {1} (очікувана {2}). Це означає, що ви робите щось жахливо неправильно, або виправте налаштування, або надайте аргумент --ignore-unsupported-environment, якщо ви дійсно знаєте, що робите.</value>
+		<comment>{0} will be replaced by plugin name, {1} will be replaced by plugin's version number, {2} will be replaced by Tickr's version number.</comment>
+	</data>
+	<data name="ErrorTooManyCrashes" xml:space="preserve">
+		<value>Ваш Tickr останнім часом аварійно завершував роботу занадто багато разів, і через це ініціалізація процесу була відключена. Або перевірте, виправте налаштування, видаліть файл TickrApp.crash з каталогу конфігурації, або додайте аргумент --ignore-unsupported-environment, якщо ви дійсно знаєте, що робите.</value>
+	</data>
+	<data name="IdlingGameNotPossiblePrivate" xml:space="preserve">
+		<value>Фермерство {0} ({1}) вимкнено, оскільки ця гра наразі позначена як приватна. Якщо ви маєте намір з Tickr фермерувати цю гру, то змініть її налаштування приватності.</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningSkipping" xml:space="preserve">
+		<value>Пропускається: {0}...</value>
+		<comment>{0} will be replaced by text value (string) of entry being skipped.</comment>
+	</data>
+	<data name="PluginUpdatesChecking" xml:space="preserve">
+		<value>Перевірка оновлень плагінів...</value>
+	</data>
+	<data name="PluginUpdateChecking" xml:space="preserve">
+		<value>Перевірка оновлення для плагіна {0}...</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateNotFound" xml:space="preserve">
+		<value>Оновлення для плагіна {0} недоступне: {1} ≥ {2}.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNewVersionAvailable" xml:space="preserve">
+		<value>Доступна нова версія плагіна {0}! Рекомендуємо оновитися!</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFound" xml:space="preserve">
+		<value>Знайдено оновлення для плагіна {0} з версії {1} до {2}...</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNoAssetFound" xml:space="preserve">
+		<value>Немає доступних ресурсів для оновлення плагіна {0} з версії {1} до {2}, що зазвичай означає, що оновлення буде доступне пізніше.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateConflictingAssetsFound" xml:space="preserve">
+		<value>Не вдалося визначити ресурс для оновлення плагіна {0} з версії {1} до {2}. Це може статися, якщо випуск ще не завершено - якщо ця помилка повторюється, ви повинні повідомити про це автора плагіна.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateInProgress" xml:space="preserve">
+		<value>Оновлення плагіна {0}...</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFinished" xml:space="preserve">
+		<value>Оновлення плагіна {0} вдалося. Зміни будуть завантажені при наступному запуску TickrApp.</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateEnabled" xml:space="preserve">
+		<value>Плагін {0}/{1} було зареєстровано і ввімкнено для автоматичних оновлень.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="PluginUpdateDisabled" xml:space="preserve">
+		<value>Плагін {0} ({1}) було вимкнено від автоматичних оновлень, хоча він підтримує цю функцію.</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="CustomPluginUpdatesEnabled" xml:space="preserve">
+		<value>Були зареєстровані власні плагіни для автоматичних оновлень. Команда Tickr хоче нагадати вам, що з метою вашої безпеки слід увімкнути автоматичні оновлення лише від довірених джерел. Якщо ви не мали на це наміру, ви можете вимкнути оновлення плагінів у загальному конфігураційному файлі TickrApp.</value>
+	</data>
+	<data name="Input" xml:space="preserve">
+		<value>Input: {0}</value>
+		<comment>{0} will be replaced by text input from the user.</comment>
+	</data>
+	<data name="WarningNoSystemRequiredLinuxDependencies" xml:space="preserve">
+		<value>Ви оголосили --system-required, але вашої ОС не вистачає необхідних залежностей, щоб ця функція працювала. Розгляньте встановлення dbus, хоча також можна безпечно ігнорувати це попередження, якщо вам не потрібно гальмувати для належної роботи.</value>
+	</data>
+	<data name="WarningBotDatabaseComponentDecryptionFailed" xml:space="preserve">
+		<value>Не вдалося розшифрувати компонент бази даних {0} . Це може бути нормально, якщо ви щойно змінили {1}вашого бота, ви більше не повинні бачити це попередження під час наступного запуску. В іншому випадку, слід дослідити та знайти точну причину невдачі.</value>
+		<comment>{0} will be replaced by bot database component's name (string), {1} will be replaced by bot config component's name (string).</comment>
+	</data>
+	<data name="WarningNoValidKeysFound" xml:space="preserve">
+		<value>Немає дійсних ключів у вашому файлі .keys для спасіння. Переконайтеся, що ваші ключі знаходяться в правильному форматі.</value>
+	</data>
+	<data name="InfoKeysImported" xml:space="preserve">
+		<value>Успішно імпортовано {0} ключі з вашого файлу .keys.</value>
+		<comment>{0} will be replaced by number of imported keys (integer).</comment>
+	</data>
+	<data name="InfoKeysImportedSkipped" xml:space="preserve">
+		<value>Успішно імпортовано {0} ключів з вашого файлу .keys, {1} line(s) були пропущені, оскільки вони не у правильному форматі, є коментарями або пусті рядки.</value>
+		<comment>{0} will be replaced by number of imported keys (integer), {1} will be replaced by number of skipped lines (integer).</comment>
+	</data>
+	<data name="InfoKeysLoaded" xml:space="preserve">
+		<value>Завантажено {0} ключ(ів) з черги.</value>
+		<comment>{0} will be replaced by number of keys (integer) in the queue.</comment>
+	</data>
+</root>

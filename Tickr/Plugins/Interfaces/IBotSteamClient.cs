@@ -1,0 +1,43 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Tickr.Steam;
+using JetBrains.Annotations;
+using SteamKit2;
+
+namespace Tickr.Plugins.Interfaces;
+
+/// <inheritdoc />
+/// <summary>
+///     Implementing this interface allows you to register your own SteamKit2 message handlers, which means controlling the traffic that comes from the Steam network.
+/// </summary>
+[PublicAPI]
+public interface IBotSteamClient : IPlugin {
+	/// <summary>
+	///     Tickr will call this method right after custom SK2 client handler initialization in order to allow you listening for callbacks in your own code.
+	/// </summary>
+	/// <param name="bot">Bot object related to this callback.</param>
+	/// <param name="callbackManager">Callback manager object which can be used for establishing subscriptions to standard and custom callbacks.</param>
+	public Task OnBotSteamCallbacksInit(Bot bot, CallbackManager callbackManager);
+
+	/// <summary>
+	///     Tickr will call this method right after bot initialization in order to allow you hooking custom SK2 client handlers into the SteamClient.
+	/// </summary>
+	/// <param name="bot">Bot object related to this callback.</param>
+	/// <returns>Collection of custom client handlers that are supposed to be hooked into the SteamClient by TickrApp. If you do not require any, just return null or empty collection.</returns>
+	public Task<IReadOnlyCollection<ClientMsgHandler>?> OnBotSteamHandlersInit(Bot bot);
+}

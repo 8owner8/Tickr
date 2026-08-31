@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<RuleSet Name="All Rules Enabled as build warnings" Description="All Rules are enabled as build warnings. Rules with IsEnabledByDefault = false are force enabled as build warnings." ToolsVersion="15.0">
+</RuleSet>

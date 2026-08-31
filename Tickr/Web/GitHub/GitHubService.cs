@@ -1,0 +1,185 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
+using Tickr.Core;
+using Tickr.Web.GitHub.Data;
+using Tickr.Web.Responses;
+using JetBrains.Annotations;
+
+namespace Tickr.Web.GitHub;
+
+public static class GitHubService {
+	private static Uri URL => new("https://api.github.com");
+
+	[PublicAPI]
+	public static async Task<ReleaseResponse?> GetLatestRelease(string repoName, bool stable = true, CancellationToken cancellationToken = default) {
+		ArgumentException.ThrowIfNullOrEmpty(repoName);
+
+		if (stable) {
+			Uri request = new(URL, $"/repos/{repoName}/releases/latest");
+
+			return await GetReleaseFromURL(request, cancellationToken).ConfigureAwait(false);
+		}
+
+		ImmutableList<ReleaseResponse>? response = await GetReleases(repoName, 1, cancellationToken).ConfigureAwait(false);
+
+		return response?.FirstOrDefault();
+	}
+
+	[PublicAPI]
+	public static async Task<ReleaseResponse?> GetRelease(string repoName, string tag, CancellationToken cancellationToken = default) {
+		ArgumentException.ThrowIfNullOrEmpty(repoName);
+		ArgumentException.ThrowIfNullOrEmpty(tag);
+
+		Uri request = new(URL, $"/repos/{repoName}/releases/tags/{tag}");
+
+		return await GetReleaseFromURL(request, cancellationToken).ConfigureAwait(false);
+	}
+
+	[PublicAPI]
+	public static async Task<ImmutableList<ReleaseResponse>?> GetReleases(string repoName, byte count = 10, CancellationToken cancellationToken = default) {
+		ArgumentException.ThrowIfNullOrEmpty(repoName);
+		ArgumentOutOfRangeException.ThrowIfZero(count);
+		ArgumentOutOfRangeException.ThrowIfGreaterThan(count, 100);
+
+		Uri request = new(URL, $"/repos/{repoName}/releases?per_page={count}");
+
+		return await GetReleasesFromURL(request, cancellationToken).ConfigureAwait(false);
+	}
+
+	internal static async Task<Dictionary<string, DateTime>?> GetWikiHistory(string page, CancellationToken cancellationToken = default) {
+		ArgumentException.ThrowIfNullOrEmpty(page);
+
+		if (TickrApp.WebBrowser == null) {
+			throw new InvalidOperationException(nameof(TickrApp.WebBrowser));
+		}
+
+		Uri request = new($"{SharedInfo.ProjectURL}/wiki/{page}/_history");
+
+		using HtmlDocumentResponse? response = await TickrApp.WebBrowser.UrlGetToHtmlDocument(request, requestOptions: WebBrowser.ERequestOptions.ReturnClientErrors | WebBrowser.ERequestOptions.AllowInvalidBodyOnErrors, cancellationToken: cancellationToken).ConfigureAwait(false);
+
+		if (response?.StatusCode.IsClientErrorCode() == true) {
+			return response.StatusCode switch {
+				HttpStatusCode.NotFound => new Dictionary<string, DateTime>(0, StringComparer.Ordinal),
+				_ => null
+			};
+		}
+
+		if (response?.Content == null) {
+			return null;
+		}
+
+		IHtmlCollection<IElement> revisionNodes = response.Content.QuerySelectorAll("li[class*='wiki-history-revision']");
+
+		Dictionary<string, DateTime> result = new(StringComparer.Ordinal);
+
+		foreach (IElement revisionNode in revisionNodes) {
+			IElement? versionNode = revisionNode.QuerySelector("input[value]");
+
+			if (versionNode == null) {
+				TickrApp.TickrLogger.LogNullError(versionNode);
+
+				return null;
+			}
+
+			string? versionText = versionNode.GetAttribute("value");
+
+			if (string.IsNullOrEmpty(versionText)) {
+				TickrApp.TickrLogger.LogNullError(versionText);
+
+				return null;
+			}
+
+			IElement? dateTimeNode = revisionNode.QuerySelector("relative-time[datetime]");
+
+			if (dateTimeNode == null) {
+				TickrApp.TickrLogger.LogNullError(dateTimeNode);
+
+				return null;
+			}
+
+			string? dateTimeText = dateTimeNode.GetAttribute("datetime");
+
+			if (string.IsNullOrEmpty(dateTimeText)) {
+				TickrApp.TickrLogger.LogNullError(dateTimeText);
+
+				return null;
+			}
+
+			if (!DateTime.TryParse(dateTimeText, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out DateTime dateTime)) {
+				TickrApp.TickrLogger.LogNullError(dateTime);
+
+				return null;
+			}
+
+			result[versionText] = dateTime.ToUniversalTime();
+		}
+
+		return result;
+	}
+
+	internal static async Task<string?> GetWikiPage(string page, string? revision = null, CancellationToken cancellationToken = default) {
+		ArgumentException.ThrowIfNullOrEmpty(page);
+
+		if (TickrApp.WebBrowser == null) {
+			throw new InvalidOperationException(nameof(TickrApp.WebBrowser));
+		}
+
+		Uri request = new($"{SharedInfo.ProjectURL}/wiki/{page}{(!string.IsNullOrEmpty(revision) ? $"/{revision}" : "")}");
+
+		using HtmlDocumentResponse? response = await TickrApp.WebBrowser.UrlGetToHtmlDocument(request, cancellationToken: cancellationToken).ConfigureAwait(false);
+
+		if (response?.Content == null) {
+			return null;
+		}
+
+		IElement? markdownBodyNode = response.Content.QuerySelector("div[class='markdown-body']");
+
+		return markdownBodyNode?.InnerHtml.Trim() ?? "";
+	}
+
+	private static async Task<ReleaseResponse?> GetReleaseFromURL(Uri request, CancellationToken cancellationToken = default) {
+		ArgumentNullException.ThrowIfNull(request);
+
+		if (TickrApp.WebBrowser == null) {
+			throw new InvalidOperationException(nameof(TickrApp.WebBrowser));
+		}
+
+		ObjectResponse<ReleaseResponse>? response = await TickrApp.WebBrowser.UrlGetToJsonObject<ReleaseResponse>(request, cancellationToken: cancellationToken).ConfigureAwait(false);
+
+		return response?.Content;
+	}
+
+	private static async Task<ImmutableList<ReleaseResponse>?> GetReleasesFromURL(Uri request, CancellationToken cancellationToken = default) {
+		ArgumentNullException.ThrowIfNull(request);
+
+		if (TickrApp.WebBrowser == null) {
+			throw new InvalidOperationException(nameof(TickrApp.WebBrowser));
+		}
+
+		ObjectResponse<ImmutableList<ReleaseResponse>>? response = await TickrApp.WebBrowser.UrlGetToJsonObject<ImmutableList<ReleaseResponse>>(request, cancellationToken: cancellationToken).ConfigureAwait(false);
+
+		return response?.Content;
+	}
+}

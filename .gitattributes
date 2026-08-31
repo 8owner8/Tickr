@@ -1,0 +1,11 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Unix files that are always LF
+*.sh text eol=lf
+
+# Windows files that are always CRLF
+[Dd]esktop.ini text eol=crlf
+
+# Diff settings
+*.cs diff=csharp

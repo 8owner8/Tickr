@@ -1,0 +1,104 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Text.Json.Serialization;
+using Tickr.Steam.Data;
+using Tickr.Steam.Storage;
+using JetBrains.Annotations;
+using SteamKit2;
+
+namespace Tickr.OfficialPlugins.ItemsMatcher.Data;
+
+internal abstract class AnnouncementRequestBase {
+	[JsonInclude]
+	private string? AvatarHash { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private Guid Guid { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private string InventoryChecksum { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private ImmutableHashSet<EAssetType> MatchableTypes { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private bool MatchEverything { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private byte MaxTradeHoldDuration { get; init; }
+
+	[JsonInclude]
+	private string? Nickname { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private ulong SteamID { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private uint TotalInventoryCount { get; init; }
+
+	[JsonInclude]
+	[JsonRequired]
+	private string TradeToken { get; init; }
+
+	internal AnnouncementRequestBase(Guid guid, ulong steamID, string inventoryChecksum, IReadOnlyCollection<EAssetType> matchableTypes, uint totalInventoryCount, bool matchEverything, byte maxTradeHoldDuration, string tradeToken, string? nickname = null, string? avatarHash = null) {
+		ArgumentOutOfRangeException.ThrowIfEqual(guid, Guid.Empty);
+
+		if ((steamID == 0) || !new SteamID(steamID).IsIndividualAccount) {
+			throw new ArgumentOutOfRangeException(nameof(steamID));
+		}
+
+		ArgumentException.ThrowIfNullOrEmpty(inventoryChecksum);
+
+		if ((matchableTypes == null) || (matchableTypes.Count == 0)) {
+			throw new ArgumentNullException(nameof(matchableTypes));
+		}
+
+		ArgumentOutOfRangeException.ThrowIfZero(totalInventoryCount);
+		ArgumentException.ThrowIfNullOrEmpty(tradeToken);
+
+		if (tradeToken.Length != BotConfig.SteamTradeTokenLength) {
+			throw new ArgumentOutOfRangeException(nameof(tradeToken));
+		}
+
+		Guid = guid;
+		SteamID = steamID;
+		TradeToken = tradeToken;
+		InventoryChecksum = inventoryChecksum;
+		MatchableTypes = [.. matchableTypes];
+		MatchEverything = matchEverything;
+		MaxTradeHoldDuration = maxTradeHoldDuration;
+		TotalInventoryCount = totalInventoryCount;
+
+		Nickname = nickname;
+		AvatarHash = avatarHash;
+	}
+
+	[UsedImplicitly]
+	public bool ShouldSerializeAvatarHash() => !string.IsNullOrEmpty(AvatarHash);
+
+	[UsedImplicitly]
+	public bool ShouldSerializeNickname() => !string.IsNullOrEmpty(Nickname);
+}

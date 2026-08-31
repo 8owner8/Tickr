@@ -1,0 +1,112 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
+using Tickr.Core;
+using Tickr.CustomPlugins.SignInWithSteam.Data;
+using Tickr.IPC.Controllers.Api;
+using Tickr.IPC.Responses;
+using Tickr.Localization;
+using Tickr.Steam;
+using Tickr.Steam.Integration;
+using Tickr.Web;
+using Tickr.Web.Responses;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Tickr.CustomPlugins.SignInWithSteam;
+
+[Route("/Api/Bot/{botName:required}/SignInWithSteam")]
+public sealed class SignInWithSteamController : TickrController {
+	[HttpPost]
+	[ProducesResponseType<GenericResponse<SignInWithSteamResponse>>((int) HttpStatusCode.OK)]
+	[ProducesResponseType<GenericResponse>((int) HttpStatusCode.BadRequest)]
+	[ProducesResponseType<GenericResponse>((int) HttpStatusCode.ServiceUnavailable)]
+	public async Task<ActionResult<GenericResponse>> Post(string botName, [FromBody] SignInWithSteamRequest request) {
+		ArgumentException.ThrowIfNullOrEmpty(botName);
+		ArgumentNullException.ThrowIfNull(request);
+
+		Bot? bot = Bot.GetBot(botName);
+
+		if (bot == null) {
+			return BadRequest(new GenericResponse(false, Strings.FormatBotNotFound(botName)));
+		}
+
+		if (!bot.IsConnectedAndLoggedOn) {
+			return StatusCode((int) HttpStatusCode.ServiceUnavailable, new GenericResponse(false, Strings.BotNotConnected));
+		}
+
+		// We've got a redirection, initiate OpenID procedure by following it
+		using HtmlDocumentResponse? challengeResponse = await bot.TickrWebHandler.UrlGetToHtmlDocumentWithSession(request.RedirectURL).ConfigureAwait(false);
+
+		if (challengeResponse?.Content == null) {
+			return StatusCode((int) HttpStatusCode.ServiceUnavailable, new GenericResponse(false, Strings.FormatErrorRequestFailedTooManyTimes(WebBrowser.MaxTries)));
+		}
+
+		IElement? paramsNode = challengeResponse.Content.QuerySelector("input[name='openidparams'][value]");
+
+		if (paramsNode == null) {
+			TickrApp.TickrLogger.LogNullError(paramsNode);
+
+			return StatusCode((int) HttpStatusCode.InternalServerError, new GenericResponse(false, Strings.FormatErrorObjectIsNull(nameof(paramsNode))));
+		}
+
+		string? paramsValue = paramsNode.GetAttribute("value");
+
+		if (string.IsNullOrEmpty(paramsValue)) {
+			TickrApp.TickrLogger.LogNullError(paramsValue);
+
+			return StatusCode((int) HttpStatusCode.InternalServerError, new GenericResponse(false, Strings.FormatErrorObjectIsNull(nameof(paramsValue))));
+		}
+
+		IElement? nonceNode = challengeResponse.Content.QuerySelector("input[name='nonce'][value]");
+
+		if (nonceNode == null) {
+			TickrApp.TickrLogger.LogNullError(nonceNode);
+
+			return StatusCode((int) HttpStatusCode.InternalServerError, new GenericResponse(false, Strings.FormatErrorObjectIsNull(nameof(nonceNode))));
+		}
+
+		string? nonceValue = nonceNode.GetAttribute("value");
+
+		if (string.IsNullOrEmpty(nonceValue)) {
+			TickrApp.TickrLogger.LogNullError(nonceValue);
+
+			return StatusCode((int) HttpStatusCode.InternalServerError, new GenericResponse(false, Strings.FormatErrorObjectIsNull(nameof(nonceValue))));
+		}
+
+		Uri loginRequest = new(TickrWebHandler.SteamCommunityURL, "/openid/login");
+
+		using StringContent actionContent = new("steam_openid_login");
+		using StringContent modeContent = new("checkid_setup");
+		using StringContent paramsContent = new(paramsValue);
+		using StringContent nonceContent = new(nonceValue);
+
+		using MultipartFormDataContent data = new();
+
+		data.Add(actionContent, "action");
+		data.Add(modeContent, "openid.mode");
+		data.Add(paramsContent, "openidparams");
+		data.Add(nonceContent, "nonce");
+
+		// Accept OpenID request presented and follow redirection back to the data we initially expected
+		BasicResponse? loginResponse = await bot.TickrWebHandler.WebBrowser.UrlPost(loginRequest, data: data, requestOptions: WebBrowser.ERequestOptions.ReturnRedirections).ConfigureAwait(false);
+
+		return loginResponse != null ? Ok(new GenericResponse<SignInWithSteamResponse>(new SignInWithSteamResponse(loginResponse.FinalUri))) : StatusCode((int) HttpStatusCode.ServiceUnavailable, new GenericResponse(false, Strings.FormatErrorRequestFailedTooManyTimes(WebBrowser.MaxTries)));
+	}
+}

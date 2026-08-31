@@ -1,0 +1,21 @@
+<Solution>
+	<Configurations>
+		<BuildType Name="Debug" />
+		<BuildType Name="DebugFast" />
+		<BuildType Name="Release" />
+	</Configurations>
+
+	<Project Path="Tickr/Tickr.csproj" />
+	<Project Path="Tickr.Launcher/Tickr.Launcher.csproj" />
+
+	<Project Path="Tickr.CustomPlugins.ExamplePlugin/Tickr.CustomPlugins.ExamplePlugin.csproj" />
+	<Project Path="Tickr.CustomPlugins.PeriodicGC/Tickr.CustomPlugins.PeriodicGC.csproj" />
+	<Project Path="Tickr.CustomPlugins.SignInWithSteam/Tickr.CustomPlugins.SignInWithSteam.csproj" />
+
+	<Project Path="Tickr.OfficialPlugins.ItemsMatcher/Tickr.OfficialPlugins.ItemsMatcher.csproj" />
+	<Project Path="Tickr.OfficialPlugins.MobileAuthenticator/Tickr.OfficialPlugins.MobileAuthenticator.csproj" />
+	<Project Path="Tickr.OfficialPlugins.Monitoring/Tickr.OfficialPlugins.Monitoring.csproj" />
+	<Project Path="Tickr.OfficialPlugins.SteamTokenDumper/Tickr.OfficialPlugins.SteamTokenDumper.csproj" />
+
+	<Project Path="Tickr.Tests/Tickr.Tests.csproj" />
+</Solution>

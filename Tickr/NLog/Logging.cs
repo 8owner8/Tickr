@@ -1,0 +1,590 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Tickr.Collections;
+using Tickr.Core;
+using Tickr.IPC;
+using Tickr.Localization;
+using Tickr.NLog.Targets;
+using Tickr.Steam;
+using Tickr.Storage;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+using NLog.Targets.Wrappers;
+
+namespace Tickr.NLog;
+
+internal static class Logging {
+	internal const string NLogConfigurationFile = "NLog.config";
+
+	private const byte ConsoleResponsivenessDelay = 250; // In milliseconds
+	private const string GeneralLayout = $@"${{date:format=yyyy-MM-dd HH\:mm\:ss}}|${{processname}}-${{processid}}|${{level:uppercase=true}}|{LayoutMessage}";
+	private const string LayoutMessage = @"${logger}|${message}${onexception:inner= ${exception:format=toString,Data}}";
+
+	private static readonly ConcurrentHashSet<LoggingRule> ConsoleLoggingRules = [];
+	private static readonly SemaphoreSlim ConsoleSemaphore = new(1, 1);
+
+	private static string Backspace => "\b \b";
+
+	private static bool IsUsingCustomConfiguration;
+	private static bool IsWaitingForUserInput;
+
+	internal static void EnableTraceLogging() {
+		if (IsUsingCustomConfiguration || (LogManager.Configuration == null)) {
+			return;
+		}
+
+		bool reload = false;
+
+		foreach (LoggingRule rule in LogManager.Configuration.LoggingRules.Where(static rule => rule.IsLoggingEnabledForLevel(LogLevel.Debug) && !rule.IsLoggingEnabledForLevel(LogLevel.Trace))) {
+			rule.EnableLoggingForLevel(LogLevel.Trace);
+			reload = true;
+		}
+
+		if (reload) {
+			LogManager.ReconfigExistingLoggers();
+		}
+	}
+
+	internal static async Task<string?> GetUserInput(TickrApp.EUserInputType userInputType, string botName = SharedInfo.Tickr) {
+		if ((userInputType == TickrApp.EUserInputType.None) || !Enum.IsDefined(userInputType)) {
+			throw new InvalidEnumArgumentException(nameof(userInputType), (int) userInputType, typeof(TickrApp.EUserInputType));
+		}
+
+		ArgumentException.ThrowIfNullOrEmpty(botName);
+
+		if (Program.Service || (TickrApp.GlobalConfig?.Headless ?? GlobalConfig.DefaultHeadless)) {
+			TickrApp.TickrLogger.LogGenericWarning(Strings.ErrorUserInputRunningInHeadlessMode);
+
+			return null;
+		}
+
+		await ConsoleSemaphore.WaitAsync().ConfigureAwait(false);
+
+		string? result;
+
+		try {
+			OnUserInputStart();
+
+			try {
+				// Since we're in the user input section, logging to NLog will not spam our console targets, but will still leave appropriate trace e.g. in the file targets
+				switch (userInputType) {
+					case TickrApp.EUserInputType.Cryptkey:
+						string cryptKeyText = Bot.FormatBotResponse(Strings.UserInputCryptkey, botName);
+
+						TickrApp.TickrLogger.LogGenericWarning(cryptKeyText);
+
+						Console.Write(cryptKeyText);
+						result = ConsoleReadLineMasked();
+
+						TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(result.AsMasked()));
+
+						break;
+					case TickrApp.EUserInputType.DeviceConfirmation:
+						string deviceConfirmationText = Bot.FormatBotResponse(Strings.UserInputDeviceConfirmation, botName);
+
+						while (true) {
+							TickrApp.TickrLogger.LogGenericWarning(deviceConfirmationText);
+
+							Console.Write(deviceConfirmationText);
+							result = ConsoleReadLine();
+
+							TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(result));
+
+							if (string.IsNullOrEmpty(result) || result.Equals("Y", StringComparison.OrdinalIgnoreCase) || result.Equals("N", StringComparison.OrdinalIgnoreCase)) {
+								break;
+							}
+						}
+
+						break;
+					case TickrApp.EUserInputType.Login:
+						string loginText = Bot.FormatBotResponse(Strings.UserInputSteamLogin, botName);
+
+						TickrApp.TickrLogger.LogGenericWarning(loginText);
+
+						Console.Write(loginText);
+						result = ConsoleReadLine();
+
+						TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(result));
+
+						break;
+					case TickrApp.EUserInputType.Password:
+						string passwordText = Bot.FormatBotResponse(Strings.UserInputSteamPassword, botName);
+
+						TickrApp.TickrLogger.LogGenericWarning(passwordText);
+
+						Console.Write(passwordText);
+						result = ConsoleReadLineMasked();
+
+						TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(result.AsMasked()));
+
+						break;
+					case TickrApp.EUserInputType.SteamGuard:
+						string steamGuardText = Bot.FormatBotResponse(Strings.UserInputSteamGuard, botName);
+
+						TickrApp.TickrLogger.LogGenericWarning(steamGuardText);
+
+						Console.Write(steamGuardText);
+						result = ConsoleReadLine();
+
+						TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(result));
+
+						break;
+					case TickrApp.EUserInputType.SteamParentalCode:
+						string steamParentalCodeText = Bot.FormatBotResponse(Strings.UserInputSteamParentalCode, botName);
+
+						TickrApp.TickrLogger.LogGenericWarning(steamParentalCodeText);
+
+						Console.Write(steamParentalCodeText);
+						result = ConsoleReadLineMasked();
+
+						TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(result.AsMasked()));
+
+						break;
+					case TickrApp.EUserInputType.TwoFactorAuthentication:
+						string twoFactorAuthenticationText = Bot.FormatBotResponse(Strings.UserInputSteam2FA, botName);
+
+						TickrApp.TickrLogger.LogGenericWarning(twoFactorAuthenticationText);
+
+						Console.Write(twoFactorAuthenticationText);
+						result = ConsoleReadLine();
+
+						TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(result?.AsMasked()));
+
+						break;
+					default:
+						TickrApp.TickrLogger.LogGenericError(Strings.FormatWarningUnknownValuePleaseReport(nameof(userInputType), userInputType));
+
+						return null;
+				}
+
+				if (!Console.IsOutputRedirected) {
+					Console.Clear(); // For security purposes
+				}
+			} catch (Exception e) {
+				OnUserInputEnd();
+				TickrApp.TickrLogger.LogGenericException(e);
+
+				return null;
+			} finally {
+				OnUserInputEnd();
+			}
+		} finally {
+			ConsoleSemaphore.Release();
+		}
+
+		return !string.IsNullOrEmpty(result) ? result.Trim() : null;
+	}
+
+	internal static void InitCoreLoggers(bool uniqueInstance) {
+		try {
+			// Handle edge case of user using NLog.config in non-standard directory (current directory)
+			if ((Directory.GetCurrentDirectory() != AppContext.BaseDirectory) && File.Exists(NLogConfigurationFile)) {
+				IsUsingCustomConfiguration = true;
+
+				LogManager.Configuration = new XmlLoggingConfiguration(NLogConfigurationFile);
+			}
+		} catch (Exception e) {
+			TickrApp.TickrLogger.LogGenericException(e);
+		}
+
+		if (IsUsingCustomConfiguration) {
+			InitConsoleLoggers();
+			LogManager.ConfigurationChanged += OnConfigurationChanged;
+
+			return;
+		}
+
+		if (uniqueInstance) {
+			if (LogManager.Configuration == null) {
+				// This should never happen, as configuration must be initialized by now (either by user's config, InitEmergencyLoggers() or InitCoreLoggers() above)
+				throw new InvalidOperationException(nameof(LogManager.Configuration));
+			}
+
+			try {
+				Directory.CreateDirectory(SharedInfo.ArchivalLogsDirectory);
+			} catch (Exception e) {
+				TickrApp.TickrLogger.LogGenericException(e);
+			}
+
+#pragma warning disable CA2000 // False positive, we're adding this disposable object to the global scope, so we can't dispose it
+			FileTarget fileTarget = new("File") {
+				ArchiveFileName = Path.Combine("${currentdir:cached=true}", SharedInfo.ArchivalLogsDirectory, SharedInfo.LogFile),
+				ArchiveOldFileOnStartup = true,
+				ArchiveSuffixFormat = ".{1:yyyyMMdd-HHmmss}",
+				FileName = Path.Combine("${currentdir:cached=true}", SharedInfo.LogFile),
+
+				// Windows OS prevents other apps from reading file when actively holding exclusive (write) lock over it
+				// We require read access for GET /Api/NLog/File Tickr API usage, therefore we shouldn't keep the lock all the time
+				KeepFileOpen = !OperatingSystem.IsWindows(),
+
+				Layout = GeneralLayout,
+				MaxArchiveFiles = 10
+			};
+#pragma warning restore CA2000 // False positive, we're adding this disposable object to the global scope, so we can't dispose it
+
+			InitializeTarget(LogManager.Configuration, fileTarget);
+
+			LogManager.ReconfigExistingLoggers();
+		}
+
+		InitConsoleLoggers();
+	}
+
+	internal static void InitEmergencyLoggers() {
+		if (LogManager.Configuration != null) {
+			IsUsingCustomConfiguration = true;
+
+			return;
+		}
+
+		// This is a temporary, bare, file-less configuration that must work until we're able to initialize it properly
+		LogManager.Setup().SetupSerialization(static serialization => {
+				serialization.ParseMessageTemplates(false);
+			}
+		);
+
+		LoggingConfiguration config = new();
+
+#pragma warning disable CA2000 // False positive, we're adding this disposable object to the global scope, so we can't dispose it
+		ColoredConsoleTarget coloredConsoleTarget = new("ColoredConsole") { Layout = GeneralLayout };
+#pragma warning restore CA2000 // False positive, we're adding this disposable object to the global scope, so we can't dispose it
+
+		InitializeTarget(config, coloredConsoleTarget);
+
+		LogManager.Configuration = config;
+	}
+
+	internal static void InitHistoryLogger() {
+		if (LogManager.Configuration == null) {
+			return;
+		}
+
+		HistoryTarget? historyTarget = LogManager.Configuration.AllTargets.Select(static target => target is WrapperTargetBase wrapper ? wrapper.WrappedTarget : target).OfType<HistoryTarget>().FirstOrDefault();
+
+		if ((historyTarget == null) && !IsUsingCustomConfiguration) {
+			historyTarget = new HistoryTarget("History") {
+				Layout = GeneralLayout,
+				MaxCount = 20
+			};
+
+			InitializeTarget(LogManager.Configuration, historyTarget);
+
+			LogManager.ReconfigExistingLoggers();
+		}
+
+		TickrKestrel.OnNewHistoryTarget(historyTarget);
+	}
+
+	internal static async Task<string[]?> ReadLogFileLines() {
+		if (LogManager.Configuration == null) {
+			return File.Exists(SharedInfo.LogFile) ? await ReadLogFileLines(SharedInfo.LogFile).ConfigureAwait(false) : null;
+		}
+
+		foreach (string fileName in LogManager.Configuration.LoggingRules.OrderBy(static rule => rule.Filters.Count).ThenByDescending(static rule => rule.Levels.Count).SelectMany(static rule => rule.Targets.Select(static target => target is WrapperTargetBase wrapper ? wrapper.WrappedTarget : target).OfType<FileTarget>().Select(static fileTarget => fileTarget.FileName.Render(new LogEventInfo { TimeStamp = DateTime.UtcNow })).Where(File.Exists))) {
+			return await ReadLogFileLines(fileName).ConfigureAwait(false);
+		}
+
+		return null;
+	}
+
+	internal static void StartInteractiveConsole() {
+		Utilities.InBackground(HandleConsoleInteractively, true);
+		TickrApp.TickrLogger.LogGenericInfo(Strings.InteractiveConsoleEnabled);
+	}
+
+	private static async Task BeepUntilCanceled(CancellationToken cancellationToken, byte secondsDelay = 30) {
+		ArgumentOutOfRangeException.ThrowIfZero(secondsDelay);
+
+		while (!cancellationToken.IsCancellationRequested) {
+			try {
+				await Task.Delay(secondsDelay * 1000, cancellationToken).ConfigureAwait(false);
+			} catch (TaskCanceledException) {
+				return;
+			}
+
+			Console.Write('\a');
+		}
+	}
+
+	private static string? ConsoleReadLine() {
+		using CancellationTokenSource cts = new();
+
+		try {
+			CancellationToken token = cts.Token;
+
+			Utilities.InBackground(() => BeepUntilCanceled(token));
+
+			if (OperatingSystem.IsWindows()) {
+				OS.WindowsStartFlashingConsoleWindow();
+			}
+
+			return Console.ReadLine();
+		} finally {
+			cts.Cancel();
+
+			if (OperatingSystem.IsWindows()) {
+				OS.WindowsStopFlashingConsoleWindow();
+			}
+		}
+	}
+
+	private static string ConsoleReadLineMasked(char mask = '*') {
+		using CancellationTokenSource cts = new();
+
+		try {
+			CancellationToken token = cts.Token;
+
+			Utilities.InBackground(() => BeepUntilCanceled(token));
+
+			if (OperatingSystem.IsWindows()) {
+				OS.WindowsStartFlashingConsoleWindow();
+			}
+
+			StringBuilder result = new();
+
+			while (true) {
+				ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+
+				if (keyInfo.KeyChar == '\u0004') {
+					// Linux terminal closing STDIN, we're done here
+					return result.ToString();
+				}
+
+				if (keyInfo.Key == ConsoleKey.Enter) {
+					// User finishing input, as expected
+					Console.WriteLine();
+
+					return result.ToString();
+				}
+
+				// User continues input
+				if (!char.IsControl(keyInfo.KeyChar)) {
+					result.Append(keyInfo.KeyChar);
+					Console.Write(mask);
+				} else if ((keyInfo.Key == ConsoleKey.Backspace) && (result.Length > 0)) {
+					result.Length--;
+
+					if (Console.CursorLeft == 0) {
+						Console.SetCursorPosition(Console.BufferWidth - 1, Console.CursorTop - 1);
+						Console.Write(' ');
+						Console.SetCursorPosition(Console.BufferWidth - 1, Console.CursorTop - 1);
+					} else {
+						Console.Write(Backspace);
+					}
+				}
+			}
+		} finally {
+			cts.Cancel();
+
+			if (OperatingSystem.IsWindows()) {
+				OS.WindowsStopFlashingConsoleWindow();
+			}
+		}
+	}
+
+	private static async Task HandleConsoleInteractively() {
+		try {
+			while (!Program.ShutdownSequenceInitialized) {
+				if (IsWaitingForUserInput || !Console.KeyAvailable) {
+					await Task.Delay(ConsoleResponsivenessDelay).ConfigureAwait(false);
+
+					continue;
+				}
+
+				await ConsoleSemaphore.WaitAsync().ConfigureAwait(false);
+
+				try {
+					ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+
+					if (keyInfo.KeyChar == '\u0004') {
+						// Linux terminal closing STDIN, we're done here
+						return;
+					}
+
+					if (keyInfo.Key != ConsoleKey.C) {
+						// Console input other than 'c', ignored
+						continue;
+					}
+
+					OnUserInputStart();
+
+					try {
+						// Since we're in the user input section, logging to NLog will not spam our console targets, but will still leave appropriate trace e.g. in the file targets
+						string enterCommandText = $@">> {Strings.EnterCommand}";
+
+						TickrApp.TickrLogger.LogGenericInfo(enterCommandText);
+
+						Console.Write(enterCommandText);
+						string? command = ConsoleReadLine();
+
+						TickrApp.TickrLogger.LogGenericInfo(Strings.FormatInput(command));
+
+						if (string.IsNullOrEmpty(command)) {
+							continue;
+						}
+
+						string? commandPrefix = TickrApp.GlobalConfig != null ? TickrApp.GlobalConfig.CommandPrefix : GlobalConfig.DefaultCommandPrefix;
+
+						if (!string.IsNullOrEmpty(commandPrefix) && command.StartsWith(commandPrefix, StringComparison.Ordinal)) {
+							if (command.Length == commandPrefix.Length) {
+								// If the message starts with command prefix and is of the same length as command prefix, then it's just empty command trigger, useless
+								continue;
+							}
+
+							command = command[commandPrefix.Length..];
+						}
+
+						Bot? targetBot = Bot.GetDefaultBot();
+
+						if (targetBot == null) {
+							string noBotsDefinedText = $@"<< {Strings.ErrorNoBotsDefined}";
+
+							TickrApp.TickrLogger.LogGenericInfo(noBotsDefinedText);
+
+							Console.WriteLine(noBotsDefinedText);
+
+							continue;
+						}
+
+						Console.WriteLine($@"<> {Strings.Executing}");
+
+						string? response = await targetBot.Commands.Response(EAccess.Owner, command).ConfigureAwait(false);
+
+						if (string.IsNullOrEmpty(response)) {
+							TickrApp.TickrLogger.LogNullError(response);
+
+							string emptyResponseText = $@"<< {Strings.FormatErrorIsEmpty(nameof(response))}";
+
+							TickrApp.TickrLogger.LogGenericInfo(emptyResponseText);
+
+							Console.WriteLine(emptyResponseText);
+
+							continue;
+						}
+
+						string responseText = $@"<< {response}";
+
+						TickrApp.TickrLogger.LogGenericInfo(responseText);
+
+						Console.WriteLine(responseText);
+					} finally {
+						OnUserInputEnd();
+					}
+				} finally {
+					ConsoleSemaphore.Release();
+				}
+			}
+		} catch (Exception e) {
+			TickrApp.TickrLogger.LogGenericException(e);
+		}
+	}
+
+	private static void InitConsoleLoggers() {
+		ConsoleLoggingRules.Clear();
+
+		if (LogManager.Configuration == null) {
+			return;
+		}
+
+		ConsoleLoggingRules.UnionWith(LogManager.Configuration.LoggingRules.Where(static loggingRule => loggingRule.Targets.Any(static target => target is ColoredConsoleTarget or ConsoleTarget)));
+	}
+
+	private static void InitializeTarget(LoggingConfiguration config, Target target) {
+		ArgumentNullException.ThrowIfNull(config);
+		ArgumentNullException.ThrowIfNull(target);
+
+		config.AddTarget(target);
+
+		if (!Debugging.IsUserDebugging) {
+			// Silence default ASP.NET logging
+			config.LoggingRules.Add(new LoggingRule("Microsoft.Hosting.Lifetime", target) { FinalMinLevel = LogLevel.Info });
+			config.LoggingRules.Add(new LoggingRule("Microsoft.*", target) { FinalMinLevel = LogLevel.Warn });
+			config.LoggingRules.Add(new LoggingRule("System.*", target) { FinalMinLevel = LogLevel.Warn });
+		}
+
+		config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, target));
+	}
+
+	private static void OnConfigurationChanged(object? sender, LoggingConfigurationChangedEventArgs e) {
+		ArgumentNullException.ThrowIfNull(e);
+
+		InitConsoleLoggers();
+
+		if (IsWaitingForUserInput) {
+			OnUserInputStart();
+		}
+
+		HistoryTarget? historyTarget = LogManager.Configuration?.AllTargets.Select(static target => target is WrapperTargetBase wrapper ? wrapper.WrappedTarget : target).OfType<HistoryTarget>().FirstOrDefault();
+		TickrKestrel.OnNewHistoryTarget(historyTarget);
+	}
+
+	private static void OnUserInputEnd() {
+		IsWaitingForUserInput = false;
+
+		if ((ConsoleLoggingRules.Count == 0) || (LogManager.Configuration == null)) {
+			return;
+		}
+
+		bool reconfigure = false;
+
+		foreach (LoggingRule consoleLoggingRule in ConsoleLoggingRules.Where(static consoleLoggingRule => !LogManager.Configuration.LoggingRules.Contains(consoleLoggingRule))) {
+			LogManager.Configuration.LoggingRules.Add(consoleLoggingRule);
+			reconfigure = true;
+		}
+
+		if (reconfigure) {
+			LogManager.ReconfigExistingLoggers();
+		}
+	}
+
+	private static void OnUserInputStart() {
+		IsWaitingForUserInput = true;
+
+		if ((ConsoleLoggingRules.Count == 0) || (LogManager.Configuration == null)) {
+			return;
+		}
+
+		bool reconfigure = false;
+
+		foreach (LoggingRule _ in ConsoleLoggingRules.Where(static consoleLoggingRule => LogManager.Configuration.LoggingRules.Remove(consoleLoggingRule))) {
+			reconfigure = true;
+		}
+
+		if (reconfigure) {
+			LogManager.ReconfigExistingLoggers();
+		}
+	}
+
+	private static async Task<string[]?> ReadLogFileLines(string filePath) {
+		ArgumentException.ThrowIfNullOrEmpty(filePath);
+
+		try {
+			return await File.ReadAllLinesAsync(filePath).ConfigureAwait(false);
+		} catch (Exception e) {
+			TickrApp.TickrLogger.LogGenericException(e);
+
+			return null;
+		}
+	}
+}

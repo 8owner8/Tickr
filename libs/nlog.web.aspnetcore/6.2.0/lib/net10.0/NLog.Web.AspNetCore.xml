@@ -1,0 +1,2441 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NLog.Web.AspNetCore</name>
+    </assembly>
+    <members>
+        <member name="T:NLog.Web.AspNetExtensions">
+            <summary>
+            Helpers for ASP.NET
+            </summary>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="builder">The logging builder</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="builder">The logging builder</param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder,NLog.Web.NLogAspNetCoreOptions,System.Func{System.IServiceProvider,NLog.LogFactory})">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
+            </summary>
+            <param name="builder"></param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+            <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLog(Microsoft.Extensions.Logging.ILoggingBuilder,System.String)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog.config from path
+            </summary>
+            <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
+            <param name="builder">The logging builder</param>
+            <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder,System.String)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog.config from path
+            </summary>
+            <param name="builder">The logging builder</param>
+            <param name="configFileName">Path to NLog configuration file, e.g. nlog.config. </param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLog(Microsoft.Extensions.Logging.ILoggingBuilder,NLog.Config.LoggingConfiguration)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
+            </summary>
+            <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
+            <param name="builder">The logging builder</param>
+            <param name="configuration">Config for NLog</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder,NLog.Config.LoggingConfiguration)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
+            </summary>
+            <param name="builder">The logging builder</param>
+            <param name="configuration">Config for NLog</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLog(Microsoft.Extensions.Logging.ILoggingBuilder,NLog.Config.LoggingConfiguration,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
+            </summary>
+            <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
+            <param name="builder">The logging builder</param>
+            <param name="configuration">Config for NLog</param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder,NLog.Config.LoggingConfiguration,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and explicit load NLog LoggingConfiguration
+            </summary>
+            <param name="builder">The logging builder</param>
+            <param name="configuration">Config for NLog</param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLog(Microsoft.Extensions.Logging.ILoggingBuilder,System.Func{System.IServiceProvider,NLog.LogFactory})">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
+            </summary>
+            <remarks>Recommended to use AddNLogWeb() to avoid name-collission issue with NLog.Extension.Logging namespace</remarks>
+            <param name="builder"></param>
+            <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder,System.Func{System.IServiceProvider,NLog.LogFactory})">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
+            </summary>
+            <param name="builder"></param>
+            <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.Logging.ILoggingBuilder,NLog.LogFactory,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging, and provide isolated LogFactory
+            </summary>
+            <param name="builder">The logging builder</param>
+            <param name="logFactory">NLog LogFactory</param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="collection"></param>
+            <returns>IServiceCollection for chaining</returns>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.DependencyInjection.IServiceCollection,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="collection"></param>
+            <param name="options">NLog Logging Provider options</param>
+            <returns>IServiceCollection for chaining</returns>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.AddNLogWeb(Microsoft.Extensions.DependencyInjection.IServiceCollection,NLog.Web.NLogAspNetCoreOptions,System.Func{System.IServiceProvider,NLog.LogFactory})">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="collection"></param>
+            <param name="options">NLog Logging Provider options</param>
+            <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+            <returns>IServiceCollection for chaining</returns>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.UseNLog(Microsoft.AspNetCore.Hosting.IWebHostBuilder)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.UseNLog(Microsoft.AspNetCore.Hosting.IWebHostBuilder,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging.
+            </summary>
+            <param name="builder"></param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.UseNLog(Microsoft.Extensions.Hosting.IHostBuilder)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.UseNLog(Microsoft.Extensions.Hosting.IHostBuilder,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging.
+            </summary>
+            <param name="builder"></param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.UseNLog(Microsoft.Extensions.Hosting.IHostApplicationBuilder)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="builder"></param>
+            <returns>IHostApplicationBuilder for chaining</returns>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.UseNLog(Microsoft.Extensions.Hosting.IHostApplicationBuilder,NLog.Web.NLogAspNetCoreOptions)">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="builder"></param>
+            <param name="options">Options for registration of the NLog LoggingProvider and enabling features.</param>
+            <returns>IHostApplicationBuilder for chaining</returns>
+        </member>
+        <member name="M:NLog.Web.AspNetExtensions.UseNLog(Microsoft.Extensions.Hosting.IHostApplicationBuilder,NLog.Web.NLogAspNetCoreOptions,System.Func{System.IServiceProvider,NLog.LogFactory})">
+            <summary>
+            Enable NLog as logging provider for Microsoft Extension Logging
+            </summary>
+            <param name="builder"></param>
+            <param name="options">NLogProviderOptions object to configure NLog behavior</param>
+            <param name="factoryBuilder">Initialize NLog LogFactory with NLog LoggingConfiguration.</param>
+            <returns>IHostApplicationBuilder for chaining</returns>
+        </member>
+        <member name="T:NLog.Web.SetupBuilderExtensions">
+            <summary>
+            Extension methods to setup LogFactory options
+            </summary>
+        </member>
+        <member name="M:NLog.Web.SetupBuilderExtensions.LoadConfigurationFromAppSettings(NLog.Config.ISetupBuilder,System.String,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Loads NLog LoggingConfiguration from appsettings.json from the NLog-section
+            </summary>
+            <param name="setupBuilder"></param>
+            <param name="basePath">Override SetBasePath for <see cref="T:Microsoft.Extensions.Configuration.ConfigurationBuilder"/> with AddJsonFile. Default resolves from environment variables, else fallback to current directory.</param>
+            <param name="environment">Override Environment for appsettings.{environment}.json with AddJsonFile. Default resolves from environment variables, else fallback to "Production"</param>
+            <param name="nlogConfigSection">Override configuration-section-name to resolve NLog-configuration</param>
+            <param name="optional">Override optional with AddJsonFile</param>
+            <param name="reloadOnChange">Override reloadOnChange with AddJsonFile. Required for "autoReload":true to work.</param>
+        </member>
+        <member name="M:NLog.Web.SetupBuilderExtensions.RegisterNLogWeb(NLog.Config.ISetupBuilder,Microsoft.Extensions.Configuration.IConfiguration,System.IServiceProvider)">
+            <summary>
+            Convience method to register aspnet-layoutrenders in NLog.Web as one-liner before loading NLog.config
+            </summary>
+            <remarks>
+            If not providing <paramref name="serviceProvider"/>, then output from aspnet-layoutrenderers will remain empty
+            </remarks>
+        </member>
+        <member name="T:NLog.Web.SetupExtensionsBuilderExtensions">
+            <summary>
+            Extension methods to setup NLog extensions, so they are known when loading NLog LoggingConfiguration
+            </summary>
+        </member>
+        <member name="M:NLog.Web.SetupExtensionsBuilderExtensions.RegisterNLogWeb(NLog.Config.ISetupExtensionsBuilder,System.IServiceProvider)">
+            <summary>
+            Register the NLog.Web.AspNetCore LayoutRenderers
+            </summary>
+            <remarks>
+            If not providing <paramref name="serviceProvider"/>, then output from aspnet-layoutrenderers will remain empty
+            </remarks>
+        </member>
+        <member name="M:NLog.Web.SetupExtensionsBuilderExtensions.RegisterAspNetLayoutRenderer(NLog.Config.ISetupExtensionsBuilder,System.String,System.Func{NLog.LogEventInfo,Microsoft.AspNetCore.Http.HttpContext,NLog.Config.LoggingConfiguration,System.Object})">
+            <summary>
+            Register a custom layout renderer using custom delegate-method <paramref name="layoutMethod" />
+            </summary>
+            <param name="setupBuilder">Fluent style</param>
+            <param name="name">Name of the layout renderer - without ${}.</param>
+            <param name="layoutMethod">Delegate method that returns layout renderer output.</param>
+        </member>
+        <member name="T:NLog.Web.Enums.ByteArrayFormatProperty">
+            <summary>
+            Controls how a byte array should be logged
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.ByteArrayFormatProperty.Base64">
+            <summary>
+            Emit the byte array using Convert.ToBase64(byte[])
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.ByteArrayFormatProperty.Hex">
+            <summary>
+            Emit the byte array using BitConverter.ToString(byte[])
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Enums.TlsHandshakeProperty">
+            <summary>
+            Specifies which of the 7 properties of ITlsHandshakeFeature to emit
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.CipherAlgorithm">
+            <summary>
+            Gets the CipherAlgorithmType.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.CipherStrength">
+            <summary>
+            Gets the cipher strength
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.HashAlgorithm">
+            <summary>
+            Gets the HashAlgorithmType.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.HashStrength">
+            <summary>
+            Gets the hash strength.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.KeyExchangeAlgorithm">
+            <summary>
+            Gets the KeyExchangeAlgorithm.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.KeyExchangeStrength">
+            <summary>
+            Gets the key exchange algorithm strength.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.Protocol">
+            <summary>
+            Gets the SslProtocols.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.HostName">
+            <summary>
+            Gets the HostName (Requires NET 8.0 or greater).
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsHandshakeProperty.NegotiatedCipherSuite">
+            <summary>
+            Gets the <see cref="T:System.Net.Security.TlsCipherSuite"/> (Requires NET 8.0 or greater).
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Enums.TlsTokenBindingProperty">
+            <summary>
+            Tls Token Binding Enumeration
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsTokenBindingProperty.Provider">
+            <summary>
+            Tls Token Binding for Provider
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TlsTokenBindingProperty.Referrer">
+            <summary>
+            Tls Token Binding for Referrer
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Enums.TrackingConsentProperty">
+            <summary>
+            Used to query, grant, and withdraw user consent regarding the storage of user information related to site activity and functionality.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TrackingConsentProperty.CanTrack">
+            <summary>
+            Indicates either if consent has been given or if consent is not required.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TrackingConsentProperty.HasConsent">
+            <summary>
+            Indicates if consent was given.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.TrackingConsentProperty.IsConsentNeeded">
+            <summary>
+            Indicates if consent is required for the given request.
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Enums.AspNetRequestLayoutOutputFormat">
+            <summary>
+            To control the Renderer Output formatting.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestLayoutOutputFormat.Flat">
+            <summary>
+            Use this format for rendering the output value as a flat string.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestLayoutOutputFormat.JsonArray">
+            <summary>
+            Use this format for rendering the output value as a json-array
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestLayoutOutputFormat.Json">
+            <summary>
+            Use this format for rendering the output value as a json formatted string.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestLayoutOutputFormat.JsonDictionary">
+            <summary>
+            Use this format for rendering the output value as a json-dictionary
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Enums.AspNetRequestUrlProperty">
+            <summary>
+            Controls which portions of the URL are logged
+            This is a Flags enumeration
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestUrlProperty.None">
+            <summary>
+            Microsoft recommends a Flags enum to have a None=0 value.
+            See https://docs.microsoft.com/en-us/dotnet/api/system.flagsattribute?view=net-6.0
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestUrlProperty.Scheme">
+            <summary>
+            To specify whether to exclude / include the scheme.  Ex. 'http' or 'https'
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestUrlProperty.Host">
+            <summary>
+            To specify whether to exclude / include the host.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestUrlProperty.Port">
+            <summary>
+            To specify whether to include / exclude the Port.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestUrlProperty.Path">
+            <summary>
+            To specify whether to exclude / include the url-path.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestUrlProperty.Query">
+            <summary>
+            To specify whether to include / exclude the Query string.
+            </summary>
+        </member>
+        <member name="F:NLog.Web.Enums.AspNetRequestUrlProperty.Default">
+            <summary>
+            By default, log the scheme://host/path
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Internal.AssemblyExtensionTypes">
+            <summary>
+            Provides logging interface and utility functions.
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Internal.LogEventInfoBuffer">
+            <summary>
+            A cyclic buffer of <see cref="T:NLog.LogEventInfo"/> object.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.Internal.LogEventInfoBuffer.#ctor(System.Int32,System.Boolean,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Internal.LogEventInfoBuffer" /> class.
+            </summary>
+            <param name="size">Buffer size.</param>
+            <param name="growAsNeeded">Whether buffer should grow as it becomes full.</param>
+            <param name="growLimit">The maximum number of items that the buffer can grow to.</param>
+        </member>
+        <member name="P:NLog.Web.Internal.LogEventInfoBuffer.Capacity">
+            <summary>
+            Gets the capacity of the buffer
+            </summary>
+        </member>
+        <member name="P:NLog.Web.Internal.LogEventInfoBuffer.Count">
+            <summary>
+            Gets the number of items in the buffer
+            </summary>
+        </member>
+        <member name="M:NLog.Web.Internal.LogEventInfoBuffer.Append(NLog.Common.AsyncLogEventInfo)">
+            <summary>
+            Adds the specified log event to the buffer.
+            </summary>
+            <param name="eventInfo">Log event.</param>
+            <returns>The number of items in the buffer.</returns>
+        </member>
+        <member name="M:NLog.Web.Internal.LogEventInfoBuffer.GetEventsAndClear">
+            <summary>
+            Gets the array of events accumulated in the buffer and clears the buffer as one atomic operation.
+            </summary>
+            <returns>Events in the buffer.</returns>
+        </member>
+        <member name="T:NLog.Web.Internal.ReEntrantScopeLock">
+            <summary>
+            Manages if a LayoutRenderer can be called recursively using AsyncLocal
+            Example used by <see cref="T:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer"/>
+            </summary>
+        </member>
+        <member name="T:NLog.Web.DependencyInjection.ServiceLocator">
+            <summary>
+            Service provider
+            </summary>
+            <remarks>
+            This is a anti-pattern, but it works well with NLog, and NLog should also support non-DI
+            </remarks>
+        </member>
+        <member name="P:NLog.Web.DependencyInjection.ServiceLocator.ServiceProvider">
+            <summary>
+            The current service provider for reading ASP.NET Core session, request etc.
+            </summary>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetEnvironmentLayoutRenderer">
+            <summary>
+            Rendering development environment. <see cref="P:Microsoft.Extensions.Hosting.IHostingEnvironment.EnvironmentName" />
+            </summary>
+            <remarks>
+            <code>${aspnet-environment}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Environment-layout-renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetEnvironmentLayoutRenderer.HostEnvironment">
+            <summary>
+            Provides access to the current IHostEnvironment
+            </summary>
+            <returns>IHostEnvironment or <c>null</c></returns>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetEnvironmentLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetEnvironmentLayoutRenderer.CloseLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestBidirectionalStreamLayoutRenderer">
+            <summary>
+            Indicates if the server can upgrade this request to an opaque, bidirectional stream.
+            1 if Capable
+            0 if Incapable
+            </summary>
+            <remarks>
+            <code>${aspnet-request-bidirectional-stream}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Bidirectional-Stream-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestBidirectionalStreamLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestConnectionIdLayoutRenderer">
+            <summary>
+            ASP.NET request connection id
+            </summary>
+            <remarks>
+            <code>${aspnet-request-connection-id}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-ConnectionId-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestConnectionIdLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestEndPointGroupLayoutRenderer">
+            <summary>
+            ASP.NET request EndPoint Group DisplayName. Metadata-attribute assigned by WithGroupName or [EndpointGroupName]
+            </summary>
+            <remarks>
+            <code>${aspnet-request-endpoint-group}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-EndPoint-Group-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestEndPointGroupLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestEndPointLayoutRenderer">
+            <summary>
+            ASP.NET request EndPoint DisplayName
+            </summary>
+            <remarks>
+            <code>${aspnet-request-endpoint}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-EndPoint-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestEndPointLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestEndPointNameLayoutRenderer">
+            <summary>
+            ASP.NET request EndPoint Name. Metadata-attribute assigned by WithName or [EndpointName]
+            </summary>
+            <remarks>
+            <code>${aspnet-request-endpoint-name}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-EndPoint-Name-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestEndPointNameLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestHttpTransportTypeLayoutRenderer">
+             <summary>
+             Specifies transports that the client can use to send HTTP requests.
+            
+             This enumeration supports a bitwise combination of its member values.
+            
+             None
+             WebSockets
+             ServerSentEvents
+             LongPolling
+            
+             </summary>
+             <remarks>
+             <code>${aspnet-request-http-transport-type}</code>
+             </remarks>
+             <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-HTTP-Transport-Type-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestHttpTransportTypeLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestInherentKeepAliveLayoutRenderer">
+             <summary>
+             Indicates if the connection transport has an "inherent keep-alive",
+             which means that the transport will automatically inform the client that it is still present.
+            
+             The most common example of this feature is the Long Polling HTTP transport,
+             which must (due to HTTP limitations) terminate each poll within a particular interval
+             and return a signal indicating "the server is still here, but there is no data yet".
+             This feature allows applications to add keep-alive functionality, but limit it only to
+             transports that don't have some kind of inherent keep-alive.
+             </summary>
+             <remarks>
+             <code>${aspnet-request-inherent-keep-alive}</code>
+             </remarks>
+             <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Inherent-KeepAlive-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestInherentKeepAliveLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestStreamIdLayoutRenderer">
+            <summary>
+            Represents the long int identifier for the stream.
+            Uses IStreamIdFeature
+            
+            This will inform when the connection is being reused, or when the connection has been closed and reopened,
+            based on when the value stays or same, or changes.
+            </summary>
+            <remarks>
+            <code>${aspnet-request-stream-id}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-StreamId-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestStreamIdLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestTlsHandshakeLayoutRenderer">
+            <summary>
+            ASP.NET TLS Handshake
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-tls-handshake:Property=CipherAlgorithm}
+            ${aspnet-request-tls-handshake:Property=CipherStrength}
+            ${aspnet-request-tls-handshake:Property=HashAlgorithm}
+            ${aspnet-request-tls-handshake:Property=HashStrength}
+            ${aspnet-request-tls-handshake:Property=KeyExchangeAlgorithm}
+            ${aspnet-request-tls-handshake:Property=KeyExchangeStrength}
+            ${aspnet-request-tls-handshake:Property=Protocol}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-TLS-Handshake-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestTlsHandshakeLayoutRenderer.Property">
+            <summary>
+            Specifies which of the 7 properties of ITlsHandshakeFeature to emit
+            Defaults to the protocol
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestTlsHandshakeLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestTlsTokenBindingLayoutRenderer">
+             <summary>
+             ASP.NET TLS Token Bindings for Provider and Referrer
+            
+             TLS token bindings help mitigate the risk of impersonation by an attacker in the event
+             an authenticated client's bearer tokens are somehow exfiltrated from the client's machine.
+             See https://datatracker.ietf.org/doc/draft-popov-token-binding/ for more information.
+             </summary>
+             <remarks>
+             <code>
+             ${aspnet-request-tls-token-binding:Property=Provider:Format=Base64}
+             ${aspnet-request-tls-token-binding:Property=Referrer:Format=Hex}
+             </code>
+             </remarks>
+             <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-TLS-Token-Bindng-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestTlsTokenBindingLayoutRenderer.Property">
+            <summary>
+            Tls Token Binding Type Enumeration, Provider or Referrer
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestTlsTokenBindingLayoutRenderer.Format">
+            <summary>
+            Tls Token Binding Format Enumeration, Hex or Base64
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestTlsTokenBindingLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestTrackingConsentLayoutRenderer">
+            <summary>
+            ASP.NET Tracking Consent
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-tracking-consent:Property=CanTrack}
+            ${aspnet-request-tracking-consent:Property=HasConsent}
+            ${aspnet-request-tracking-consent:Property=IsConsentNeeded}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Tracking-Consent-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestTrackingConsentLayoutRenderer.Property">
+            <summary>
+            Gets or sets what property to emit from ITrackingConsentFeature. Default = CanTrack
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestTrackingConsentLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestTrailersLayoutRenderer">
+            <summary>
+            ASP.NET Request Trailers
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-trailers:OutputFormat=Flat}
+            ${aspnet-request-trailers:OutputFormat=JsonArray}
+            ${aspnet-request-trailers:OutputFormat=JsonDictionary}
+            ${aspnet-request-trailers:OutputFormat=JsonDictionary:Items=username}
+            ${aspnet-request-trailers:OutputFormat=JsonDictionary:Exclude=access_token}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Trailers-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestTrailersLayoutRenderer.Items">
+            <summary>
+            Trailer names to be rendered.
+            If <c>null</c> or empty array, all trailers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestTrailersLayoutRenderer.TrailerNames">
+            <summary>
+            Trailer names to be rendered.
+            If <c>null</c> or empty array, all trailers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestTrailersLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestTrailersLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseHttpsCompressionLayoutRenderer">
+             <summary>
+             ASP.NET Response HTTPS Compression Mode
+            
+             Renders the Response HTTPS Compression Mode
+            
+             Compress - Opts into compression over HTTPS. Enabling compression on HTTPS requests for
+             remotely manipulable content may expose security problems.
+            
+             DoNotCompress - Opts out of compression over HTTPS. Enabling compression on HTTPS requests for
+             remotely manipulable content may expose security problems.
+            
+             Default - No value has been specified, use the configured defaults.
+             </summary>
+             <remarks>
+             <code>${aspnet-response-https-compression}</code>
+             </remarks>
+             <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-HTTPS-Compression-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseHttpsCompressionLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseTrailersLayoutRenderer">
+            <summary>
+            ASP.NET Response Trailers
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-response-trailers:OutputFormat=Flat}
+            ${aspnet-response-trailers:OutputFormat=JsonArray}
+            ${aspnet-response-trailers:OutputFormat=JsonDictionary}
+            ${aspnet-response-trailers:OutputFormat=JsonDictionary:Items=username}
+            ${aspnet-response-trailers:OutputFormat=JsonDictionary:Exclude=access_token}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-Trailers-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseTrailersLayoutRenderer.Items">
+            <summary>
+            Trailer names to be rendered.
+            If <c>null</c> or empty array, all trailers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseTrailersLayoutRenderer.TrailerNames">
+            <summary>
+            Trailer names to be rendered.
+            If <c>null</c> or empty array, all trailers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseTrailersLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseTrailersLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.SessionValueType">
+            <summary>
+            The type of a value
+            </summary>
+        </member>
+        <member name="F:NLog.Web.LayoutRenderers.SessionValueType.String">
+            <summary>
+            String
+            </summary>
+        </member>
+        <member name="F:NLog.Web.LayoutRenderers.SessionValueType.Int32">
+            <summary>
+            Int32
+            </summary>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer">
+            <summary>
+            Rendering Application BasePath. <see cref="P:Microsoft.Extensions.Hosting.IHostEnvironment.ContentRootPath" /> (Previous IApplicationEnvironment.ApplicationBasePath)
+            </summary>
+            <remarks>
+            <code>${aspnet-appbasepath}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-AppBasePath-layout-renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer.HostEnvironment">
+            <summary>
+            Provides access to the current IHostEnvironment
+            </summary>
+            <returns>IHostEnvironment or <c>null</c></returns>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer.InitializeLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetAppBasePathLayoutRenderer.CloseLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer">
+            <summary>
+            ASP.NET HttpContext Items Dictionary Value.
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-httpcontext-item:myKey} - produces "123"
+            ${aspnet-httpcontext-item:anotherKey} - produces "01/01/2006 00:00:00"
+            ${aspnet-httpcontext-item:anotherKey:culture=pl-PL} - produces "2006-01-01 00:00:00"
+            ${aspnet-httpcontext-item:myKey:padding=5} - produces "  123"
+            ${aspnet-httpcontext-item:myKey:padding=-5} - produces "123  "
+            ${aspnet-httpcontext-item:stringKey:upperCase=true} - produces "AAA BBB"
+            </code>
+            </remarks>
+            <example>
+            <para>You can set the value of an ASP.NET Item variable by using the following code:</para>
+            <code lang="C#">
+            <![CDATA[
+            HttpContext.Current.Items["myKey"] = 123;
+            HttpContext.Current.Items["stringKey"] = "aaa BBB";
+            HttpContext.Current.Items["anotherKey"] = DateTime.Now;
+            ]]>
+            </code>
+            </example>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-HttpContext-Item-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer.Item">
+            <summary>
+            Gets or sets the item variable name.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer.ObjectPath">
+            <summary>
+            Gets or sets the object-property-navigation-path for lookup of nested property.
+            In this case the Item should have have any dot notation, as the nested properties path is in this variable
+            Example:
+            Item="person";
+            ObjectPath="Name.First"
+            This will emit the First Name property of the object in HttpContext.Items woith the key of 'person' in the collection
+            </summary>
+            <docgen category='Layout Options' order='20' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer.Variable">
+            <summary>
+            Gets or sets the item variable name.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer.Format">
+            <summary>
+            Format string for conversion from object to string.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer.Culture">
+            <summary>
+            Gets or sets the culture used for rendering.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer.InitializeLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetHttpContextItemLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase">
+            <summary>
+            Layout renderers for ASP.NET rendering multiple key/value pairs.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.ItemSeparator">
+            <summary>
+            Separator between key/value pair, and the next pair. Only used for <see cref="F:NLog.Web.Enums.AspNetRequestLayoutOutputFormat.Flat" />
+            </summary>
+            <remarks>Render with <see cref="M:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.GetRenderedItemSeparator(NLog.LogEventInfo)" /></remarks>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.ValueSeparator">
+            <summary>
+            Separator between value and key. Only used for <see cref="F:NLog.Web.Enums.AspNetRequestLayoutOutputFormat.Flat" />
+            </summary>
+            <remarks>Render with <see cref="M:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.GetRenderedValueSeparator(NLog.LogEventInfo)" /></remarks>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.SingleAsArray">
+            <summary>
+            Get or set whether single key/value-pair be rendered as Json-Array.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.OutputFormat">
+            <summary>
+            Determines how the output is rendered. Possible Value: FLAT, JSON. Default is FLAT.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.ValuesOnly">
+            <summary>
+            Only render values if true, otherwise render key/value pairs.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.LowerCaseKeys">
+            <summary>
+            Convert the key to lowercase if true, otherwise render the raw value of key. Default is false.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.SerializePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Serialize multiple key/value pairs
+            </summary>
+            <param name="pairs">The key/value pairs.</param>
+            <param name="builder">Add to this builder.</param>
+            <param name="logEvent">Log event for rendering separators.</param>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.SerializeValues(System.Collections.Generic.IEnumerable{System.String},System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Serialize multiple values
+            </summary>
+            <param name="values">The values.</param>
+            <param name="builder">Add to this builder.</param>
+            <param name="logEvent">Log event for rendering separators.</param>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.GetRenderedItemSeparator(NLog.LogEventInfo)">
+            <summary>
+            Get the rendered <see cref="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.ItemSeparator" />
+            </summary>
+            <param name="logEvent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.GetRenderedValueSeparator(NLog.LogEventInfo)">
+            <summary>
+            Get the rendered <see cref="P:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.ValueSeparator" />
+            </summary>
+            <param name="logEvent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutMultiValueRendererBase.AppendQuoted(System.Text.StringBuilder,System.String)">
+            <summary>
+            Appends strings with proper quoting for JSON
+            </summary>
+            <param name="builder"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetLayoutRendererBase">
+            <summary>
+            Base class for ASP.NET layout renderers.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetLayoutRendererBase.HttpContextAccessor">
+            <summary>
+            Provides access to the current request HttpContext.
+            </summary>
+            <returns>HttpContextAccessor or <c>null</c></returns>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutRendererBase.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutRendererBase.DoAppend(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <summary>
+            Renders the value of layout renderer in the context of the specified log event into <see cref="T:System.Text.StringBuilder" />.
+            </summary>
+            <remarks>
+            Won't be called if <see cref="P:NLog.Web.LayoutRenderers.AspNetLayoutRendererBase.HttpContextAccessor" /> of <see cref="P:Microsoft.AspNetCore.Http.IHttpContextAccessor.HttpContext" /> is <c>null</c>.
+            </remarks>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder" /> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutRendererBase.CloseLayoutRenderer">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetLayoutRendererBase.Register(System.String,System.Func{NLog.LogEventInfo,Microsoft.AspNetCore.Http.HttpContext,NLog.Config.LoggingConfiguration,System.Object})">
+            <summary>
+            Register a custom layout renderer with a callback function <paramref name="func" />. The callback receives the logEvent and the current configuration.
+            </summary>
+            <param name="name">Name of the layout renderer - without ${}.</param>
+            <param name="func">Callback that returns the value for the layout renderer.</param>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetMvcActionLayoutRenderer">
+            <summary>
+            ASP.NET RouteData MVC Action Name.
+            </summary>
+            <remarks>
+            <code>${aspnet-mvc-action}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-MVC-Action-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetMvcActionLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetMvcControllerLayoutRenderer">
+            <summary>
+            ASP.NET RouteData MVC Controller Name.
+            </summary>
+            <remarks>
+            <code>${aspnet-mvc-controller}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-MVC-Controller-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetMvcControllerLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetMvcLayoutRendererBase">
+            <summary>
+            Base Class for ASP.NET MVC Renderer.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetMvcLayoutRendererBase.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetMvcLayoutRendererBase.MvcDoAppend(System.Text.StringBuilder,NLog.LogEventInfo,Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Renders the specified ASP.NET Application variable and appends it to the specified <see cref="T:System.Text.StringBuilder" />.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder" /> to append the rendered data to.</param>
+            <param name="logEvent">Logging event.</param>
+            <param name="context">The current http context.</param>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestClientCertificateLayoutRenderer">
+            <summary>
+            ASP.NET Client Certificate of the Connection
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-client-certificate}
+            ${aspnet-request-client-certificate:Verbose=True}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Client-Certificate-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestClientCertificateLayoutRenderer.Verbose">
+            <summary>
+            This is passed to the X509Certificate2.ToString(bool) method
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestClientCertificateLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestContentLengthLayoutRenderer">
+            <summary>
+            ASP.NET request contentlength of the posted body
+            </summary>
+            <remarks>
+            <code>${aspnet-request-contentlength}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-ContentLength-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestContentLengthLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestContentTypeLayoutRenderer">
+            <summary>
+            ASP.NET HttpRequest Content-Type Header
+            </summary>
+            <remarks>
+            <code>${aspnet-request-contenttype}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-ContentType-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestContentTypeLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer">
+            <summary>
+            ASP.NET Request Cookie
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-cookie:OutputFormat=Flat}
+            ${aspnet-request-cookie:OutputFormat=JsonArray}
+            ${aspnet-request-cookie:OutputFormat=JsonDictionary}
+            ${aspnet-request-cookie:OutputFormat=JsonDictionary:Items=username}
+            ${aspnet-request-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Cookie-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer.Items">
+            <summary>
+            Cookie names to be rendered.
+            If <c>null</c> or empty array, all cookies will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer.CookieNames">
+            <summary>
+            Cookie names to be rendered.
+            If <c>null</c> or empty array, all cookies will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestCookieLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestDurationLayoutRenderer">
+            <summary>
+            ASP.NET Request Duration
+            </summary>
+            <remarks>
+            <code>${aspnet-request-duration}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Duration-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestDurationLayoutRenderer.Format">
+            <summary>
+            When no format specified, then just total milliseconds
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestDurationLayoutRenderer.Culture">
+            <summary>
+            Gets or sets the culture used for rendering. 
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestDurationLayoutRenderer.InitializeLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestDurationLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer">
+            <summary>
+            ASP.NET Request Form Data
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-form} - Produces - All Form Data from the Request with each key/value pair separated by a comma.
+            ${aspnet-request-form:Items=id,name} - Produces - Only Form Data from the Request with keys "id" and "name".
+            ${aspnet-request-form:Exclude=id,name} - Produces - All Form Data from the Request except the keys "id" and "name".
+            ${aspnet-request-form:ItemSeparator=${newline}} - Produces - All Form Data from the Request with each key/value pair separated by a new line.
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Form-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Items">
+            <summary>
+            Gets or sets the form keys to include in the output.
+            
+            If <c>null</c> or empty array, all will be included.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Include">
+            <summary>
+            Gets or sets the form keys to include in the output.  If omitted, all are included.  <see cref="P:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Exclude" /> takes precedence over <see cref="P:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Include" />.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the form keys to exclude from the output.  If omitted, none are excluded.  <see cref="P:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Exclude" /> takes precedence over <see cref="P:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Include" />.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestFormLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestHasPostedBodyLayoutRenderer">
+             <summary>
+             Used to indicate if the request has a body.
+             Uses IHttpRequestBodyDetectionFeature
+            
+             This returns true when:
+             - It's an HTTP/1.x request with a non-zero Content-Length or a 'Transfer-Encoding: chunked' header.
+             - It's an HTTP/2 request that did not set the END_STREAM flag on the initial headers frame.
+             The final request body length may still be zero for the chunked or HTTP/2 scenarios.
+            
+             This returns false when:
+             - It's an HTTP/1.x request with no Content-Length or 'Transfer-Encoding: chunked' header, or the Content-Length is 0.
+             - It's an HTTP/1.x request with Connection: Upgrade(e.g.WebSockets).
+                 There is no HTTP request body for these requests and no data should be received until after the upgrade.
+             - It's an HTTP/2 request that set END_STREAM on the initial headers frame. When false, the request body should never return data.
+             </summary>
+             <remarks>
+             <code>${aspnet-request-has-body}</code>
+             </remarks>
+             <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Has-Posted-Body-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestHasPostedBodyLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer">
+            <summary>
+            ASP.NET Request Headers
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-headers:OutputFormat=Flat}
+            ${aspnet-request-headers:OutputFormat=JsonArray}
+            ${aspnet-request-headers:OutputFormat=JsonDictionary}
+            ${aspnet-request-headers:OutputFormat=JsonDictionary:Items=username}
+            ${aspnet-request-headers:OutputFormat=JsonDictionary:Exclude=access_token}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Headers-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer.Items">
+            <summary>
+            Header names to be rendered.
+            If <c>null</c> or empty array, all headers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer.HeaderNames">
+            <summary>
+            Header names to be rendered.
+            If <c>null</c> or empty array, all headers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestHeadersLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestHostLayoutRenderer">
+            <summary>
+            ASP.NET Request DNS name of the remote client
+            </summary>
+            <remarks>
+            <code>${aspnet-request-host}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Host-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestHostLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer">
+            <summary>
+            ASP.NET Request IP address of the remote client
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-ip} - Return the Remote IP
+            ${aspnet-request-ip:CheckForwardedForHeader=true} - Return first element in the X-Forwarded-For header
+            ${aspnet-request-ip:CheckForwardedForHeaderOffset=1} - Return second element in the X-Forwarded-For header
+            ${aspnet-request-ip:CheckForwardedForHeaderOffset=-1} - Return last element in the X-Forwarded-For header
+            ${aspnet-request-ip:CheckForwardedForHeader=true:ForwardedForHeader=myHeader} - Return first element in the myHeader header
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-IP-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer.ForwardedForHeader">
+            <summary>
+            The header name to check for the Forwarded-For. Default "X-Forwarded-For". Needs <see cref="P:NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer.CheckForwardedForHeader"/>
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer.CheckForwardedForHeader">
+            <summary>
+            Gets or sets whether the renderer should check value of <see cref="P:NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer.ForwardedForHeader"/> header
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer.CheckForwardedForHeaderOffset">
+            <summary>
+            Gets or sets the array index of the X-Forwarded-For header to use, if the desired client IP is not at
+            the zeroth index.  Defaults to zero.  If the index is too large the last array element is returned instead.
+            If a negative index is used, this is used as the position from the end of the array.
+            Minus one will indicate the last element in the array.  If the negative index is too large the first index
+            of the array is returned instead.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestIpLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestIsWebSocketLayoutRenderer">
+            <summary>
+            ASP.NET Is Request Web Socket
+            </summary>
+            <remarks>
+            <code>${aspnet-request-is-web-socket}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-IsWebSocket-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestIsWebSocketLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer">
+            <summary>
+            ASP.NET Request Context variable.
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request:item=v}
+            ${aspnet-request:querystring=v}
+            ${aspnet-request:form=v}
+            ${aspnet-request:cookie=v}
+            ${aspnet-request:header=h}
+            ${aspnet-request:serverVariable=v}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-layout-renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer.Item">
+            <summary>
+            Gets or sets the HttpContext Item to be rendered.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer.QueryString">
+            <summary>
+            Gets or sets the QueryString variable to be rendered.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer.Form">
+            <summary>
+            Gets or sets the form variable to be rendered.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer.Cookie">
+            <summary>
+            Gets or sets the cookie to be rendered.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer.ServerVariable">
+            <summary>
+            Gets or sets the ServerVariables item to be rendered.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer.Header">
+            <summary>
+            Gets or sets the Headers item to be rendered.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestLocalIpLayoutRenderer">
+            <summary>
+            ASP.NET Local IP of the Connection
+            </summary>
+            <remarks>
+            <code>${aspnet-request-local-ip}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Local-IP-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestLocalIpLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestLocalPortLayoutRenderer">
+            <summary>
+            ASP.NET Local Port of the Connection
+            </summary>
+            <remarks>
+            <code>${aspnet-request-local-port}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Local-Port-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestLocalPortLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestMethodLayoutRenderer">
+            <summary>
+            ASP.NET Http Request Method (POST / GET)
+            </summary>
+            <remarks>
+            <code>${aspnet-request-method}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Method-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestMethodLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestPostedBodyLayoutRenderer">
+            <summary>
+            ASP.NET posted body, e.g. FORM or AJAX POST, when ContentLength > 0
+            </summary>
+            <remarks>
+            <code>${aspnet-request-posted-body}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-posted-body-layout-renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="F:NLog.Web.LayoutRenderers.AspNetRequestPostedBodyLayoutRenderer.NLogPostedRequestBodyKey">
+            <summary>
+            The object for the key in HttpContext.Items for the POST request body
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestPostedBodyLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer">
+            <summary>
+            ASP.NET Request Query String
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-querystring:OutputFormat=Flat}
+            ${aspnet-request-querystring:OutputFormat=JsonArray}
+            ${aspnet-request-querystring:OutputFormat=JsonDictionary}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-QueryString-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer.Items">
+            <summary>
+            List Query Strings' Key to be rendered from Request.
+            If empty, then render all querystrings
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer.QueryStringKeys">
+            <summary>
+            List Query Strings' Key to be rendered from Request.
+            If empty, then render all querystrings
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestQueryStringLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestReferrerLayoutRenderer">
+            <summary>
+            ASP.NET Request Referrer URL String
+            </summary>
+            <remarks>
+            <code>${aspnet-request-referrer}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Referrer-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestReferrerLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestRemotePortLayoutRenderer">
+            <summary>
+            ASP.NET Remote Port of the Connection
+            </summary>
+            <remarks>
+            <code>${aspnet-request-remote-port}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-Remote-Port-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestRemotePortLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestRouteParametersLayoutRenderer">
+            <summary>
+            ASP.NET Request Route Parameters
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-routeparameters:OutputFormat=Flat}
+            ${aspnet-request-routeparameters:OutputFormat=JsonArray}
+            ${aspnet-request-routeparameters:OutputFormat=JsonDictionary}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-RouteParameters-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestRouteParametersLayoutRenderer.Items">
+            <summary>
+            List Route Parameter' Key to be rendered from Request.
+            If empty, then render all parameters
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestRouteParametersLayoutRenderer.RouteParameterKeys">
+            <summary>
+            List Route Parameter' Key to be rendered from Request.
+            If empty, then render all parameters
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestRouteParametersLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer">
+            <summary>
+            ASP.NET Server Variable.
+            </summary>
+            <remarks>
+            <code>${aspnet-request-servervariable:Item=KeyName}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-ServerVariable-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer.Item">
+            <summary>
+            Gets or sets the ServerVariables item to be rendered.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer.InitializeLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestServerVariableLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer">
+            <summary>
+            ASP.NET Request URL
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-url:IncludeQueryString=true} - produces http://www.example.com/?t=1
+            ${aspnet-request-url:IncludeQueryString=false} - produces http://www.example.com/
+            ${aspnet-request-url:IncludePort=true} - produces http://www.example.com:80/
+            ${aspnet-request-url:IncludePort=false} - produces http://www.example.com/
+            ${aspnet-request-url:IncludeScheme=false} - produces www.example.com/
+            ${aspnet-request-url:IncludePort=true:IncludeQueryString=true} - produces http://www.example.com:80/?t=1
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-Url-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.Properties">
+            <summary>
+            A flags enumeration that controls which of the five portions of the URL are logged.
+            Defaults to scheme://host/path, port and query string are by default not logged.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.IncludeQueryString">
+            <summary>
+            To specify whether to include / exclude the Query string. Default is false.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.IncludePort">
+            <summary>
+            To specify whether to include / exclude the Port. Default is false.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.IncludeHost">
+            <summary>
+            To specify whether to exclude / include the host. Default is true.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.IncludeScheme">
+            <summary>
+            To specify whether to exclude / include the scheme. Ex. 'http' or 'https'.  Default is true.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.IncludePath">
+            <summary>
+            To specify whether to exclude / include the url-path. Default is true.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.UseRawTarget">
+            <summary>
+            To specify whether to use raw path and full query. Default is false.
+            See https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.features.ihttprequestfeature.rawtarget
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestUrlLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestUserAgentLayoutRenderer">
+            <summary>
+            ASP.NET Request User Agent String
+            </summary>
+            <remarks>
+            <code>${aspnet-request-useragent}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetRequest-UserAgent-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestUserAgentLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetRequestWebSocketRequestedProtocolsLayoutRenderer">
+            <summary>
+            ASP.NET Web Socket Requested Protocols
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-request-web-socket-requested-protocols:OutputFormat=Flat}
+            ${aspnet-request-web-socket-requested-protocols:OutputFormat=JsonArray}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-WebSocket-Requested-Protocols-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetRequestWebSocketRequestedProtocolsLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseContentLengthLayoutRenderer">
+            <summary>
+            ASP.NET Response ContentLength
+            </summary>
+            <remarks>
+            <code>${aspnet-response-contentlength}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-ContentLength-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseContentLengthLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseContentTypeLayoutRenderer">
+            <summary>
+            ASP.NET HttpResponse Content-Type Header
+            </summary>
+            <remarks>
+            <code>${aspnet-request-contenttype}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-ContentType-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseContentTypeLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer">
+            <summary>
+            ASP.NET Response Cookie
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-response-cookie:OutputFormat=Flat}
+            ${aspnet-response-cookie:OutputFormat=JsonArray}
+            ${aspnet-response-cookie:OutputFormat=JsonDictionary}
+            ${aspnet-response-cookie:OutputFormat=JsonDictionary:Items=username}
+            ${aspnet-response-cookie:OutputFormat=JsonDictionary:Exclude=access_token}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-Cookie-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.ObjectSeparator">
+            <summary>
+            Separator between objects, like cookies. Only used for <see cref="F:NLog.Web.Enums.AspNetRequestLayoutOutputFormat.Flat" />
+            </summary>
+            <remarks>Render with <see cref="M:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.GetRenderedObjectSeparator(NLog.LogEventInfo)" /></remarks>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.Items">
+            <summary>
+            Cookie names to be rendered.
+            If <c>null</c> or empty array, all cookies will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.CookieNames">
+            <summary>
+            Cookie names to be rendered.
+            If <c>null</c> or empty array, all cookies will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.Verbose">
+            <summary>
+            Render all of the cookie properties, such as Daom and Path, not merely Name and Value
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.GetRenderedObjectSeparator(NLog.LogEventInfo)">
+            <summary>
+            Get the rendered <see cref="P:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.ObjectSeparator" />
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.AppendJsonProperty(System.Text.StringBuilder,System.String,System.String,System.Boolean)">
+            <summary>
+            Append the quoted name and value separated by a colon
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.AppendFlatProperty(System.Text.StringBuilder,System.String,System.String,System.String,System.String)">
+            <summary>
+            Append the quoted name and value separated by a value separator
+            and ended by item separator
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseCookieLayoutRenderer.GetCookies(Microsoft.AspNetCore.Http.HttpResponse)">
+            <summary>
+            Method to get cookies for all ASP.NET Core versions
+            </summary>
+            <param name="response"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseHasStartedLayoutRenderer">
+            <summary>
+            ASP.NET response headers already sent, in other words the response has started
+            </summary>
+            <remarks>
+            <code>${aspnet-response-has-started}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-HasStarted-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseHasStartedLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer">
+            <summary>
+            ASP.NET Response Headers
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-response-headers:OutputFormat=Flat}
+            ${aspnet-response-headers:OutputFormat=JsonArray}
+            ${aspnet-response-headers:OutputFormat=JsonDictionary}
+            ${aspnet-response-headers:OutputFormat=JsonDictionary:Items=username}
+            ${aspnet-response-headers:OutputFormat=JsonDictionary:Exclude=access_token}
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Response-Headers-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer.Items">
+            <summary>
+            Header names to be rendered.
+            If <c>null</c> or empty array, all headers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer.HeaderNames">
+            <summary>
+            Header names to be rendered.
+            If <c>null</c> or empty array, all headers will be rendered.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer.Exclude">
+            <summary>
+            Gets or sets the keys to exclude from the output. If omitted, none are excluded.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseHeadersLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetResponseStatusCodeLayoutRenderer">
+            <summary>
+            ASP.NET Response Status Code.
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-response-statuscode} - Render http status code as integer
+            ${aspnet-response-statuscode:Format=D} - Render http status code as integer
+            ${aspnet-response-statuscode:Format=F} - Render http status code as enum-string-value
+            ${aspnet-response-statuscode:Format=G} - Render http status code as enum-string-value
+            ${aspnet-response-statuscode:Format=X} - Render http status code as hexadecimal
+            </code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetResponse-StatusCode-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetResponseStatusCodeLayoutRenderer.Format">
+            <summary>
+            A valid enumeration format string, defaults to integer format
+            </summary>
+            <remarks>
+            Supported Values, Case Insensitive
+            D: outputs the HttpStatusCode enum as a integer
+            F: outputs the HttpStatusCode enum as a string if possible, otherwise an integer
+            G: outputs the HttpStatusCode enum as a string if possible, otherwise an integer
+            X: outputs the HttpStatusCode enum as a hexadecimal
+            </remarks>
+            <seealso href="https://learn.microsoft.com/en-us/dotnet/standard/base-types/enumeration-format-strings">Documentation on Enum Format Strings</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetResponseStatusCodeLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetSessionIdLayoutRenderer">
+            <summary>
+            ASP.NET Session ID.
+            </summary>
+            <remarks>
+            <code>${aspnet-sessionid}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetSessionId-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetSessionIdLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer">
+            <summary>
+            ASP.NET Session Dictionary Item Value
+            </summary>
+            <remarks>
+            <code>
+            ${aspnet-session-item:myKey} - produces "123"
+            ${aspnet-session-item:anotherKey} - produces "01/01/2006 00:00:00"
+            ${aspnet-session-item:anotherKey:culture=pl-PL} - produces "2006-01-01 00:00:00"
+            ${aspnet-session-item:myKey:padding=5} - produces "  123"
+            ${aspnet-session-item:myKey:padding=-5} - produces "123  "
+            ${aspnet-session-item:stringKey:upperCase=true} - produces "AAA BBB"
+            </code>
+            </remarks>
+            <example>
+            <para>You can set the value of an ASP.NET Session variable by using the following code:</para>
+            <code lang="C#">
+            <![CDATA[
+            HttpContext.Current.Session["myKey"] = 123;
+            HttpContext.Current.Session["stringKey"] = "aaa BBB";
+            HttpContext.Current.Session["anotherKey"] = DateTime.Now;
+            ]]>
+            </code>
+            </example>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetSession-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.Item">
+            <summary>
+            Gets or sets the session item name.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.Variable">
+            <summary>
+            Gets or sets the session item name.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.ObjectPath">
+            <summary>
+            Gets or sets the object-property-navigation-path for lookup of nested property
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.Format">
+            <summary>
+            Format string for conversion from object to string.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.Culture">
+            <summary>
+            Gets or sets the culture used for rendering.
+            </summary>
+            <docgen category='Rendering Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.ValueType">
+            <summary>
+            The type of the value.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.InitializeLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetSessionItemLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetTraceIdentifierLayoutRenderer">
+            <summary>
+            ASP.NET Request TraceIdentifier.
+            </summary>
+            <remarks>
+            <code>${aspnet-traceidentifier}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetTraceIdentifier-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetTraceIdentifierLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetTraceIdentifierLayoutRenderer.IgnoreActivityId">
+            <summary>
+            Ignore the System.Diagnostics.Activity.Current.Id value, and always use HttpContext.TraceIdentifier
+            </summary>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetUserAuthTypeLayoutRenderer">
+            <summary>
+            ASP.NET User Identity AuthenticationType
+            </summary>
+            <remarks>
+            <code>${aspnet-user-authtype}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetUserAuthType-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetUserAuthTypeLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer">
+            <summary>
+            ASP.NET User ClaimType Value Lookup.
+            </summary>
+            <remarks>
+            <code>${aspnet-user-claim:ClaimType=Name}</code> to render a single specific claim type
+            <code>${aspnet-user-claim}</code> to render all claim types
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-User-Claim-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="F:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer.Oid">
+            <summary>
+            New ObjectId claim: "oid".
+            </summary>
+        </member>
+        <member name="F:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer.ObjectId">
+            <summary>
+            Old ObjectId claim: "http://schemas.microsoft.com/identity/claims/objectidentifier".
+            </summary>
+        </member>
+        <member name="F:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer.Tid">
+            <summary>
+            New TenantId claim: "tid".
+            </summary>
+        </member>
+        <member name="F:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer.TenantId">
+            <summary>
+            Old TenantId claim: "http://schemas.microsoft.com/identity/claims/tenantid".
+            </summary>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer.ClaimType">
+            <summary>
+            Key to lookup using primary <see cref="M:System.Security.Claims.ClaimsIdentity.FindFirst(System.String)"/> with fallback to <see cref="M:System.Security.Claims.ClaimsPrincipal.FindFirst(System.String)"/>
+            </summary>
+            <remarks>
+            When value is prefixed with "ClaimTypes." (Remember dot) then ít will lookup in well-known claim types from <see cref="T:System.Security.Claims.ClaimTypes"/>. Ex. ClaimsTypes.Name .
+            
+            Additional Azure Claims are also recognized: ClaimTypes.ObjectId + ClaimTypes.TenantId + ClaimTypes.AppId .
+            
+            If using value null or empty then all claim types are rendered.
+            </remarks>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer.InitializeLayoutRenderer">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetUserClaimLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetUserIdentityLayoutRenderer">
+            <summary>
+            ASP.NET User Identity Name
+            </summary>
+            <remarks>
+            <code>${aspnet-user-identity}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetUserIdentity-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetUserIdentityLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetUserIsAuthenticatedLayoutRenderer">
+            <summary>
+            ASP.NET User Identity Authenticated? (0 = not authenticated, 1 = authenticated)
+            </summary>
+            <remarks>
+            <code>${aspnet-user-isAuthenticated}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-User-isAuthenticated-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetUserIsAuthenticatedLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AspNetWebRootPathLayoutRenderer">
+            <summary>
+            Rendering WebRootPath. <see cref="P:Microsoft.AspNetCore.Hosting.IWebHostEnvironment.WebRootPath" />
+            </summary>
+            <remarks>
+            <code>${aspnet-webrootpath}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-WebRootPath-layout-renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.AspNetWebRootPathLayoutRenderer.WebHostEnvironment">
+            <summary>
+            Provides access to the current IHostEnvironment
+            </summary>
+            <returns>IHostEnvironment or <c>null</c></returns>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetWebRootPathLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AspNetWebRootPathLayoutRenderer.CloseLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.AssemblyVersionLayoutRenderer">
+            <summary>
+            Extend NLog.LayoutRenderers.AssemblyVersionLayoutRenderer with ASP.NET Full and Core support
+            </summary>
+            <remarks>
+            <code>${assembly-version}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/AssemblyVersion-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AssemblyVersionLayoutRenderer.InitializeLayoutRenderer">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.AssemblyVersionLayoutRenderer.GetAssembly">
+            <inheritdoc />
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.IISSiteNameLayoutRenderer">
+            <summary>
+            Rendering site name in IIS. <see cref="P:Microsoft.Extensions.Hosting.IHostingEnvironment.ApplicationName" />
+            </summary>
+            <remarks>
+            <code>${iis-site-name}</code>
+            </remarks>
+            <seealso href="https://github.com/NLog/NLog/wiki/IIS-site-name-Layout-Renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.LayoutRenderers.IISSiteNameLayoutRenderer.HostEnvironment">
+            <summary>
+            Provides access to the current IHostEnvironment
+            </summary>
+            <returns>IHostEnvironment or <c>null</c></returns>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.IISSiteNameLayoutRenderer.Append(System.Text.StringBuilder,NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.IISSiteNameLayoutRenderer.CloseLayoutRenderer">
+            <inheritdoc/>
+        </member>
+        <member name="T:NLog.Web.LayoutRenderers.NLogWebFuncLayoutRenderer">
+            <summary>
+            Specialized layout render which has a cached <see cref="T:Microsoft.AspNetCore.Http.IHttpContextAccessor"/>
+            </summary>
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.NLogWebFuncLayoutRenderer.CloseLayoutRenderer">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.LayoutRenderers.NLogWebFuncLayoutRenderer.RenderValue(NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="T:NLog.Web.NLogAspNetCoreOptions">
+            <summary>
+            Options for ASP.NET Core and NLog
+            </summary>
+        </member>
+        <member name="P:NLog.Web.NLogAspNetCoreOptions.RegisterHttpContextAccessor">
+            <summary>
+            Register the HttpContextAccessor when not yet registed. Default <c>true</c>
+            </summary>
+            <remarks>needed for various layout renderers</remarks>
+        </member>
+        <member name="P:NLog.Web.NLogAspNetCoreOptions.Default">
+            <summary>
+            The default options
+            </summary>
+        </member>
+        <member name="T:NLog.Web.NLogBufferingTargetWrapperMiddleware">
+             <summary>
+             This class is to intercept the HTTP pipeline and to allow the AspNetBufferingTargetWrapper to function properly
+            
+             Usage: app.UseMiddleware&lt;NLogBufferingTargetWrapperMiddleware&gt;(); where app is an IApplicationBuilder
+             </summary>
+             <seealso href="https://github.com/NLog/NLog/wiki/AspNetBufferingWrapper-target">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.NLogBufferingTargetWrapperMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes new instance of the <see cref="T:NLog.Web.NLogBufferingTargetWrapperMiddleware"/> class
+            </summary>
+            <remarks>
+            Use the following in Startup.cs:
+            <code>
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            {
+               app.UseMiddleware&lt;NLog.Web.NLogBufferingTargetWrapperMiddleware&gt;();
+            }
+            </code>
+            </remarks>
+        </member>
+        <member name="M:NLog.Web.NLogBufferingTargetWrapperMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            This allows interception of the HTTP pipeline for logging purposes
+            </summary>
+            <param name="context">The HttpContext</param>
+            <returns></returns>
+        </member>
+        <member name="T:NLog.Web.NLogBuilder">
+            <summary>
+            NLog helpers to ensure registration of NLog.Web-extensions before loading NLog-configuration
+            </summary>
+            <remarks>
+            It is now recommended to use NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
+            </remarks>
+        </member>
+        <member name="M:NLog.Web.NLogBuilder.ConfigureNLog(System.String)">
+            <summary>
+            Configure NLog from XML config.
+            </summary>
+            <remarks>
+            It is now recommended to use NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
+            </remarks>
+            <param name="configFileName">Path to NLog configuration file, e.g. nlog.config</param>
+            <returns>LogFactory to get loggers, add events etc</returns>
+        </member>
+        <member name="M:NLog.Web.NLogBuilder.ConfigureNLog(NLog.Config.LoggingConfiguration)">
+            <summary>
+            Configure NLog from API
+            </summary>
+            <remarks>
+            It is now recommended to use NLog.LogManager.Setup().LoadConfigurationFromAppSettings()
+            </remarks>
+            <param name="configuration">Config for NLog</param>
+            <returns>LogFactory to get loggers, add events etc</returns>
+        </member>
+        <member name="T:NLog.Web.NLogRequestLoggingMiddleware">
+            <summary>
+            Middleware that writes all requests to Logger named "RequestLogging"
+            </summary>
+            <remarks>
+            - LogLevel.Error - Request failed with exception<br/>
+            - LogLevel.Warn  - Request completed with unsucessful StatusCode<br/>
+            - LogLevel.Info  - Request completed standard StatusCode<br/>
+            </remarks>
+        </member>
+        <member name="M:NLog.Web.NLogRequestLoggingMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,NLog.Web.NLogRequestLoggingOptions,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Initializes new instance of the <see cref="T:NLog.Web.NLogRequestLoggingMiddleware"/> class
+            </summary>
+            <remarks>
+            Use the following in Startup.cs:
+            <code>
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            {
+               app.UseMiddleware&lt;NLog.Web.RequestLoggingMiddleware&gt;();
+            }
+            </code>
+            </remarks>
+        </member>
+        <member name="M:NLog.Web.NLogRequestLoggingMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Executes the middleware.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.NLogRequestLoggingMiddleware.LogHttpRequest(Microsoft.AspNetCore.Http.HttpContext,System.Exception)">
+            <summary>
+            Exception Filter for better capture of thread-execution-context (Ex. AsyncLocal-state)
+            </summary>
+        </member>
+        <member name="T:NLog.Web.NLogRequestLoggingOptions">
+            <summary>
+            Options configuration for <see cref="T:NLog.Web.NLogRequestLoggingMiddleware"/>
+            </summary>
+        </member>
+        <member name="M:NLog.Web.NLogRequestLoggingOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.NLogRequestLoggingOptions" /> class.
+            </summary>
+        </member>
+        <member name="P:NLog.Web.NLogRequestLoggingOptions.LoggerName">
+            <summary>
+            Logger-name used for logging http-requests
+            </summary>
+        </member>
+        <member name="P:NLog.Web.NLogRequestLoggingOptions.DurationThresholdMs">
+            <summary>
+            Get or set duration time in milliseconds, before a HttpRequest is seen as slow (Logged as warning)
+            </summary>
+        </member>
+        <member name="P:NLog.Web.NLogRequestLoggingOptions.ExcludeRequestPaths">
+            <summary>
+            Gets or sets request-paths where LogLevel should be reduced (Logged as debug)
+            </summary>
+            <remarks>
+            Example '/healthcheck'
+            </remarks>
+        </member>
+        <member name="P:NLog.Web.NLogRequestLoggingOptions.ShouldLogRequest">
+            <summary>
+            Mapper from HttpContext status to LogLevel
+            </summary>
+        </member>
+        <member name="T:NLog.Web.NLogRequestPostedBodyMiddleware">
+             <summary>
+             ASP.NET Core Middleware that enables ${aspnet-request-posted-body}
+            
+             Inject the NLogRequestPostBodyMiddlewareOption in the IoC if wanting to override default values for constructor
+             </summary>
+             <remarks>
+             Usage:
+             
+             app.UseMiddleware&lt;NLogRequestPostBodyMiddleware&gt;(); where app is an IApplicationBuilder
+             </remarks>
+             <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-posted-body-layout-renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.NLogRequestPostedBodyMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,NLog.Web.NLogRequestPostedBodyMiddlewareOptions)">
+            <summary>
+            Initializes new instance of the <see cref="T:NLog.Web.NLogRequestPostedBodyMiddleware"/> class
+            </summary>
+            <remarks>
+            Use the following in Startup.cs:
+            <code>
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            {
+               app.UseMiddleware&lt;NLog.Web.NLogRequestPostedBodyMiddleware&gt;();
+            }
+            </code>
+            </remarks>
+        </member>
+        <member name="M:NLog.Web.NLogRequestPostedBodyMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            This allows interception of the HTTP pipeline for logging purposes
+            </summary>
+            <param name="context">The HttpContext</param>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.Web.NLogRequestPostedBodyMiddleware.ReadPostedBodyFromStream(System.IO.Stream)">
+            <summary>
+            Convert the stream to a String for logging.
+            If the stream is binary please do not utilize this middleware
+            Arguably, logging a byte array in a sensible format is simply not possible.
+            </summary>
+            <param name="stream"></param>
+            <returns>The contents of the Stream read fully from start to end as a String</returns>
+        </member>
+        <member name="T:NLog.Web.NLogRequestPostedBodyMiddlewareOptions">
+            <summary>
+            Contains the configuration for the NLogRequestPostedBodyMiddleware
+            </summary>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNet-Request-posted-body-layout-renderer">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="F:NLog.Web.NLogRequestPostedBodyMiddlewareOptions.Default">
+            <summary>
+            The default configuration
+            </summary>
+        </member>
+        <member name="M:NLog.Web.NLogRequestPostedBodyMiddlewareOptions.#ctor">
+            <summary>
+            The default constructor
+            </summary>
+        </member>
+        <member name="P:NLog.Web.NLogRequestPostedBodyMiddlewareOptions.MaxContentLength">
+            <summary>
+            The maximum request posted body size that will be captured. Defaults to 30KB.
+            </summary>
+            <remarks>
+            HttpRequest.EnableBuffer() writes the request to TEMP files on disk if the request ContentLength is > 30KB
+            but uses memory otherwise if &lt;= 30KB, so we should protect against "very large" request post body payloads.
+            </remarks>
+        </member>
+        <member name="P:NLog.Web.NLogRequestPostedBodyMiddlewareOptions.AllowContentTypes">
+            <summary>
+            Prefix and suffix values to be accepted as ContentTypes. Ex. key-prefix = "application/" and value-suffix = "json"
+            </summary>
+        </member>
+        <member name="P:NLog.Web.NLogRequestPostedBodyMiddlewareOptions.ShouldCapture">
+            <summary>
+            If this returns true, the post request body will be captured
+            Defaults to true if content length &lt;= 30KB
+            This can be used to capture only certain content types,
+            only certain hosts, only below a certain request body size, and so forth
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NLog.Web.NLogRequestPostedBodyMiddlewareOptions.DefaultCapture(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            The default predicate for ShouldCapture. Returns true if content length &lt;= 30KB
+            </summary>
+        </member>
+        <member name="T:NLog.Web.Layouts.W3CExtendedLogField">
+            <summary>
+            Field in W3C Extended Formatted event
+            </summary>
+            <seealso href="https://github.com/NLog/NLog/wiki/W3CExtendedLogLayout">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogField.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Layouts.W3CExtendedLogField" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogField.#ctor(System.String,NLog.Layouts.Layout)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Layouts.W3CExtendedLogField" /> class.
+            </summary>
+            <param name="name">The name of the column.</param>
+            <param name="layout">The layout of the column.</param>
+        </member>
+        <member name="P:NLog.Web.Layouts.W3CExtendedLogField.Name">
+            <summary>
+            Gets or sets the name of the field.
+            </summary>
+            <remarks>
+            Standard field prefixes:<br/>
+             * s- = server details<br/>
+             * c- = client details<br/>
+             * cs- = client to server request details<br/>
+             * sc- = server to client response details<br/>
+            </remarks>
+            <docgen category='W3C Field Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.Layouts.W3CExtendedLogField.Layout">
+            <summary>
+            Gets or sets the layout of the field.
+            </summary>
+            <docgen category='W3C Field Options' order='10' />
+        </member>
+        <member name="T:NLog.Web.Layouts.W3CExtendedLogLayout">
+            <summary>
+            A specialized layout that renders W3C Extended Log Format (ELF).
+            </summary>
+            <seealso href="https://github.com/NLog/NLog/wiki/W3CExtendedLogLayout">Documentation on NLog Wiki</seealso>
+        </member>
+        <member name="P:NLog.Web.Layouts.W3CExtendedLogLayout.Fields">
+            <summary>
+            Gets the array of extended fields to include
+            </summary>
+            <docgen category='W3C Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.Layouts.W3CExtendedLogLayout.Directives">
+            <summary>
+            Gets the array of directive headers to include
+            </summary>
+            <docgen category='W3C Options' order='10' />
+        </member>
+        <member name="P:NLog.Web.Layouts.W3CExtendedLogLayout.LineEnding">
+            <summary>
+            Newline to append after each directive header
+            </summary>
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogLayout.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Layouts.W3CExtendedLogLayout"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogLayout.InitializeLayout">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogLayout.RenderFormattedMessage(NLog.LogEventInfo,System.Text.StringBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogLayout.W3CExtendedHeaderLayout.#ctor(NLog.Web.Layouts.W3CExtendedLogLayout)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Layouts.W3CExtendedLogLayout.W3CExtendedHeaderLayout"/> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogLayout.W3CExtendedHeaderLayout.Precalculate(NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogLayout.W3CExtendedHeaderLayout.GetFormattedMessage(NLog.LogEventInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:NLog.Web.Layouts.W3CExtendedLogLayout.W3CExtendedHeaderLayout.RenderFormattedMessage(NLog.LogEventInfo,System.Text.StringBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper">
+            <summary>
+            Buffers log events for the duration of ASP.NET request and sends them down 
+            to the wrapped target at the end of a request.
+            </summary>
+            <seealso href="https://github.com/NLog/NLog/wiki/AspNetBufferingWrapper-target">Documentation on NLog Wiki</seealso>
+            <remarks>
+            <p>
+            Typically this target is used in cooperation with PostFilteringTargetWrapper
+            to provide verbose logging for failing requests and normal or no logging for
+            successful requests. We need to make the decision of the final filtering rule
+            to apply after all logs for a page have been generated.
+            </p>
+            <p>
+            To use this target, for classic ASP.NET you need to add an entry in the httpModules section of
+            web.config:
+            </p>
+            <code lang="XML">
+            <![CDATA[<?xml version="1.0" ?>
+            <configuration>
+              <system.web>
+                <httpModules>
+                  <add name="NLog" type="NLog.Web.NLogBufferingTargetWrapperModule, NLog.Web"/>
+                </httpModules>
+              </system.web>
+            </configuration>
+            ]]>
+            </code>
+            to use this target, for ASP.NET Core, you need to add a line fo code to involve the proper middleware
+            <code>
+            <![CDATA[
+               app.UseMiddleware<NLogBufferingTargetWrapperMiddleware>();
+            ]]>
+            </code>
+            </remarks>
+            <example>
+            <p>To set up the ASP.NET Buffering target wrapper <a href="config.html">configuration file</a>, put
+            the following in <c>web.nlog</c> file in your web application directory (this assumes
+            that PostFilteringWrapper is used to provide the filtering and actual logs go to
+            a file).
+            </p>
+            <code lang="XML" source="examples/targets/Configuration File/ASPNetBufferingWrapper/web.nlog" />
+            <p>
+            This assumes just one target and a single rule. More configuration
+            options are described <a href="config.html">here</a>.
+            </p>
+            <p>
+            To configure the target programmatically, put the following
+            piece of code in your <c>Application_OnStart()</c> handler in Global.asax.cs 
+            or some other place that gets executed at the very beginning of your code:
+            </p>
+            <code lang="C#" source="examples/targets/Configuration API/ASPNetBufferingWrapper/Global.asax.cs" />
+            <p>
+            Fully working C# project can be found in the <c>Examples/Targets/Configuration API/ASPNetBufferingWrapper</c>
+            directory along with usage instructions.
+            </p>
+            </example>
+        </member>
+        <member name="M:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper" /> class.
+            </summary>
+        </member>
+        <member name="M:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.#ctor(NLog.Targets.Target)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper" /> class.
+            </summary>
+            <param name="wrappedTarget">The wrapped target.</param>
+        </member>
+        <member name="M:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.#ctor(NLog.Targets.Target,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper" /> class.
+            </summary>
+            <param name="wrappedTarget">The wrapped target.</param>
+            <param name="bufferSize">Size of the buffer.</param>
+        </member>
+        <member name="P:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.BufferSize">
+            <summary>
+            Gets or sets the number of log events to be buffered.
+            </summary>
+            <docgen category='Buffering Options' order='100' />
+        </member>
+        <member name="P:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.GrowBufferAsNeeded">
+            <summary>
+            Gets or sets a value indicating whether buffer should grow as needed.
+            </summary>
+            <value>A value of <c>true</c> if buffer should grow as needed; otherwise, <c>false</c>.</value>
+            <remarks>
+            Value of <c>true</c> causes the buffer to expand until <see cref="P:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.BufferGrowLimit"/> is hit,
+            <c>false</c> causes the buffer to never expand and lose the earliest entries in case of overflow.
+            </remarks>
+            <docgen category='Buffering Options' order='100' />
+        </member>
+        <member name="P:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.BufferGrowLimit">
+            <summary>
+            Gets or sets the maximum number of log events that the buffer can keep.
+            </summary>
+            <docgen category='Buffering Options' order='100' />
+        </member>
+        <member name="M:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.InitializeTarget">
+            <inheritdoc/>
+        </member>
+        <member name="M:NLog.Web.Targets.Wrappers.AspNetBufferingTargetWrapper.WriteAsyncThreadSafe(NLog.Common.AsyncLogEventInfo)">
+            <summary>
+            Adds the specified log event to the buffer.
+            </summary>
+            <param name="logEvent">The log event.</param>
+        </member>
+    </members>
+</doc>

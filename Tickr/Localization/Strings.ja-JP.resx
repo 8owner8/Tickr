@@ -1,0 +1,822 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns="" id="root">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<data name="AcceptingTrade" xml:space="preserve">
+		<value>トレードを承認中: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="AutoUpdateCheckInfo" xml:space="preserve">
+		<value>Tickrは {0} ごとに自動的に新しいバージョンをチェックします。</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "24 hours")</comment>
+	</data>
+	<data name="Content" xml:space="preserve">
+		<value>内容: {0}</value>
+		<comment>{0} will be replaced by content string. Please note that this string should include newline for formatting.</comment>
+	</data>
+	<data name="ErrorConfigPropertyInvalid" xml:space="preserve">
+		<value>設定された {0} プロパティは無効です: {1}</value>
+		<comment>{0} will be replaced by name of the configuration property, {1} will be replaced by invalid value</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionInfo" xml:space="preserve">
+		<value>Tickr V {0} はコアログインモジュールを初期化する前に、致命的な例外に遭遇しました！</value>
+		<comment>{0} will be replaced by version number</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionPrint" xml:space="preserve">
+		<value>例外: {0} () {1} StackTrace: {2}</value>
+		<comment>{0} will be replaced by function name, {1} will be replaced by exception message, {2} will be replaced by entire stack trace. Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="ErrorExitingWithNonZeroErrorCode" xml:space="preserve">
+		<value>エラーコード {0} で終了します!</value>
+		<comment>{0} will be replaced by error code (number)</comment>
+	</data>
+	<data name="ErrorFailingRequest" xml:space="preserve">
+		<value>要求が失敗: {0}</value>
+		<comment>{0} will be replaced by URL of the request</comment>
+	</data>
+	<data name="ErrorGlobalConfigNotLoaded" xml:space="preserve">
+		<value>グローバル設定がロードできませんでした。{0} が存在し、有効であるかどうか確認してください！不明な点があれば、wikiのセッティングガイドを参照してください。</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorIsInvalid" xml:space="preserve">
+		<value>{0} は無効です！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorNoBotsDefined" xml:space="preserve">
+		<value>Bot が定義されていません。Tickrの設定を忘れましたか？わからなければ、wikiの「設定」ガイドに従ってください。</value>
+	</data>
+	<data name="ErrorObjectIsNull" xml:space="preserve">
+		<value>{0} は空(null) です！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorParsingObject" xml:space="preserve">
+		<value>{0} の解析に失敗しました！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorRequestFailedTooManyTimes" xml:space="preserve">
+		<value>要求を {0} 回試行し、失敗しました！</value>
+		<comment>{0} will be replaced by maximum number of tries</comment>
+	</data>
+	<data name="ErrorUpdateCheckFailed" xml:space="preserve">
+		<value>最新のバージョンを確認できませんでした！</value>
+	</data>
+	<data name="ErrorUpdateNoAssetForThisVersion" xml:space="preserve">
+		<value>現在実行中のバージョンに関するアセットが無いため、更新を続行できませんでした！そのバージョンへの自動更新は不可能です。</value>
+	</data>
+	<data name="ErrorUpdateNoAssets" xml:space="preserve">
+		<value>そのバージョンにはアセットが含まれていないため、更新を続行できませんでした！</value>
+	</data>
+	<data name="ErrorUserInputRunningInHeadlessMode" xml:space="preserve">
+		<value>ユーザー入力のリクエストを受け取りましたが、プロセスは headless モードで実行されています！</value>
+	</data>
+	<data name="Exiting" xml:space="preserve">
+		<value>終了中...</value>
+	</data>
+	<data name="WarningFailed" xml:space="preserve">
+		<value>失敗！</value>
+	</data>
+	<data name="GlobalConfigChanged" xml:space="preserve">
+		<value>グローバル設定ファイルが変更されました！</value>
+	</data>
+	<data name="ErrorGlobalConfigRemoved" xml:space="preserve">
+		<value>グローバル設定ファイルが削除されました！</value>
+	</data>
+	<data name="IgnoringTrade" xml:space="preserve">
+		<value>トレードを無視: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="LoggingIn" xml:space="preserve">
+		<value>{0} にログイン中...</value>
+		<comment>{0} will be replaced by service's name</comment>
+	</data>
+	<data name="NoBotsAreRunning" xml:space="preserve">
+		<value>bot が実行されていません。終了しています...</value>
+	</data>
+	<data name="RefreshingOurSession" xml:space="preserve">
+		<value>セッションを更新！</value>
+	</data>
+	<data name="RejectingTrade" xml:space="preserve">
+		<value>トレードを拒否: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="Restarting" xml:space="preserve">
+		<value>再起動中...</value>
+	</data>
+	<data name="Starting" xml:space="preserve">
+		<value>開始中...</value>
+	</data>
+	<data name="Success" xml:space="preserve">
+		<value>成功！</value>
+	</data>
+	<data name="UnlockingParentalAccount" xml:space="preserve">
+		<value>親アカウントのロックを解除しています...</value>
+	</data>
+	<data name="UpdateCheckingNewVersion" xml:space="preserve">
+		<value>新しいバージョンをチェックしています...</value>
+	</data>
+	<data name="UpdateDownloadingNewVersion" xml:space="preserve">
+		<value>新しいバージョンをダウンロードしています： {0} ({1} MB) ... 待っている間、作者への寄付をご検討ください！ :)</value>
+		<comment>{0} will be replaced by version string, {1} will be replaced by update size (in megabytes)</comment>
+	</data>
+	<data name="UpdateFinished" xml:space="preserve">
+		<value>アップデート完了！</value>
+	</data>
+	<data name="UpdateNewVersionAvailable" xml:space="preserve">
+		<value>新しい Tickr のバージョンが利用可能です！更新をご検討ください！</value>
+	</data>
+	<data name="UpdateVersionInfo" xml:space="preserve">
+		<value>現在のバージョン: {0} | 最新バージョン: {1}</value>
+		<comment>{0} will be replaced by current version, {1} will be replaced by remote version</comment>
+	</data>
+	<data name="UserInputDeviceConfirmation" xml:space="preserve">
+		<value>Steamモバイルアプリを確認してください。ログイン承認通知を受け取ったはずです。 通知を受け取って承認した場合はYと入力してください。代わりにコードを提供したい場合はNと入力してください。 </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteam2FA" xml:space="preserve">
+		<value>Steam 認証アプリの二次認証コードを入力してください: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamGuard" xml:space="preserve">
+		<value>あなたのメールアドレスに送信されたSteamガード認証コードを入力してください: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamLogin" xml:space="preserve">
+		<value>あなたの Steam アカウント名を入力してください: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamParentalCode" xml:space="preserve">
+		<value>Steam parental code を入力してください: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamPassword" xml:space="preserve">
+		<value>あなたの Steam パスワードを入力してください: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="WarningUnknownValuePleaseReport" xml:space="preserve">
+		<value>{0} に不明な値を受信しました。この問題を報告してください: {1}</value>
+		<comment>{0} will be replaced by object's name, {1} will be replaced by value for that object</comment>
+	</data>
+	<data name="IPCReady" xml:space="preserve">
+		<value>IPC サーバーの準備ができました！</value>
+	</data>
+	<data name="IPCStarting" xml:space="preserve">
+		<value>IPC サーバーを起動しています...</value>
+	</data>
+	<data name="BotAlreadyStopped" xml:space="preserve">
+		<value>この bot は既に停止しています！</value>
+	</data>
+	<data name="BotNotFound" xml:space="preserve">
+		<value>{0} という名前の bot を見つけられませんでした！</value>
+		<comment>{0} will be replaced by bot's name query (string)</comment>
+	</data>
+	<data name="BotStatusOverview" xml:space="preserve">
+		<value>{0}/{1} のbotが実行されています。合計{2} つのゲーム({3} つのカード) をファームできます。</value>
+		<comment>{0} will be replaced by number of active bots, {1} will be replaced by total number of bots, {2} will be replaced by total number of games left to farm, {3} will be replaced by total number of cards left to farm</comment>
+	</data>
+	<data name="BotStatusIdling" xml:space="preserve">
+		<value>Botはファーミングしています: {0} ({1}, 残りカード{2} つ) 合計{3} つのゲーム({4} つのカード) が残っています(あと~{5})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm, {3} will be replaced by total number of games to farm, {4} will be replaced by total number of cards to farm, {5} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="BotStatusIdlingList" xml:space="preserve">
+		<value>Botはファーミングしています: {0} 合計{1} つのゲーム({2} つのカード) が残っています(あと~{3})</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), {1} will be replaced by total number of games to farm, {2} will be replaced by total number of cards to farm, {3} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="CheckingFirstBadgePage" xml:space="preserve">
+		<value>最初のバッジのページを確認しています...</value>
+	</data>
+	<data name="CheckingOtherBadgePages" xml:space="preserve">
+		<value>他のバッジのページを確認しています...</value>
+	</data>
+	<data name="ChosenFarmingAlgorithm" xml:space="preserve">
+		<value>選択されたファーミングアルゴリズム: {0}</value>
+		<comment>{0} will be replaced by the name of chosen farming algorithm</comment>
+	</data>
+	<data name="Done" xml:space="preserve">
+		<value>完了！</value>
+	</data>
+	<data name="GamesToIdle" xml:space="preserve">
+		<value>合計 {0} 個のゲーム ({1} 枚のカード) をファーミングできます (残り ～{2})</value>
+		<comment>{0} will be replaced by number of games, {1} will be replaced by number of cards, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinished" xml:space="preserve">
+		<value>ファーミングが終了しました！</value>
+	</data>
+	<data name="IdlingFinishedForGame" xml:space="preserve">
+		<value>ファーミングを完了: {0} ({1}) プレイ時間は{2}！</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinishedForGames" xml:space="preserve">
+		<value>ゲームのファーミングを完了: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="IdlingStatusForGame" xml:space="preserve">
+		<value>{0} ({1}) のファーミング状態: 残りカード {2} 枚</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm</comment>
+	</data>
+	<data name="IdlingStopped" xml:space="preserve">
+		<value>ファーミング停止！</value>
+	</data>
+	<data name="IgnoredPermanentPauseEnabled" xml:space="preserve">
+		<value>永続的一時停止が有効なため、このリクエストを無視します！</value>
+	</data>
+	<data name="NothingToIdle" xml:space="preserve">
+		<value>このアカウントにはファームするものがありません！</value>
+	</data>
+	<data name="NowIdling" xml:space="preserve">
+		<value>ファーミング中: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="NowIdlingList" xml:space="preserve">
+		<value>ファーミング中: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="PlayingNotAvailable" xml:space="preserve">
+		<value>現在プレイできません。後で再試行します！</value>
+	</data>
+	<data name="StillIdling" xml:space="preserve">
+		<value>ファーミングを継続中: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StillIdlingList" xml:space="preserve">
+		<value>ファーミングを継続中: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="StoppedIdling" xml:space="preserve">
+		<value>ファーミングを停止: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StoppedIdlingList" xml:space="preserve">
+		<value>ファーミングを停止: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="UnknownCommand" xml:space="preserve">
+		<value>不明なコマンドです！</value>
+	</data>
+	<data name="WarningCouldNotCheckBadges" xml:space="preserve">
+		<value>バッジの情報を取得できませんでした。後で再試行します！</value>
+	</data>
+	<data name="WarningCouldNotCheckCardsStatus" xml:space="preserve">
+		<value>カードの状態を確認できませんでした: {0} ({1}) 後で再試行します！</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotAcceptingGift" xml:space="preserve">
+		<value>ギフトを受領: {0}...</value>
+		<comment>{0} will be replaced by giftID (number)</comment>
+	</data>
+	<data name="BotAccountLimited" xml:space="preserve">
+		<value>このアカウントは制限されています。解除されるまでファーミングは利用できません！</value>
+	</data>
+	<data name="BotAddLicense" xml:space="preserve">
+		<value>ID: {0} | 状態: {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotAddLicenseWithItems" xml:space="preserve">
+		<value>ID: {0} |状態: {1} |項目: {2}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string, {2} will be replaced by list of granted IDs (numbers), separated by a comma</comment>
+	</data>
+	<data name="BotAlreadyRunning" xml:space="preserve">
+		<value>その bot は既に実行されています！</value>
+	</data>
+	<data name="BotAuthenticatorConverting" xml:space="preserve">
+		<value>.maFileをTickrフォーマットに変換しています...</value>
+	</data>
+	<data name="BotAuthenticatorImportFinished" xml:space="preserve">
+		<value>モバイル認証のインポートを完了しました！</value>
+	</data>
+	<data name="BotAuthenticatorToken" xml:space="preserve">
+		<value>二次認証トークン: {0}</value>
+		<comment>{0} will be replaced by generated 2FA token (string)</comment>
+	</data>
+	<data name="BotAutomaticIdlingNowPaused" xml:space="preserve">
+		<value>自動ファーミングを一時停止しました！</value>
+	</data>
+	<data name="BotAutomaticIdlingNowResumed" xml:space="preserve">
+		<value>自動ファーミングを再開しました！</value>
+	</data>
+	<data name="BotAutomaticIdlingPausedAlready" xml:space="preserve">
+		<value>自動ファーミングは既に一時停止されています！</value>
+	</data>
+	<data name="BotAutomaticIdlingResumedAlready" xml:space="preserve">
+		<value>自動ファーミングは既に再開されています！</value>
+	</data>
+	<data name="BotConnected" xml:space="preserve">
+		<value>Steam に接続しました！</value>
+	</data>
+	<data name="BotDisconnected" xml:space="preserve">
+		<value>Steam から切断しました！</value>
+	</data>
+	<data name="BotDisconnecting" xml:space="preserve">
+		<value>切断中...</value>
+	</data>
+	<data name="BotInstanceNotStartingBecauseDisabled" xml:space="preserve">
+		<value>設定ファイル内で無効化されているため、この bot のインスタンスを起動しません！</value>
+	</data>
+	<data name="BotInvalidAuthenticatorDuringLogin" xml:space="preserve">
+		<value>TwoFactorCodeMismatch エラーを {0} 回受信しました。二次認証資格が有効でないか、時刻が同期されていません。中断します！</value>
+		<comment>{0} will be replaced by maximum allowed number of failed 2FA attempts</comment>
+	</data>
+	<data name="BotLoggedOff" xml:space="preserve">
+		<value>Steam からログオフ: {0}</value>
+		<comment>{0} will be replaced by logging off reason (string)</comment>
+	</data>
+	<data name="BotLoggedOn" xml:space="preserve">
+		<value>{0} へのログインに成功しました。</value>
+		<comment>{0} will be replaced by steam ID (number)</comment>
+	</data>
+	<data name="BotLoggingIn" xml:space="preserve">
+		<value>ログイン中...</value>
+	</data>
+	<data name="BotLogonSessionReplaced" xml:space="preserve">
+		<value>このアカウントは別の Tickr インスタンスで使用されているようです。未定義の挙動のため、実行し続けることができません！</value>
+	</data>
+	<data name="BotLootingFailed" xml:space="preserve">
+		<value>トレードのオファーに失敗しました！</value>
+	</data>
+	<data name="BotLootingMasterNotDefined" xml:space="preserve">
+		<value>Master 権限に定義されている bot がないため、トレードは送信できません！</value>
+	</data>
+	<data name="BotLootingSuccess" xml:space="preserve">
+		<value>トレードオファーを正常に送信しました！</value>
+	</data>
+	<data name="BotSendingTradeToYourself" xml:space="preserve">
+		<value>自分自身にトレードを送信することはできません！</value>
+	</data>
+	<data name="BotNoTickrAuthenticator" xml:space="preserve">
+		<value>その bot は Tickr 二次認証が有効ではありません！認証システムを Tickr 二次認証としてインポートするのを忘れていませんか？</value>
+	</data>
+	<data name="BotNotConnected" xml:space="preserve">
+		<value>この bot のインスタンスは接続されていません！</value>
+	</data>
+	<data name="BotNotOwnedYet" xml:space="preserve">
+		<value>所有していない: {0}</value>
+		<comment>{0} will be replaced by query (string)</comment>
+	</data>
+	<data name="BotOwnedAlreadyWithName" xml:space="preserve">
+		<value>所有している: {0} | {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotPointsBalance" xml:space="preserve">
+		<value>ポイント残高: {0}</value>
+		<comment>{0} will be replaced by the points balance value (integer)</comment>
+	</data>
+	<data name="BotRateLimitExceeded" xml:space="preserve">
+		<value>回数制限を超過しました。{0} のクールダウン後に再試行します。</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "25 minutes")</comment>
+	</data>
+	<data name="BotReconnecting" xml:space="preserve">
+		<value>再接続中...</value>
+	</data>
+	<data name="BotRedeem" xml:space="preserve">
+		<value>キー: {0} | 状態: {1}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotRedeemWithItems" xml:space="preserve">
+		<value>キー: {0} |状態: {1} |項目: {2}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string, {2} will be replaced by list of key-value pairs, separated by a comma</comment>
+	</data>
+	<data name="BotRemovedExpiredLoginKey" xml:space="preserve">
+		<value>期限切れのログインキーを削除しました！</value>
+	</data>
+	<data name="BotStatusNotIdling" xml:space="preserve">
+		<value>Botは何もファーミングしていません。</value>
+	</data>
+	<data name="BotStatusLimited" xml:space="preserve">
+		<value>Botが制限中のため、ファーミングでカードを得ることができません。</value>
+	</data>
+	<data name="BotStatusConnecting" xml:space="preserve">
+		<value>bot は Steam Network に接続しています。</value>
+	</data>
+	<data name="BotStatusNotRunning" xml:space="preserve">
+		<value>bot は実行されていません。</value>
+	</data>
+	<data name="BotStatusPaused" xml:space="preserve">
+		<value>bot は停止中か、マニュアルモードで実行中です。</value>
+	</data>
+	<data name="BotStatusPlayingNotAvailable" xml:space="preserve">
+		<value>bot は現在使用されています。</value>
+	</data>
+	<data name="BotUnableToLogin" xml:space="preserve">
+		<value>Steam にログインできませんでした: {0}/{1}</value>
+		<comment>{0} will be replaced by failure reason (string), {1} will be replaced by extended failure reason (string)</comment>
+	</data>
+	<data name="ErrorIsEmpty" xml:space="preserve">
+		<value>{0} は空です！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="UnusedKeys" xml:space="preserve">
+		<value>未使用のキー: {0}</value>
+		<comment>{0} will be replaced by list of cd-keys (strings), separated by a comma</comment>
+	</data>
+	<data name="WarningFailedWithError" xml:space="preserve">
+		<value>エラーのため失敗しました: {0}</value>
+		<comment>{0} will be replaced by failure reason (string)</comment>
+	</data>
+	<data name="BotConnectionLost" xml:space="preserve">
+		<value>Steam Network への接続が失われました。再接続しています...</value>
+	</data>
+	<data name="BotAccountFree" xml:space="preserve">
+		<value>アカウントが開放されました: ファーミング処理を再開します！</value>
+	</data>
+	<data name="BotAccountOccupied" xml:space="preserve">
+		<value>現在アカウントは使用中です: アカウントが開放されたとき、Tickrはファーミングを再開します...</value>
+	</data>
+	<data name="BotConnecting" xml:space="preserve">
+		<value>接続中...</value>
+	</data>
+	<data name="BotHeartBeatFailed" xml:space="preserve">
+		<value>クライアントとの切断に失敗しました。bot のインスタンスを放棄します！</value>
+	</data>
+	<data name="BotStopping" xml:space="preserve">
+		<value>停止中...</value>
+	</data>
+	<data name="ErrorBotConfigInvalid" xml:space="preserve">
+		<value>bot の設定が有効ではありません。{0} の内容を確認して再度試してください！</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorDatabaseInvalid" xml:space="preserve">
+		<value>永続的データベースをロードできませんでした。この問題が続く場合、{0} を削除してデータベースを再生成してください！</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="Initializing" xml:space="preserve">
+		<value>{0} を初期化中...</value>
+		<comment>{0} will be replaced by service name that is being initialized</comment>
+	</data>
+	<data name="WarningPrivacyPolicy" xml:space="preserve">
+		<value>Tickr が正確には何をしているか心配な場合は、wiki 上でプライバシーポリシーの項を確認してください！</value>
+	</data>
+	<data name="Welcome" xml:space="preserve">
+		<value>どうやら最初の起動のようですね。ようこそ！</value>
+	</data>
+	<data name="ErrorInvalidCurrentCulture" xml:space="preserve">
+		<value>指定された CurrentCulture が有効ではありません。Tickrはデフォルトで実行されます！</value>
+	</data>
+	<data name="TranslationIncomplete" xml:space="preserve">
+		<value>Tickr はあなたの言語 {0} の使用を試みますが、この言語の翻訳の完成度は {1} です。もしかしたらあなたが翻訳の向上を助けられるかもしれませんよ？</value>
+		<comment>{0} will be replaced by culture code, such as "en-US", {1} will be replaced by completeness percentage, such as "78.5%"</comment>
+	</data>
+	<data name="IdlingGameNotPossible" xml:space="preserve">
+		<value>そのゲームをプレイ出来ないため、{0} ({1}) のファーミングは一時的に無効にされています。</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningIdlingGameMismatch" xml:space="preserve">
+		<value>Tickrは {0} ({1}) のIDの不一致を検出しました。代わりに {2} のIDを使用します。</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotVersion" xml:space="preserve">
+		<value>{0} V{1}</value>
+		<comment>{0} will be replaced by program's name (e.g. "Tickr"), {1} will be replaced by program's version (e.g. "1.0.0.0"). This string typically has nothing to translate and you should leave it as it is, unless you need to change the format, e.g. in RTL languages.</comment>
+	</data>
+	<data name="BotAccountLocked" xml:space="preserve">
+		<value>このアカウントはロックされています。ファーミングプロセスは永久的に利用できません！</value>
+	</data>
+	<data name="BotStatusLocked" xml:space="preserve">
+		<value>Botがロックされているため、ファーミングでカードを得ることができません。</value>
+	</data>
+	<data name="ErrorFunctionOnlyInHeadlessMode" xml:space="preserve">
+		<value>この機能は headless モードでのみ利用可能です！</value>
+	</data>
+	<data name="BotOwnedAlready" xml:space="preserve">
+		<value>所有している: {0}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="ErrorAccessDenied" xml:space="preserve">
+		<value>アクセスが拒否されました！</value>
+	</data>
+	<data name="WarningPreReleaseVersion" xml:space="preserve">
+		<value>あなたの指定した更新チャンネルよりも新しいバージョンを使用しています。プレリリースバージョンはバグの報告と問題への対処、フィードバックのできるユーザー向けであることに留意してください - テクニカルサポートは行われません。</value>
+	</data>
+	<data name="BotStats" xml:space="preserve">
+		<value>Current memory usage: {0} MB.
+Process uptime: {1}</value>
+		<comment>{0} will be replaced by number (in megabytes) of memory being used, {1} will be replaced by translated TimeSpan string (such as "25 minutes"). Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="BotOwnsOverviewPerGame" xml:space="preserve">
+		<value>{0}/{1} bot は既に {2} を所有しています。</value>
+		<comment>{0} will be replaced by number of bots that already own particular game being checked, {1} will be replaced by total number of bots that were checked during the process, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotRefreshingPackagesData" xml:space="preserve">
+		<value>パッケージデータを更新しています...</value>
+	</data>
+	<data name="WarningDeprecated" xml:space="preserve">
+		<value>{0} は廃止予定であり、将来のバージョンのプログラムで削除されます。代わりに {1} を使用してください。</value>
+		<comment>{0} will be replaced by the name of deprecated property (such as argument, config property or likewise), {1} will be replaced by the name of valid replacement (such as another argument or config property)</comment>
+	</data>
+	<data name="BotAcceptedDonationTrade" xml:space="preserve">
+		<value>承認された寄付トレード: {0}</value>
+		<comment>{0} will be replaced by trade's ID (number)</comment>
+	</data>
+	<data name="WarningWorkaroundTriggered" xml:space="preserve">
+		<value>{0} バグへの解決策が適用されました。</value>
+		<comment>{0} will be replaced by the bug's name provided by Tickr</comment>
+	</data>
+	<data name="TargetBotNotConnected" xml:space="preserve">
+		<value>対象 bot のインスタンスは接続されていません！</value>
+	</data>
+	<data name="BotWalletBalance" xml:space="preserve">
+		<value>ウォレット残高: {0} {1}</value>
+		<comment>{0} will be replaced by wallet balance value, {1} will be replaced by currency name</comment>
+	</data>
+	<data name="BotHasNoWallet" xml:space="preserve">
+		<value>bot にウォレット残高がありません。</value>
+	</data>
+	<data name="BotLevel" xml:space="preserve">
+		<value>bot のレベルは {0} です。</value>
+		<comment>{0} will be replaced by bot's level</comment>
+	</data>
+	<data name="BotInventory" xml:space="preserve">
+		<value>{0}/{1} ({2}/{3}): アセット数 {4}</value>
+		<comment>{0} will be replaced by appID (number), {1} will be replaced by contextID (number), {2} will be replaced by app's name (string), {3} will be replaced by name of the context (string), {4} will be replaced by number of assets in the specified inventory (number).</comment>
+	</data>
+	<data name="ActivelyMatchingItems" xml:space="preserve">
+		<value>Steam アイテムをマッチさせています: #{0}</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="DoneActivelyMatchingItems" xml:space="preserve">
+		<value>Steam アイテムのマッチが完了しました: #{0}</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="ErrorAborted" xml:space="preserve">
+		<value>中断しました！</value>
+	</data>
+	<data name="WarningExcessiveBotsCount" xml:space="preserve">
+		<value>推奨の上限値よりも多くの個人 bot を実行しているようです ({0})。この設定はサポートされておらず、アカウントの凍結を含むさまざまな問題を引き起こす可能性があります。詳しくは FAQ をチェックしてください。</value>
+		<comment>{0} will be replaced by our maximum recommended bots count (number)</comment>
+	</data>
+	<data name="PluginLoaded" xml:space="preserve">
+		<value>{0} が正常にロードされました！</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin</comment>
+	</data>
+	<data name="PluginLoading" xml:space="preserve">
+		<value>{0} V{1} をロード中…</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin, {1} will be replaced by its version</comment>
+	</data>
+	<data name="NothingFound" xml:space="preserve">
+		<value>何も見つかりません！</value>
+	</data>
+	<data name="PluginsWarning" xml:space="preserve">
+		<value>Tickrに1つ以上のカスタムプラグインをロードしました。私たちはModのセットアップのためにサポートを提供することはできません。何か問題が発生した場合はModの開発者に問い合わせてください。</value>
+	</data>
+	<data name="PleaseWait" xml:space="preserve">
+		<value>しばらくお待ちください…</value>
+	</data>
+	<data name="EnterCommand" xml:space="preserve">
+		<value>コマンドを入力: </value>
+	</data>
+	<data name="Executing" xml:space="preserve">
+		<value>実行中…</value>
+	</data>
+	<data name="InteractiveConsoleEnabled" xml:space="preserve">
+		<value>対話型コンソールがアクティブになりました。コマンドモードに入るには「c」と入力します。</value>
+	</data>
+	<data name="BotGamesToRedeemInBackgroundCount" xml:space="preserve">
+		<value>bot のバックグラウンドキューに {0} つのゲームが残っています。</value>
+		<comment>{0} will be replaced by remaining number of games in BGR's queue</comment>
+	</data>
+	<data name="ErrorSingleInstanceRequired" xml:space="preserve">
+		<value>Tickr プロセスはすでにこの作業ディレクトリに対して実行中です。中止します！</value>
+	</data>
+	<data name="BotHandledConfirmations" xml:space="preserve">
+		<value>{0} 件の確認を正常に処理しました。</value>
+		<comment>{0} will be replaced by number of confirmations</comment>
+	</data>
+	<data name="BotExtraIdlingCooldown" xml:space="preserve">
+		<value>ファームできる状態になったことを確認するために {0} まで待機しています…</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "1 minute")</comment>
+	</data>
+	<data name="UpdateCleanup" xml:space="preserve">
+		<value>更新後に古いファイルをクリーンアップしています…</value>
+	</data>
+	<data name="BotGeneratingSteamParentalCode" xml:space="preserve">
+		<value>Steam parental code (保護者による使用制限用のコード) を生成中、しばらく掛かりそうだ。設定に書いておくことをオススメします。</value>
+	</data>
+	<data name="IPCConfigChanged" xml:space="preserve">
+		<value>IPC 設定が変更されました！</value>
+	</data>
+	<data name="BotTradeOfferResult" xml:space="preserve">
+		<value>トレード {0} は {1} に確定しました。理由は {2} です。</value>
+		<comment>{0} will be replaced by trade offer ID (number), {1} will be replaced by internal Tickr enum name, {2} will be replaced by technical reason why the trade was determined to be in this state</comment>
+	</data>
+	<data name="BotInvalidPasswordDuringLogin" xml:space="preserve">
+		<value>エラーコード InvalidPassword (無効なパスワード ) を {0} 回連続で受け取りました。このアカウントのパスワードが間違っている可能性が高いです。</value>
+		<comment>{0} will be replaced by maximum allowed number of failed login attempts</comment>
+	</data>
+	<data name="Result" xml:space="preserve">
+		<value>結果: {0}</value>
+		<comment>{0} will be replaced by generic result of various functions that use this string</comment>
+	</data>
+	<data name="WarningUnsupportedEnvironment" xml:space="preserve">
+		<value>サポートされていない環境: {1} で、{0} 向けのTickrを実行しようとしています: もしもこれが意図通りの動作であるならば、 --ignore-unsupported-environment 引数を使用してください。</value>
+	</data>
+	<data name="WarningUnknownCommandLineArgument" xml:space="preserve">
+		<value>不明なコマンドライン引数: {0}</value>
+		<comment>{0} will be replaced by unrecognized command that has been provided</comment>
+	</data>
+	<data name="ErrorConfigDirectoryNotFound" xml:space="preserve">
+		<value>設定ディレクトリが見つかりませんでした。中断します！</value>
+	</data>
+	<data name="BotIdlingSelectedGames" xml:space="preserve">
+		<value>選択した {0} をプレイ中: {1}</value>
+		<comment>{0} will be replaced by internal name of the config property (e.g. "GamesPlayedWhileIdle"), {1} will be replaced by comma-separated list of appIDs that user has chosen</comment>
+	</data>
+	<data name="AutomaticFileMigration" xml:space="preserve">
+		<value>{0} 設定ファイルは最新の構文に移行されます...</value>
+		<comment>{0} will be replaced with the relative path to the affected config file</comment>
+	</data>
+	<data name="WarningTooShortCryptKey" xml:space="preserve">
+		<value>暗号化キーが短すぎます。少なくとも {0} バイト (文字) の長いものを使用することをお勧めします。</value>
+		<comment>{0} will be replaced by the number of bytes (characters) recommended</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForHashing" xml:space="preserve">
+		<value>{1} プロパティの {0} 設定を使用していますが、カスタム --cryptkey が指定されていません。必要に応じて、セキュリティ向上のためにカスタム --cryptkey を指定できます。</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "SCrypt"), {1} will be replaced by the name of the property (e.g. "IPCPassword")</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForEncryption" xml:space="preserve">
+		<value>{0} 設定の {1} プロパティを使用していますが、カスタム --cryptkey が設定されていません。 Tickrは独自の(既知の) キーを使用することを余儀なくされているため、この状態ではセキュリティ保護がされていないことを意味します。 この設定で提供されるセキュリティ上のメリットを利用するためには、カスタム --cryptkey を提供する必要があります。</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "AES"), {1} will be replaced by the name of the property (e.g. "SteamPassword")</comment>
+	</data>
+	<data name="WarningRunningAsRoot" xml:space="preserve">
+		<value>あなたは管理者(root) としてTickrを実行しようとしています。 これにより、マシンに重大なセキュリティリスクが発生する可能性があります。Tickrは操作に管理者アクセスを必要としないため、 可能であれば管理者以外のユーザーとして実行することをお勧めします。</value>
+	</data>
+	<data name="WarningRunningInUnsupportedEnvironment" xml:space="preserve">
+		<value>--ignore-unsupported-environment引数を使用し、サポートされていない環境でTickrを実行しています。 我々は、この動作環境に対するいかなる種類のサポートも提供しておらず、自身の責任においてそれを行っていることにご注意ください。 警告はしましたよ。</value>
+	</data>
+	<data name="FetchingChecksumFromRemoteServer" xml:space="preserve">
+		<value>リモートサーバーからチェックサムを取得しています...</value>
+	</data>
+	<data name="VerifyingChecksumWithRemoteServer" xml:space="preserve">
+		<value>リモートサーバーからダウンロードしたバイナリのチェックサムを確認しています...</value>
+	</data>
+	<data name="ChecksumMissing" xml:space="preserve">
+		<value>リモートサーバーがアップデート中のリリースを認知していません。このリリースが直近に公開された場合、この状況が起こることがあります - 万全なセキュリティ対策を期すため、このアップデートを却下します。</value>
+	</data>
+	<data name="ChecksumTimeout" xml:space="preserve">
+		<value>ダウンロードしたバイナリのチェックサムの取得に失敗しました。セキュリティ上の理由から、今回はアップデート手順を中止します。</value>
+	</data>
+	<data name="ChecksumWrong" xml:space="preserve">
+		<value>リモートサーバーがチェックサムの不一致を確認しました。これはダウンロードが破損しているか、MITM攻撃を示す可能性があります。このアップデートを却下します！</value>
+	</data>
+	<data name="PatchingFiles" xml:space="preserve">
+		<value>Tickrファイルをパッチ中...</value>
+	</data>
+	<data name="UserInputCryptkey" xml:space="preserve">
+		<value>cryptkeyを入力してください: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="ErrorIPNotBanned" xml:space="preserve">
+		<value>IPアドレス {0} は禁止されていません！</value>
+		<comment>{0} will be replaced by an IP address which was requested to be unbanned from using IPC</comment>
+	</data>
+	<data name="WarningNoLicense" xml:space="preserve">
+		<value>有償機能の{0} の使用を試みましたが、Tickrグローバル設定に有効なLicenseIDが設定されていません。追加の設定が行われていない場合、この機能は動作しません。設定を確認してください。</value>
+		<comment>{0} will be replaced by feature name (e.g. MatchActively)</comment>
+	</data>
+	<data name="WarningRegionRestrictedPackage" xml:space="preserve">
+		<value>アプリ {0} は、{1} の国に対する地域制限が {2} まで有効なため、Tickr ではプレイできません。</value>
+		<comment>{0} will be replaced by app ID (number), {1} will be replaced by short country code (string, such as "PL"), {2} will be replaced by human-readable date (string).</comment>
+	</data>
+	<data name="WarningUnsupportedOfficialPlugins" xml:space="preserve">
+		<value>公式の {0} プラグインを Tickr バージョン {1} で使用しようとしていますが、互換性がありません（想定バージョン: {2}）。構成に問題がある可能性が高いため、修正するか、本当に内容を理解している場合のみ --ignore-unsupported-environment を指定してください。</value>
+		<comment>{0} will be replaced by plugin name, {1} will be replaced by plugin's version number, {2} will be replaced by Tickr's version number.</comment>
+	</data>
+	<data name="ErrorTooManyCrashes" xml:space="preserve">
+		<value>Tickr が最近頻繁にクラッシュしているため、プロセスの初期化が無効化されています。構成を確認・修正したうえで、設定ディレクトリ内の TickrApp.crash ファイルを削除するか、本当に理解している場合のみ --ignore-unsupported-environment を指定してください。</value>
+	</data>
+	<data name="IdlingGameNotPossiblePrivate" xml:space="preserve">
+		<value>{0}（{1}）のファーミングは無効です。このゲームは現在プライベート設定になっています。Tickr でファーミングを行いたい場合は、プライバシー設定の変更を検討してください。</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningSkipping" xml:space="preserve">
+		<value>スキップ中: {0}...</value>
+		<comment>{0} will be replaced by text value (string) of entry being skipped.</comment>
+	</data>
+	<data name="PluginUpdatesChecking" xml:space="preserve">
+		<value>プラグインのアップデートを確認しています...</value>
+	</data>
+	<data name="PluginUpdateChecking" xml:space="preserve">
+		<value>{0} プラグインのアップデートを確認中…</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateNotFound" xml:space="preserve">
+		<value>{0} プラグインはすでに最新です（{1} ≥ {2}）。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNewVersionAvailable" xml:space="preserve">
+		<value>新しい {0} プラグインバージョンが利用可能です！アップデートを検討してください！</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFound" xml:space="preserve">
+		<value>{0} プラグインのアップデートが見つかりました（バージョン {1} → {2}）…</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNoAssetFound" xml:space="preserve">
+		<value>{0} プラグインのバージョン {1} から {2} へのアップデート用アセットが見つかりません。通常、この場合は後ほど利用可能になります。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateConflictingAssetsFound" xml:space="preserve">
+		<value>{0} プラグインのバージョン {1} から {2} へのアップデートに使用するアセットが特定できませんでした。これはリリースが未完了の場合に発生することがあります。繰り返し発生する場合は、プラグインの作者に連絡してください。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateInProgress" xml:space="preserve">
+		<value>{0} プラグインを更新中…</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFinished" xml:space="preserve">
+		<value>{0} プラグインの更新に成功しました。変更は次回 Tickr の起動時に反映されます。</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateEnabled" xml:space="preserve">
+		<value>{0}/{1} プラグインは登録され、自動アップデートが有効になりました。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="PluginUpdateDisabled" xml:space="preserve">
+		<value>{0}（{1}）プラグインは自動アップデート機能に対応していますが、無効化されています。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="CustomPluginUpdatesEnabled" xml:space="preserve">
+		<value>カスタムプラグインが自動アップデート対象として登録されました。Tickrチームからのお願いとして、安全のため信頼できる提供元からのプラグインのみ自動アップデートを有効にしてください。意図しない登録であれば、Tickrのグローバル設定でプラグインの自動アップデートを無効にできます。</value>
+	</data>
+	<data name="Input" xml:space="preserve">
+		<value>入力: {0}</value>
+		<comment>{0} will be replaced by text input from the user.</comment>
+	</data>
+	<data name="WarningNoSystemRequiredLinuxDependencies" xml:space="preserve">
+		<value>--system-requiredと宣言しましたが、その機能を動作させるために必要な依存関係がOSにありません。 正常に動作するように阻害を必要としない場合は、この警告を無視することもできますが、dbusをインストールすることを検討してください。</value>
+	</data>
+	<data name="WarningBotDatabaseComponentDecryptionFailed" xml:space="preserve">
+		<value>{0} データベースコンポーネントの復号に失敗しました。ボットの {1} を変更した直後であれば、これは問題ない場合があります。その場合、次回起動時にはこの警告は表示されなくなるはずです。そうでない場合は、失敗した正確な原因を調査してください。</value>
+		<comment>{0} will be replaced by bot database component's name (string), {1} will be replaced by bot config component's name (string).</comment>
+	</data>
+	<data name="WarningNoValidKeysFound" xml:space="preserve">
+		<value>返済のために有効なキーが.keysファイルに見つかりませんでした。キーが正しい形式であることを確認してください。</value>
+	</data>
+	<data name="InfoKeysImported" xml:space="preserve">
+		<value>{0} キーを.keyファイルから正常にインポートしました。</value>
+		<comment>{0} will be replaced by number of imported keys (integer).</comment>
+	</data>
+	<data name="InfoKeysImportedSkipped" xml:space="preserve">
+		<value>.keys ファイルから {0} キーを正しくインポートしました。 {1} 行は正しい形式ではないためスキップされました。コメントまたは空の行です。</value>
+		<comment>{0} will be replaced by number of imported keys (integer), {1} will be replaced by number of skipped lines (integer).</comment>
+	</data>
+	<data name="InfoKeysLoaded" xml:space="preserve">
+		<value>{0} キーをキューから読み込みました。</value>
+		<comment>{0} will be replaced by number of keys (integer) in the queue.</comment>
+	</data>
+</root>

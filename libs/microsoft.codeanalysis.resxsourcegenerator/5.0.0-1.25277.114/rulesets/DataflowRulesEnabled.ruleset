@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<RuleSet Name="Dataflow Rules Enabled as build warnings" Description="All Dataflow Rules are enabled as build warnings. Dataflow Rules with IsEnabledByDefault = false are force enabled as build warning. Non-Dataflow Rules are disabled." ToolsVersion="15.0">
+   <!-- Dataflow Rules -->
+
+
+
+   <!-- Other Rules -->
+</RuleSet>

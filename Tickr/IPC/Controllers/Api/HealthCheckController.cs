@@ -1,0 +1,53 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using Tickr.IPC.Responses;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+namespace Tickr.IPC.Controllers.Api;
+
+[ApiController]
+[Produces("application/json")]
+[Route("/HealthCheck")]
+public sealed class HealthCheckController : ControllerBase {
+	private readonly HealthCheckService HealthCheckService;
+
+	public HealthCheckController(HealthCheckService healthCheckService) {
+		ArgumentNullException.ThrowIfNull(healthCheckService);
+
+		HealthCheckService = healthCheckService;
+	}
+
+	[EndpointDescription("This endpoint can be called in order to easily check whether the program is up")]
+	[EndpointSummary("Fetches current application's status")]
+	[HttpGet]
+	[ProducesResponseType(typeof(HealthCheckResponse), (int) HttpStatusCode.OK)]
+	[ProducesResponseType(typeof(HealthCheckResponse), (int) HttpStatusCode.ServiceUnavailable)]
+	public async Task<IActionResult> Get() {
+		CancellationToken cancellationToken = HttpContext.RequestAborted;
+
+		HealthReport report = await HealthCheckService.CheckHealthAsync(cancellationToken).ConfigureAwait(false);
+
+		HealthCheckResponse response = new(report);
+
+		return response.Status == HealthStatus.Healthy ? Ok(response) : StatusCode((int) HttpStatusCode.ServiceUnavailable, response);
+	}
+}

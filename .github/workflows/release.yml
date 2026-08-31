@@ -1,0 +1,181 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Tickr — release.yml  (tag-triggered release with auto-update manifest)
+#
+#  Triggers:
+#    * push of a version tag:  git tag v1.3.0 && git push origin v1.3.0
+#    * manual from the Actions tab (workflow_dispatch) with a version input -
+#      the tag and both releases are created from main, no local git needed
+#
+#  Produces two GitHub Releases:
+#    * {tag}      - the user-facing one: ONLY Tickr.exe (+ auto source archives)
+#    * data-{tag} - prerelease with the auto-update payload: manifest.json +
+#                  every app file as flat assets ("www/style.css" -> "www__style.css")
+#
+#  Asset download URLs follow the predictable pattern
+#  https://github.com/<repo>/releases/download/<tag>/<asset>
+#  so the manifest generator fills downloadUrl directly and no post-upload
+#  manifest patching is needed.
+# ─────────────────────────────────────────────────────────────────────────────
+name: release
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version to create, e.g. v1.0.4 (tag + releases are created from main)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  CONFIGURATION: Release
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_NOLOGO: true
+  DOTNET_SDK_VERSION: 10.0.x
+  PLUGINS_BUNDLED: ItemsMatcher MobileAuthenticator Monitoring SteamTokenDumper
+  # Tag pushes come in as github.ref_name; manual runs provide the version via inputs
+  RELEASE_VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        show-progress: false
+        submodules: recursive
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props', 'Directory.Build.props', 'nuget.config', '**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Restore dependencies
+      run: dotnet restore Tickr.slnx -r win-x64
+
+    # UseAppHost=false is CRITICAL: the app must ship without its own Tickr.exe -
+    # the launcher is the one and only Tickr.exe in the release.
+    - name: Publish Tickr (framework-dependent, no apphost)
+      run: dotnet publish Tickr/Tickr.csproj -c ${{ env.CONFIGURATION }} -r win-x64 --no-self-contained --no-restore -p:UseAppHost=false -o out/result
+
+    - name: Publish official plugins
+      shell: pwsh
+      run: |
+        $configuration = '${{ env.CONFIGURATION }}'
+        '${{ env.PLUGINS_BUNDLED }}' -split ' ' | ForEach-Object -Parallel {
+          $plugin = $_
+          dotnet publish "Tickr.OfficialPlugins.$plugin/Tickr.OfficialPlugins.$plugin.csproj" -c $using:configuration -r win-x64 --no-self-contained --no-restore -p:UseAppHost=false -p:BuildProjectReferences=false -o "out/result/plugins/$plugin"
+          if ($LASTEXITCODE -ne 0) { throw "Failed to publish plugin $plugin" }
+        } -ThrottleLimit 4
+
+    - name: Publish Launcher (self-contained single file)
+      run: dotnet publish Tickr.Launcher/Tickr.Launcher.csproj -c ${{ env.CONFIGURATION }} -r win-x64 --no-restore -o launcher_out
+
+    # The launcher assembly is Tickr.Launcher (so the test project can reference both assemblies),
+    # but the file users run must be Tickr.exe - rename the single-file output.
+    - name: Rename launcher to Tickr.exe
+      shell: pwsh
+      run: Move-Item launcher_out/Tickr.Launcher.exe launcher_out/Tickr.exe
+
+    - name: Verify launcher output
+      shell: pwsh
+      run: |
+        if (-not (Test-Path launcher_out/Tickr.exe)) { throw 'launcher_out/Tickr.exe is missing' }
+        if (Test-Path out/result/Tickr.exe) { throw 'out/result must not contain Tickr.exe (apphost) - it collides with the launcher' }
+
+    - name: Generate update manifest
+      shell: pwsh
+      run: pwsh scripts/generate-manifest.ps1 -Version "${{ env.RELEASE_VERSION }}" -DownloadTag "data-${{ env.RELEASE_VERSION }}" -InputDir out/result -OutputFile manifest.json -LauncherExe launcher_out/Tickr.exe
+
+    # Makes re-runs of this workflow safe: broken or outdated releases for the same tag are recreated from scratch.
+    - name: Delete existing releases (if re-run)
+      shell: pwsh
+      run: |
+        foreach ($rel in @("${{ env.RELEASE_VERSION }}", "data-${{ env.RELEASE_VERSION }}")) {
+          gh release view $rel --json tagName 2>$null | Out-Null
+          if ($LASTEXITCODE -eq 0) {
+            gh release delete $rel --yes
+            if ($LASTEXITCODE -ne 0) { throw "Failed to delete release $rel" }
+          }
+        }
+        # A "release not found" view leaves $LASTEXITCODE at 1, which GitHub reads as a step failure - end clean
+        exit 0
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # The update payload (manifest + every app file) goes to a parallel PRERELEASE "data-{tag}".
+    # Prereleases never appear in /releases/latest, so the user-facing release stays clean:
+    # Tickr.exe + the two auto-generated source archives, nothing else.
+    - name: Create payload release (prerelease)
+      shell: pwsh
+      run: gh release create "data-${{ env.RELEASE_VERSION }}" --target "${{ github.sha }}" --title "Tickr ${{ env.RELEASE_VERSION }} - update payload" --notes "Machine-consumed payload for the Tickr auto-updater. Users should download Tickr.exe from the main release - nothing from here is needed manually." --prerelease
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Flatten relative paths into asset names ("www/style.css" -> "www__style.css") -
+    # the same encoding UpdateManager.EncodeAssetName and generate-manifest.ps1 use.
+    # NOTE: gh's "path#name" syntax only sets a display LABEL - the real asset name (and its download URL)
+    # always comes from the file's own name. So we stage hardlinks whose names ARE the encoded asset names.
+    - name: Upload payload assets
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = 'Stop'
+        gh release upload "data-${{ env.RELEASE_VERSION }}" manifest.json --clobber
+        if ($LASTEXITCODE -ne 0) { throw 'Failed to upload manifest.json' }
+        $root = (Resolve-Path out/result).Path
+        $staging = 'upload_staging'
+        if (Test-Path $staging) { Remove-Item -Recurse -Force $staging }
+        New-Item -ItemType Directory -Path $staging | Out-Null
+        Get-ChildItem -Path $root -Recurse -File | ForEach-Object {
+          $relative = $_.FullName.Substring($root.Length).TrimStart('\', '/') -replace '\\', '/'
+          $asset = $relative.Replace('/', '__')
+          if ($_.Length -eq 0) { Write-Warning "Skipping zero-byte file (GitHub rejects them as assets): $relative"; return }
+          New-Item -ItemType HardLink -Path (Join-Path $staging $asset) -Target $_.FullName -ErrorAction Stop | Out-Null
+        }
+        # Native commands don't throw on non-zero exit codes - check explicitly, retry transient failures,
+        # and use --clobber so a retried batch doesn't die on the files that already made it.
+        $files = Get-ChildItem $staging -File | ForEach-Object FullName
+        for ($i = 0; $i -lt $files.Count; $i += 50) {
+          $batch = $files[$i..([Math]::Min($i + 49, $files.Count - 1))]
+          $ok = $false
+          for ($attempt = 1; $attempt -le 3 -and -not $ok; $attempt++) {
+            gh release upload "data-${{ env.RELEASE_VERSION }}" $batch --clobber
+            if ($LASTEXITCODE -eq 0) { $ok = $true }
+            elseif ($attempt -lt 3) { Start-Sleep -Seconds 10 }
+          }
+          if (-not $ok) { throw "Failed to upload batch starting at index $i after 3 attempts" }
+        }
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # The user-facing release: ONLY Tickr.exe (the bootstrapper) + GitHub's auto-generated source archives.
+    # Created LAST so /releases/latest points here.
+    - name: Create release
+      shell: pwsh
+      run: |
+        $notes = "**Download: [Tickr.exe](https://github.com/${{ github.repository }}/releases/download/${{ env.RELEASE_VERSION }}/Tickr.exe)** - the only file you need. Put it in an empty folder and run it - the bootstrapper downloads the rest of the application automatically and keeps itself up to date. Requires Windows x64 and .NET 10 (Desktop + ASP.NET Core runtimes)."
+        gh release create "${{ env.RELEASE_VERSION }}" --target "${{ github.sha }}" --title "Tickr ${{ env.RELEASE_VERSION }}" --notes $notes
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload launcher
+      shell: pwsh
+      run: |
+        gh release upload "${{ env.RELEASE_VERSION }}" launcher_out/Tickr.exe --clobber
+        if ($LASTEXITCODE -ne 0) { throw 'Failed to upload Tickr.exe' }
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

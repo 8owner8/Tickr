@@ -1,0 +1,8 @@
+# NOTE: Requires **VS2019 16.3** or later
+
+# All Rules with default severity
+# Description: All Rules with default severity. Rules with IsEnabledByDefault = false are disabled.
+
+# Code files
+[*.{cs,vb}]
+

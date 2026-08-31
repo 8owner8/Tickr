@@ -1,0 +1,25 @@
+<Project>
+  
+  <!--
+    This property group handles 'CodeAnalysisTreatWarningsAsErrors = false' for the CA rule ids implemented in this package.
+  -->
+  <PropertyGroup>
+    <CodeAnalysisRuleIds></CodeAnalysisRuleIds>
+    <EffectiveCodeAnalysisTreatWarningsAsErrors Condition="'$(EffectiveCodeAnalysisTreatWarningsAsErrors)' == ''">$(CodeAnalysisTreatWarningsAsErrors)</EffectiveCodeAnalysisTreatWarningsAsErrors>
+    <WarningsNotAsErrors Condition="'$(EffectiveCodeAnalysisTreatWarningsAsErrors)' == 'false' and '$(TreatWarningsAsErrors)' == 'true'">$(WarningsNotAsErrors);$(CodeAnalysisRuleIds)</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <CompilerVisibleProperty Include="RootNamespace" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="WithCulture" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="GenerateSource" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="RelativeDir" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="ClassName" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="OmitGetResourceString" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="AsConstants" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="IncludeDefaultValues" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="EmitFormatMethods" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="Public" />
+    <CompilerVisibleItemMetadata Include="AdditionalFiles" MetadataName="NoWarn" />
+  </ItemGroup>
+
+</Project>

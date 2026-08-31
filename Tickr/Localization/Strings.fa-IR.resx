@@ -1,0 +1,557 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns="" id="root">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<data name="AcceptingTrade" xml:space="preserve">
+		<value>موافقت با ترید: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="AutoUpdateCheckInfo" xml:space="preserve">
+		<value>برنامه برای نسخه ی جدید هر {0} به صورت خودکار چک خواهد کرد.</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "24 hours")</comment>
+	</data>
+	<data name="Content" xml:space="preserve">
+		<value>محتوا:
+{0}</value>
+		<comment>{0} will be replaced by content string. Please note that this string should include newline for formatting.</comment>
+	</data>
+	<data name="ErrorConfigPropertyInvalid" xml:space="preserve">
+		<value>کانفیگ {0}، مشکل در: {1}</value>
+		<comment>{0} will be replaced by name of the configuration property, {1} will be replaced by invalid value</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionInfo" xml:space="preserve">
+		<value>قبل از لود شدن برنامه ی لاگ کردن Tickr نسخه ی {0} کرش شده است!</value>
+		<comment>{0} will be replaced by version number</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionPrint" xml:space="preserve">
+		<value>ارور:
+Exception: {0}() {1}
+StackTrace:
+{2}</value>
+		<comment>{0} will be replaced by function name, {1} will be replaced by exception message, {2} will be replaced by entire stack trace. Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="ErrorExitingWithNonZeroErrorCode" xml:space="preserve">
+		<value>برنامه به مشکل خورده است، شماره ی ارور: {0}!</value>
+		<comment>{0} will be replaced by error code (number)</comment>
+	</data>
+	<data name="ErrorFailingRequest" xml:space="preserve">
+		<value>درخواست ناموفق: {0}</value>
+		<comment>{0} will be replaced by URL of the request</comment>
+	</data>
+	<data name="ErrorGlobalConfigNotLoaded" xml:space="preserve">
+		<value>کانفیگ اصلی قابل لود نیست. مطمئن باشید {0} وجود دارد و فاقد مشکلات می باشد! می توانید در صورت گیج شدن از صفحه ی ویکی برنامه کمک بگیرید.</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorIsInvalid" xml:space="preserve">
+		<value>{0} صحیح نیست!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorNoBotsDefined" xml:space="preserve">
+		<value>رباتی ساخته نشده است. آیا فراموش کردید برنامه را کانفیگ کنید؟
+می توانید در صورت گیج شدن از صفحه ی ویکی برنامه کمک بگیرید.</value>
+	</data>
+	<data name="ErrorObjectIsNull" xml:space="preserve">
+		<value>{0} فاقد اطلاعات است!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorParsingObject" xml:space="preserve">
+		<value>دریافت {0} ناموفق بود!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorRequestFailedTooManyTimes" xml:space="preserve">
+		<value>درخواست بعد از تعداد {0} تلاش شکست خورد!</value>
+		<comment>{0} will be replaced by maximum number of tries</comment>
+	</data>
+	<data name="ErrorUpdateCheckFailed" xml:space="preserve">
+		<value>چک کردن آپدیت به مشکل خورد!</value>
+	</data>
+	<data name="ErrorUpdateNoAssetForThisVersion" xml:space="preserve">
+		<value>فایلی منطبق با نسخه ی جدید پیدا نشد، به روز رسانی خودکار به آن نسخه امکان‌پذیر نیست.</value>
+	</data>
+	<data name="ErrorUpdateNoAssets" xml:space="preserve">
+		<value>نتوانستیم به آن نسخه آپدیت کنیم زیرا هیچ گونه فایلی نداشت!</value>
+	</data>
+	<data name="ErrorUserInputRunningInHeadlessMode" xml:space="preserve">
+		<value>درخواستی برای ورودی دریافت شد اما برنامه در حال اجرا در نسخه ی بدون رابط کاربری است!</value>
+	</data>
+	<data name="Exiting" xml:space="preserve">
+		<value>در حال خارج شدن...</value>
+	</data>
+	<data name="WarningFailed" xml:space="preserve">
+		<value>ارور!</value>
+	</data>
+	<data name="GlobalConfigChanged" xml:space="preserve">
+		<value>فایل کانفیگ اصلی تغییر یافته است!</value>
+	</data>
+	<data name="ErrorGlobalConfigRemoved" xml:space="preserve">
+		<value>فایل کانفیگ اصلی حذف شده است!</value>
+	</data>
+	<data name="IgnoringTrade" xml:space="preserve">
+		<value>پاسخ ندادن به درخواست تبادل: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="LoggingIn" xml:space="preserve">
+		<value>در حال ورود به {0}...</value>
+		<comment>{0} will be replaced by service's name</comment>
+	</data>
+	<data name="NoBotsAreRunning" xml:space="preserve">
+		<value>هیچ رباتی در حال اجرا نیست، در حال خارج شدن از برنامه...</value>
+	</data>
+	<data name="RefreshingOurSession" xml:space="preserve">
+		<value>در حال رفرش کردن سشن!</value>
+	</data>
+	<data name="RejectingTrade" xml:space="preserve">
+		<value>در حال رد کردن درخواست تبادل: {0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="Restarting" xml:space="preserve">
+		<value>در حال راه‌اندازی دوباره...</value>
+	</data>
+	<data name="Starting" xml:space="preserve">
+		<value>در حال راه‌اندازی...</value>
+	</data>
+	<data name="Success" xml:space="preserve">
+		<value>موفقیت!</value>
+	</data>
+	<data name="UnlockingParentalAccount" xml:space="preserve">
+		<value>در حال باز کردن parental account...</value>
+	</data>
+	<data name="UpdateCheckingNewVersion" xml:space="preserve">
+		<value>در حال چک کردن برای نسخه ی جدید...</value>
+	</data>
+	<data name="UpdateDownloadingNewVersion" xml:space="preserve">
+		<value>در حال دانلود نسخه ی جدید: {0} ({1} مگابایت})... تا دانلود بشه لطفاً به دونیت کردن فکر کنید اگر از برنامه رضایت دارید! :)</value>
+		<comment>{0} will be replaced by version string, {1} will be replaced by update size (in megabytes)</comment>
+	</data>
+	<data name="UpdateFinished" xml:space="preserve">
+		<value>عملیات به روز رسانی با موفقیت انجام شد!</value>
+	</data>
+	<data name="UpdateNewVersionAvailable" xml:space="preserve">
+		<value>نسخه ی جدیدی از Tickr در دسترس است! آپدیت کردن دستی را در نظر بگیرید!</value>
+	</data>
+	<data name="UpdateVersionInfo" xml:space="preserve">
+		<value>نسخه ی محلی: {0} | نسخه ی آنلاین: {1}</value>
+		<comment>{0} will be replaced by current version, {1} will be replaced by remote version</comment>
+	</data>
+	<data name="UserInputDeviceConfirmation" xml:space="preserve">
+		<value>لطفاً برنامه ی استیم موبایل خود را چک کنید، باید اعلان لاگین کردن را دریافت کرده باشید. از دکمه Y استفاده کنید اگر اعلان را دریافت نموده و آن را قبول کرده اید، و اما اگر می خواهید کد لاگین وارد کنید از دکمه ی N استفاده کنید: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteam2FA" xml:space="preserve">
+		<value>لطفاً کد ورود دو مرحله ای را از برنامه ی استیم گوشی وارد کنید: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamGuard" xml:space="preserve">
+		<value>لطفاً کد ورودی که به ایمیلتان فرستاده شده را وارد کنید: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamLogin" xml:space="preserve">
+		<value>لطفاً یوزرنیم استیم خود را وارد کنید: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamParentalCode" xml:space="preserve">
+		<value>لطفا parental code اکانت خود را وارد کنید: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamPassword" xml:space="preserve">
+		<value>لطفاً رمز عبور اکانت استیم خود را وارد کنید: </value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="WarningUnknownValuePleaseReport" xml:space="preserve">
+		<value>مقداری نامفهوم برای {0} دریافت شده، لطفاً این را گزارش دهید: {1}</value>
+		<comment>{0} will be replaced by object's name, {1} will be replaced by value for that object</comment>
+	</data>
+	<data name="IPCReady" xml:space="preserve">
+		<value>سرور IPC آماده است!</value>
+	</data>
+	<data name="IPCStarting" xml:space="preserve">
+		<value>در حال راه‌اندازی سرور IPC...</value>
+	</data>
+	<data name="BotAlreadyStopped" xml:space="preserve">
+		<value>این ربات از قبل خاموش بوده است!</value>
+	</data>
+	<data name="BotNotFound" xml:space="preserve">
+		<value>هیچ رباتی با اسم {0} یافت نشد!</value>
+		<comment>{0} will be replaced by bot's name query (string)</comment>
+	</data>
+	<data name="BotStatusOverview" xml:space="preserve">
+		<value>در حال حاضر {0}/{1} ربات در حال اجرا هستند، تعداد گیم های مانده برای فارم: {2} ({3} کارت).</value>
+		<comment>{0} will be replaced by number of active bots, {1} will be replaced by total number of bots, {2} will be replaced by total number of games left to farm, {3} will be replaced by total number of cards left to farm</comment>
+	</data>
+	<data name="BotStatusIdling" xml:space="preserve">
+		<value>ربات در حال فارم بازی است: {0} ({1}، تعداد کارت های باقی مانده: {2})، از تعداد {3} بازی است، تعداد کلی کارت های باقی مانده: {4} (تقریباً {5} به طول خواهد انجامید).</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm, {3} will be replaced by total number of games to farm, {4} will be replaced by total number of cards to farm, {5} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="BotStatusIdlingList" xml:space="preserve">
+		<value>ربات در حال فارم کردن بازی است: {0} از تعداد کلی {1} بازی({2} کارت برای فارم مانده) تقریباً {3} به طول خواهد انجامید.</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), {1} will be replaced by total number of games to farm, {2} will be replaced by total number of cards to farm, {3} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="CheckingFirstBadgePage" xml:space="preserve">
+		<value>در حال چک کردن صفحه ی اول بج های اکانت...</value>
+	</data>
+	<data name="CheckingOtherBadgePages" xml:space="preserve">
+		<value>در حال چک کردن صفحه های بعدی بج های اکانت...</value>
+	</data>
+	<data name="ChosenFarmingAlgorithm" xml:space="preserve">
+		<value>الگوریتم فار کردن انتخاب شده: {0}</value>
+		<comment>{0} will be replaced by the name of chosen farming algorithm</comment>
+	</data>
+	<data name="Done" xml:space="preserve">
+		<value>انجام شد!</value>
+	</data>
+	<data name="GamesToIdle" xml:space="preserve">
+		<value>تعداد بازی های باقی مانده برای فارم {0} است({1} کارت) باقی مانده برای فارم کردن (تقریباً {2} باقی مانده است)...</value>
+		<comment>{0} will be replaced by number of games, {1} will be replaced by number of cards, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinished" xml:space="preserve">
+		<value>فارم کردن به اتمام رسید!</value>
+	</data>
+	<data name="IdlingFinishedForGame" xml:space="preserve">
+		<value>فارم کردن {0} ({1}) بعد از {2} پلی تایم به اتمام رسید!</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinishedForGames" xml:space="preserve">
+		<value>فارم کردن این بازی ها به پایان رسید: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="IdlingStatusForGame" xml:space="preserve">
+		<value>وضعیت فارم کردن برای {0} ({1}): تعداد کارت های باقی مانده {2} است</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm</comment>
+	</data>
+	<data name="IdlingStopped" xml:space="preserve">
+		<value>فارم کردن متوقف شد!</value>
+	</data>
+	<data name="IgnoredPermanentPauseEnabled" xml:space="preserve">
+		<value>در حال رد کردن این درخواست به دلیل روشن بودن مکث همیشگی(Permanent pause)!</value>
+	</data>
+	<data name="NothingToIdle" xml:space="preserve">
+		<value>ما هیچ چیزی برای فارم کردن در این اکانت نداریم!</value>
+	</data>
+	<data name="NowIdling" xml:space="preserve">
+		<value>در حال فارم کردن: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="NowIdlingList" xml:space="preserve">
+		<value>در حال فارم کردن: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="PlayingNotAvailable" xml:space="preserve">
+		<value>پلی دادن در حال حاضر قابل دسترسی نیست، بعداً دوباره تلاش خواهیم کرد!</value>
+	</data>
+	<data name="StillIdling" xml:space="preserve">
+		<value>همچنان در حال فارم: {0} ({1})</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StillIdlingList" xml:space="preserve">
+		<value>همچنان در حال فارم: {0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="StoppedIdling" xml:space="preserve">
+		<value>فارم کردن {0} ({1}) متوقف شد</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StoppedIdlingList" xml:space="preserve">
+		<value>فارم کردن {0} متوقف شد</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="UnknownCommand" xml:space="preserve">
+		<value>دستور نامفهوم!</value>
+	</data>
+	<data name="WarningCouldNotCheckBadges" xml:space="preserve">
+		<value>دریافت بج های اکانت با مشکل مواجه شد، بعداً دوباره امتحان خواهیم کرد!</value>
+	</data>
+	<data name="WarningCouldNotCheckCardsStatus" xml:space="preserve">
+		<value>وضعیت کارت های {0} ({1}) را نتوانستیم بررسی کنیم، بعداً دوباره امتحان خواهیم کرد!</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotAcceptingGift" xml:space="preserve">
+		<value>در حال قبول کردن هدیه: {0}...</value>
+		<comment>{0} will be replaced by giftID (number)</comment>
+	</data>
+	<data name="BotAccountLimited" xml:space="preserve">
+		<value>این اکانت محدود است، امکان فارم کردن تا زمانی که محدودیت از بین برود مقدور نیست!</value>
+	</data>
+	<data name="BotAddLicense" xml:space="preserve">
+		<value>آیدی: {0} | وضعیت: {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotAddLicenseWithItems" xml:space="preserve">
+		<value>آیدی: {0} | وضعیت: {1} | آیتم ها: {2}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string, {2} will be replaced by list of granted IDs (numbers), separated by a comma</comment>
+	</data>
+	<data name="BotAlreadyRunning" xml:space="preserve">
+		<value>این ربات در حال اجرا است!</value>
+	</data>
+	<data name="BotAuthenticatorConverting" xml:space="preserve">
+		<value>درحال تبدیل فایل با فرمت maFile. به فرمت TickrApp...</value>
+	</data>
+	<data name="BotAuthenticatorImportFinished" xml:space="preserve">
+		<value>وارد کردن تایید کننده موبایل با موفقیت انجام شد!</value>
+	</data>
+	<data name="BotAuthenticatorToken" xml:space="preserve">
+		<value>توکن دو مرحله ای: {0}</value>
+		<comment>{0} will be replaced by generated 2FA token (string)</comment>
+	</data>
+	<data name="BotAutomaticIdlingNowPaused" xml:space="preserve">
+		<value>فارم کردن خودکار مکث شد!</value>
+	</data>
+	<data name="BotAutomaticIdlingNowResumed" xml:space="preserve">
+		<value>در حال ادامه دادن فارم کردن خودکار!</value>
+	</data>
+	<data name="BotAutomaticIdlingPausedAlready" xml:space="preserve">
+		<value>فارم کردن خودکار در حالت مکث می باشد!</value>
+	</data>
+	<data name="BotAutomaticIdlingResumedAlready" xml:space="preserve">
+		<value>فارم کردن خودکار در حال اجرا می باشد!</value>
+	</data>
+	<data name="BotConnected" xml:space="preserve">
+		<value>به استیم متصل شدیم!</value>
+	</data>
+	<data name="BotDisconnected" xml:space="preserve">
+		<value>از استیم قطع شدیم!</value>
+	</data>
+	<data name="BotDisconnecting" xml:space="preserve">
+		<value>در حال قطع شدن...</value>
+	</data>
+	<data name="BotInstanceNotStartingBecauseDisabled" xml:space="preserve">
+		<value>این ربات را استارت نمی کنیم زیرا در فایل کانفیگ غیر فعال می باشد!</value>
+	</data>
+	<data name="BotInvalidAuthenticatorDuringLogin" xml:space="preserve">
+		<value>ارور کد 2 مرحله ای اشتباه را {0} دفعه پشت هم دریافت کردیم. یا کد 2مرحله ای شما دیگر معتبر نیست، یا ساعت شما تنظیم نیست، در حال کنسل کردن!</value>
+		<comment>{0} will be replaced by maximum allowed number of failed 2FA attempts</comment>
+	</data>
+	<data name="BotLoggedOff" xml:space="preserve">
+		<value>از استیم خارج شد: {0}</value>
+		<comment>{0} will be replaced by logging off reason (string)</comment>
+	</data>
+	<data name="BotLoggedOn" xml:space="preserve">
+		<value>{0} با موفقیت وارد شد.</value>
+		<comment>{0} will be replaced by steam ID (number)</comment>
+	</data>
+	<data name="BotLoggingIn" xml:space="preserve">
+		<value>در حال وارد شدن...</value>
+	</data>
+	<data name="BotLogonSessionReplaced" xml:space="preserve">
+		<value>به نظر می رسید این اکانت در حال استفاده از نمایه ی دیگری از Tickr است، در حال خودداری از اجرا کردنش هستیم!</value>
+	</data>
+	<data name="BotLootingFailed" xml:space="preserve">
+		<value>پیشنهاد تبادل ناموفق بود!</value>
+	</data>
+	<data name="BotLootingMasterNotDefined" xml:space="preserve">
+		<value>پیشنهاد تبادل را نتوانستیم ارسال کنیم زیرا هیچ کاربری با پرمیشن مَستِر معرفی نشده است!</value>
+	</data>
+	<data name="BotLootingSuccess" xml:space="preserve">
+		<value>پیشنهاد تبادل با موفقیت ارسال شد!</value>
+	</data>
+	<data name="BotSendingTradeToYourself" xml:space="preserve">
+		<value>شما نمی توانید به خودتان پیشنهاد تبادل ارسال کنید!</value>
+	</data>
+	<data name="BotNoTickrAuthenticator" xml:space="preserve">
+		<value>این ربات دارای تاییدیه ی دو مرحله ای نیست! آیا فراموش کرده اید که تاییدیه دو مرحله ای خود را به صورتTickr 2FA ایمپورت کنید؟</value>
+	</data>
+	<data name="BotNotConnected" xml:space="preserve">
+		<value>این ربات متصل نیست!</value>
+	</data>
+	<data name="BotNotOwnedYet" xml:space="preserve">
+		<value>هنوز خریداری نشده است: {0}</value>
+		<comment>{0} will be replaced by query (string)</comment>
+	</data>
+	<data name="BotOwnedAlreadyWithName" xml:space="preserve">
+		<value>قبلاً خریداری شده است: {0} | {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotPointsBalance" xml:space="preserve">
+		<value>موجودی پوینت ها: {0}</value>
+		<comment>{0} will be replaced by the points balance value (integer)</comment>
+	</data>
+	<data name="BotRateLimitExceeded" xml:space="preserve">
+		<value>حد اتصال به بیش از حد مجاز رسید، تا {0} ی دیگر دوباره امتحان خواهیم کرد...</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "25 minutes")</comment>
+	</data>
+	<data name="BotReconnecting" xml:space="preserve">
+		<value>در حال اتصال دوباره...</value>
+	</data>
+	<data name="BotRedeem" xml:space="preserve">
+		<value>کلید: {0} | وضعیت: {1}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotRedeemWithItems" xml:space="preserve">
+		<value>کلید: {0} | وضعیت: {1} | آیتم ها: {2}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string, {2} will be replaced by list of key-value pairs, separated by a comma</comment>
+	</data>
+	<data name="BotRemovedExpiredLoginKey" xml:space="preserve">
+		<value>کلید لاگین تاریخ گذشته حذف شد!</value>
+	</data>
+	<data name="BotStatusNotIdling" xml:space="preserve">
+		<value>بات در حال فارم چیزی نیست.</value>
+	</data>
+	<data name="BotStatusLimited" xml:space="preserve">
+		<value>بات محدود شده است و نمی تواند کارتی از طریق فارم کردن دراپ کند.</value>
+	</data>
+	<data name="BotStatusConnecting" xml:space="preserve">
+		<value>بات در حال وصل شدن به شبکه ی استیم است.</value>
+	</data>
+	<data name="BotStatusNotRunning" xml:space="preserve">
+		<value>بات در حال اجرا نیست.</value>
+	</data>
+	<data name="BotStatusPaused" xml:space="preserve">
+		<value>بات در حالت مکث یا دستی در حال اجرا است.</value>
+	</data>
+	<data name="BotStatusPlayingNotAvailable" xml:space="preserve">
+		<value>بات در حال استفاده است.</value>
+	</data>
+	<data name="BotUnableToLogin" xml:space="preserve">
+		<value>لاگین کردن به استیم با شکست مواجه شد: {0}/{1}</value>
+		<comment>{0} will be replaced by failure reason (string), {1} will be replaced by extended failure reason (string)</comment>
+	</data>
+	<data name="ErrorIsEmpty" xml:space="preserve">
+		<value>خطا: {0} خالی است!</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="UnusedKeys" xml:space="preserve">
+		<value>کلید های استفاده نشده: {0}</value>
+		<comment>{0} will be replaced by list of cd-keys (strings), separated by a comma</comment>
+	</data>
+	<data name="WarningFailedWithError" xml:space="preserve">
+		<value>به این دلیل شکست خورد: {0}</value>
+		<comment>{0} will be replaced by failure reason (string)</comment>
+	</data>
+	<data name="BotConnectionLost" xml:space="preserve">
+		<value>اتصال به شبکه ی استیم قطع شد. در حال اتصال مجدد...</value>
+	</data>
+	<data name="BotAccountFree" xml:space="preserve">
+		<value>اکانت دیگر در دست استفاده نیست: رویه ی فارم کردن در حال ادامه یافتن است!</value>
+	</data>
+	<data name="BotAccountOccupied" xml:space="preserve">
+		<value>اکانت در دست استفاده است: Tickr زمانی که اکانت آزاد باشد فارم کردن را شروع می کند...</value>
+	</data>
+	<data name="BotConnecting" xml:space="preserve">
+		<value>در حال اتصال...</value>
+	</data>
+	<data name="BotHeartBeatFailed" xml:space="preserve">
+		<value>قطع شدن این بات با مشکل مواجه شد. بات را ول می کنیم!</value>
+	</data>
+	<data name="BotStopping" xml:space="preserve">
+		<value>در حال توقف...</value>
+	</data>
+	<data name="ErrorBotConfigInvalid" xml:space="preserve">
+		<value>کانفیگ بات شما صحیح نیست. لطفاً محتوای {0} را بررسی کنید و دوباره تلاش کنید!</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorDatabaseInvalid" xml:space="preserve">
+		<value>لود کردن دیتابیس با مشکل مواجه شد، اگر این مشکل ادامه داشت، لطفاً {0} را حذف کنید تا دوباره دیتابیس ایجاد شود!</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="Initializing" xml:space="preserve">
+		<value>در حال لود کردن {0}...</value>
+		<comment>{0} will be replaced by service name that is being initialized</comment>
+	</data>
+	<data name="WarningPrivacyPolicy" xml:space="preserve">
+		<value>لطفاً در صورت نگرانی اینکه برنامه Tickr در حال انجام چه کاری است خط مشی ما را در ویکی مطالعه کنید!</value>
+	</data>
+	<data name="Welcome" xml:space="preserve">
+		<value>بنظر می رسد اولین استفاده ی شما از این برنامه باشد، خوش آمدید! 3:</value>
+	</data>
+	<data name="BotWalletBalance" xml:space="preserve">
+		<value>موجودی والت: {0} {1}</value>
+		<comment>{0} will be replaced by wallet balance value, {1} will be replaced by currency name</comment>
+	</data>
+	<data name="BotHasNoWallet" xml:space="preserve">
+		<value>بات والتی ندارد.</value>
+	</data>
+	<data name="BotLevel" xml:space="preserve">
+		<value>بات لول {0} است.</value>
+		<comment>{0} will be replaced by bot's level</comment>
+	</data>
+	<data name="ErrorAborted" xml:space="preserve">
+		<value>کنسل شد!</value>
+	</data>
+	<data name="NothingFound" xml:space="preserve">
+		<value>چیزی پیدا نشد!</value>
+	</data>
+	<data name="PleaseWait" xml:space="preserve">
+		<value>لطفا صبر کنید...</value>
+	</data>
+	<data name="EnterCommand" xml:space="preserve">
+		<value>دستور را وارد کنید: </value>
+	</data>
+	<data name="Executing" xml:space="preserve">
+		<value>در حال اجرا...</value>
+	</data>
+	<data name="UpdateCleanup" xml:space="preserve">
+		<value>درحال پاک سازی فایل های قدیمی بعد از به روزرسانی...</value>
+	</data>
+	<data name="Result" xml:space="preserve">
+		<value>نتایج: {0}</value>
+		<comment>{0} will be replaced by generic result of various functions that use this string</comment>
+	</data>
+	<data name="PatchingFiles" xml:space="preserve">
+		<value>در حال پچ کردن فایل های TickrApp...</value>
+	</data>
+	<data name="ErrorIPNotBanned" xml:space="preserve">
+		<value>آدرس آیپی {0} بن نشده است!</value>
+		<comment>{0} will be replaced by an IP address which was requested to be unbanned from using IPC</comment>
+	</data>
+	<data name="WarningSkipping" xml:space="preserve">
+		<value>در حال رد کردن: {0}...</value>
+		<comment>{0} will be replaced by text value (string) of entry being skipped.</comment>
+	</data>
+</root>

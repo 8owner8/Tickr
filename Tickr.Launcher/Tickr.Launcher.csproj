@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<!-- The assembly keeps its own name so Tickr.Tests can reference both this and the main Tickr assembly. -->
+		<!-- The release workflow renames the published exe to Tickr.exe - the user-facing file the whole update flow works with. -->
+		<RootNamespace>Tickr.Launcher</RootNamespace>
+		<UseWindowsForms>true</UseWindowsForms>
+
+		<!-- Distribution: single self-contained win-x64 executable, no .NET Runtime required -->
+		<!-- NOTE: PublishTrimmed is intentionally NOT set - WinForms is not trimming-compatible (NETSDK1175). Compression keeps the single file lean instead. -->
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<!-- Windows-only: overrides the multi-platform RuntimeIdentifiers list inherited from Directory.Build.props (no WinForms packs exist for linux/osx) -->
+		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+		<SelfContained>true</SelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+		<InvariantGlobalization>true</InvariantGlobalization>
+
+		<!-- Launcher UI strings are hardcoded English by design, no localization infrastructure here -->
+		<NoWarn>$(NoWarn),CA1303,CA1515</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Embedded so the logo is available even on the very first run, before resources/ is downloaded -->
+		<EmbeddedResource Include="..\resources\Tickr.jpg" LogicalName="tickr-logo.jpg" />
+	</ItemGroup>
+</Project>

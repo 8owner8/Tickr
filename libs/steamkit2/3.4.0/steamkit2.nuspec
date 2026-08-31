@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>SteamKit2</id>
+    <version>3.4.0</version>
+    <authors>SteamKit2</authors>
+    <license type="expression">LGPL-2.1-only</license>
+    <licenseUrl>https://licenses.nuget.org/LGPL-2.1-only</licenseUrl>
+    <icon>steamkit_logo_128.png</icon>
+    <readme>description.md</readme>
+    <projectUrl>https://github.com/SteamRE/SteamKit</projectUrl>
+    <description>.NET library that aims to interoperate with the Steam network.</description>
+    <releaseNotes>Release notes are available at https://github.com/SteamRE/SteamKit/releases/tag/3.4.0</releaseNotes>
+    <tags>steamkit sk2 steam valve dota dota2 csgo</tags>
+    <repository type="git" url="https://github.com/SteamRE/SteamKit" commit="1c7bc9c41a529e8fbb1e6890f1e4dbcdc5200cb7" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="System.IO.Hashing" version="10.0.1" exclude="Build,Analyzers" />
+        <dependency id="ZstdSharp.Port" version="0.8.7" exclude="Build,Analyzers" />
+        <dependency id="protobuf-net" version="3.2.56" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net10.0">
+        <dependency id="System.IO.Hashing" version="10.0.1" exclude="Build,Analyzers" />
+        <dependency id="ZstdSharp.Port" version="0.8.7" exclude="Build,Analyzers" />
+        <dependency id="protobuf-net" version="3.2.56" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

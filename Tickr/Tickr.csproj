@@ -1,0 +1,94 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<DefaultItemExcludes>$(DefaultItemExcludes);config/**;debug/**;logs/**;overlay/**</DefaultItemExcludes>
+		<OutputType>WinExe</OutputType>
+		<ApplicationIcon>Tickr.ico</ApplicationIcon>
+		<UseWindowsForms>true</UseWindowsForms>
+	</PropertyGroup>
+
+	<!-- TODO: It seems CA1515 is no longer respected inside editorconfig, might be possible to remove later -->
+	<PropertyGroup>
+		<NoWarn>$(NoWarn),CA1515,MSB3277,MSB3270</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AngleSharp" />
+		<PackageReference Include="CryptSharpStandard" />
+		<PackageReference Include="Humanizer" />
+		<PackageReference Include="JetBrains.Annotations.Sources" PrivateAssets="all" />
+		<PackageReference Include="Markdig.Signed" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+		<PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
+		<PackageReference Include="Microsoft.Web.WebView2" />
+		<PackageReference Include="Nito.AsyncEx.Coordination" />
+		<PackageReference Include="NLog.Web.AspNetCore" />
+		<PackageReference Include="Scalar.AspNetCore" />
+		<PackageReference Include="SteamKit2" />
+		<PackageReference Include="System.Composition" />
+		<PackageReference Include="Tmds.DBus.Protocol" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Localization\Strings.resx" EmitFormatMethods="true" Public="true" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\LICENSE.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+		<Content Include="..\resources\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<Link>resources\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+		<Content Include="Tickr.ico">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+		<Content Include="overlay\all\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TickrVariant)' != '' AND Exists($([System.IO.Path]::Combine('overlay', 'variant-base', $(TickrVariant.Split('-')[0]))))">
+		<Content Include="overlay/variant-base/$(TickrVariant.Split('-')[0])/**/*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TickrVariant)' != '' AND Exists($([System.IO.Path]::Combine('overlay', 'variant-specific', $(TickrVariant))))">
+		<Content Include="overlay/variant-specific/$(TickrVariant)/**/*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<Link>SteamKit2.Tools.exe</Link>
+		</Content>
+	</ItemGroup>
+
+	<!-- Hard build requirement: SteamKit2.Tools.exe must be present at libs/steamkit2/3.4.0 - fail the build with a clear error otherwise -->
+	<Target Name="RequireSteamKit2Tools" BeforeTargets="BeforeBuild">
+		<Error Condition="!Exists('$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe')" Text="SteamKit2.Tools.exe is required to build Tickr but was not found at '$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe'. The file is committed to the repository (libs/steamkit2/3.4.0) - restore it and build again." />
+	</Target>
+
+	<Target Name="RunSteamKitTools" BeforeTargets="BeforeBuild" DependsOnTargets="RequireSteamKit2Tools" Condition="'$(OS)' == 'Windows_NT' AND '$(CI)' != 'true' AND Exists('$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe')">
+		<Exec Command="&quot;$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe&quot;" />
+	</Target>
+</Project>

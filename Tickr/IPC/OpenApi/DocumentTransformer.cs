@@ -1,0 +1,123 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Tickr.IPC.Integration;
+using Tickr.Storage;
+using JetBrains.Annotations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.OpenApi;
+
+namespace Tickr.IPC.OpenApi;
+
+[UsedImplicitly]
+internal sealed class DocumentTransformer : IOpenApiDocumentTransformer {
+	public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken) {
+		ArgumentNullException.ThrowIfNull(document);
+		ArgumentNullException.ThrowIfNull(context);
+
+		document.Info.Title = $"{SharedInfo.AssemblyName} API";
+		document.Info.Version = SharedInfo.Version.ToString();
+
+		document.Info.Contact ??= new OpenApiContact();
+		document.Info.Contact.Name = SharedInfo.GithubRepo;
+		document.Info.Contact.Url = new Uri(SharedInfo.ProjectURL);
+
+		document.Info.License ??= new OpenApiLicense();
+		document.Info.License.Name = SharedInfo.LicenseName;
+		document.Info.License.Url = new Uri(SharedInfo.LicenseURL);
+
+		document.Components ??= new OpenApiComponents();
+		document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>(1, StringComparer.Ordinal);
+
+		document.Components.SecuritySchemes.Add(
+			nameof(GlobalConfig.IPCPassword), new OpenApiSecurityScheme {
+				Description = $"{nameof(GlobalConfig.IPCPassword)} authentication using request headers. Check {SharedInfo.ProjectURL}/wiki/IPC#authentication for more info.",
+				In = ParameterLocation.Header,
+				Name = ApiAuthenticationMiddleware.HeadersField,
+				Type = SecuritySchemeType.ApiKey
+			}
+		);
+
+		// Add limited info support for our NLog endpoint
+		ApiDescription? nlogEndpont = context.DescriptionGroups.SelectMany(static group => group.Items).FirstOrDefault(static endpoint => (endpoint.HttpMethod == null) && (endpoint.RelativePath == "Api/NLog"));
+
+		if (nlogEndpont != null) {
+			OpenApiOperation operation = new() {
+				Description = nlogEndpont.ActionDescriptor.EndpointMetadata.OfType<EndpointDescriptionAttribute>().FirstOrDefault()?.Description,
+
+				Responses = new OpenApiResponses {
+					{
+						StatusCodes.Status101SwitchingProtocols.ToString(CultureInfo.InvariantCulture),
+
+						new OpenApiResponse {
+							Description = nameof(HttpStatusCode.SwitchingProtocols)
+						}
+					},
+					{
+						StatusCodes.Status200OK.ToString(CultureInfo.InvariantCulture),
+
+						new OpenApiResponse {
+							Description = nameof(HttpStatusCode.OK)
+						}
+					},
+					{
+						StatusCodes.Status400BadRequest.ToString(CultureInfo.InvariantCulture),
+
+						new OpenApiResponse {
+							Description = nameof(HttpStatusCode.BadRequest)
+						}
+					}
+				},
+
+				Security = new List<OpenApiSecurityRequirement>(1) {
+					new() {
+						{
+							new OpenApiSecuritySchemeReference(nameof(GlobalConfig.IPCPassword), document),
+							[]
+						}
+					}
+				},
+
+				Summary = nlogEndpont.ActionDescriptor.EndpointMetadata.OfType<EndpointSummaryAttribute>().FirstOrDefault()?.Summary,
+
+				Tags = new HashSet<OpenApiTagReference>(1) { new("NLog", document) }
+			};
+
+			document.Paths.Add(
+				$"/{nlogEndpont.RelativePath}", new OpenApiPathItem {
+					Operations = new Dictionary<HttpMethod, OpenApiOperation>(2) {
+						// HTTP/2 use CONNECT for that endpoint
+						{ HttpMethod.Connect, operation },
+
+						// But HTTP/1.1 use GET with upgrade, so this is also valid
+						{ HttpMethod.Get, operation }
+					}
+				}
+			);
+		}
+
+		return Task.CompletedTask;
+	}
+}

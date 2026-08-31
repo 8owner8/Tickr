@@ -1,0 +1,1559 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Frozen;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Linq;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
+using Tickr.Collections;
+using Tickr.Core;
+using Tickr.Helpers;
+using Tickr.Localization;
+using Tickr.Plugins;
+using Tickr.Steam.Data;
+using Tickr.Steam.Integration;
+using Tickr.Steam.Storage;
+using Tickr.Storage;
+using Tickr.Web;
+using JetBrains.Annotations;
+
+namespace Tickr.Steam.Cards;
+
+public sealed class CardsFarmer : IAsyncDisposable, IDisposable {
+	internal const byte DaysForRefund = 14; // In how many days since payment we're allowed to refund
+	internal const byte HoursForRefund = 2; // Up to how many hours we're allowed to play for refund
+
+	private const byte DaysToIgnoreRiskyAppIDs = 14; // How many days since determining that game is not candidate for idling, we assume that to still be the case, in risky approach
+	private const byte ExtraFarmingDelaySeconds = 15; // In seconds, how much time to add on top of FarmingDelay (helps fighting misc time differences of Steam network)
+	private const byte HoursToIgnore = 1; // How many hours we ignore unreleased appIDs and don't bother checking them again
+
+	[PublicAPI]
+	public static readonly FrozenSet<uint> SalesBlacklist = [267420, 303700, 335590, 368020, 425280, 480730, 566020, 639900, 762800, 876740, 991980, 1195670, 1343890, 1465680, 1658760, 1797760, 2021850, 2243720, 2459330, 2640280, 2861690, 2861720, 3558920, 3558940, 4761370];
+
+	private static readonly ConcurrentDictionary<uint, DateTime> GloballyIgnoredAppIDs = new(); // Reserved for unreleased games
+
+	private static readonly TickrCacheable<FrozenSet<uint>> MarketableAppIDs = new(ResolveMarketableAppIDs, TimeSpan.FromDays(1));
+
+	// Games that were confirmed to show false status on general badges page
+	private static readonly FrozenSet<uint> UntrustedAppIDs = [440, 570, 730];
+
+	[JsonInclude]
+	[JsonPropertyName(nameof(CurrentGamesFarming))]
+	[PublicAPI]
+	public IReadOnlyCollection<Game> CurrentGamesFarmingReadOnly => CurrentGamesFarming;
+
+	[JsonInclude]
+	[JsonPropertyName(nameof(GamesToFarm))]
+	[PublicAPI]
+	public IReadOnlyCollection<Game> GamesToFarmReadOnly => GamesToFarm;
+
+	[JsonInclude]
+	[PublicAPI]
+	public TimeSpan TimeRemaining {
+		get {
+			if (GamesToFarm.Count == 0) {
+				return TimeSpan.Zero;
+			}
+
+			byte hoursRequired = Bot.BotConfig.HoursUntilCardDrops;
+
+			if (hoursRequired == 0) {
+				// This is the simple case, one card drops each 30 minutes on average
+				return TimeSpan.FromMinutes(GamesToFarm.Sum(static game => game.CardsRemaining) * 30);
+			}
+
+			// More advanced calculation, the above AND hours required for bumps
+			uint cardsRemaining = 0;
+			List<float> totalHoursClocked = [];
+
+			foreach (Game gameToFarm in GamesToFarm) {
+				cardsRemaining += gameToFarm.CardsRemaining;
+
+				if (gameToFarm.HoursPlayed < hoursRequired) {
+					totalHoursClocked.Add(gameToFarm.HoursPlayed);
+				}
+			}
+
+			if (totalHoursClocked.Count == 0) {
+				// Same as simple because we have no hours to bump
+				return TimeSpan.FromMinutes(cardsRemaining * 30);
+			}
+
+			// Determine how many additional hours we'll waste on game bumps
+			totalHoursClocked.Sort();
+
+			double extraHours = 0;
+
+			// Due to the fact that we have hours sorted, the lowest amount in each group is what we'll need for the entire group
+			// This is still simplified as Tickr will farm cards instead of hours ASAP, but it should give good enough approximation (if not the exact value)
+			for (int i = 0; i < totalHoursClocked.Count; i += TickrHandler.MaxGamesPlayedConcurrently) {
+				float hoursClocked = totalHoursClocked[i];
+
+				extraHours += hoursRequired - hoursClocked;
+			}
+
+			return TimeSpan.FromHours(extraHours) + TimeSpan.FromMinutes(cardsRemaining * 30);
+		}
+	}
+
+	private readonly Bot Bot;
+	private readonly ConcurrentHashSet<Game> CurrentGamesFarming = [];
+	private readonly SemaphoreSlim EventSemaphore = new(1, 1);
+	private readonly SemaphoreSlim FarmingInitializationSemaphore = new(1, 1);
+	private readonly ConcurrentList<Game> GamesToFarm = [];
+	private readonly Timer? IdleFarmingTimer;
+
+	private readonly ConcurrentDictionary<uint, DateTime> LocallyIgnoredAppIDs = new();
+
+	private IEnumerable<ConcurrentDictionary<uint, DateTime>> SourcesOfIgnoredAppIDs {
+		get {
+			yield return GloballyIgnoredAppIDs;
+			yield return LocallyIgnoredAppIDs;
+		}
+	}
+
+	[JsonInclude]
+	[JsonRequired]
+	[PublicAPI]
+	[Required]
+	public bool NowFarming { get; private set; }
+
+	[JsonInclude]
+	[JsonRequired]
+	[PublicAPI]
+	[Required]
+	public bool Paused { get; private set; }
+
+	private TaskCompletionSource<bool>? FarmingResetEvent;
+	private bool ParsingScheduled;
+	private bool PermanentlyPaused;
+	private bool ShouldResumeFarming;
+	private bool ShouldSkipNewGamesIfPossible;
+
+	internal CardsFarmer(Bot bot) {
+		ArgumentNullException.ThrowIfNull(bot);
+
+		Bot = bot;
+
+		byte idleFarmingPeriod = TickrApp.GlobalConfig?.IdleFarmingPeriod ?? GlobalConfig.DefaultIdleFarmingPeriod;
+
+		if (idleFarmingPeriod > 0) {
+			IdleFarmingTimer = new Timer(
+				CheckGamesForFarming,
+				null,
+				TimeSpan.FromHours(idleFarmingPeriod) + TimeSpan.FromSeconds(TickrApp.LoadBalancingDelay * Bot.Bots?.Count ?? 0), // Delay
+				TimeSpan.FromHours(idleFarmingPeriod) // Period
+			);
+		}
+	}
+
+	public void Dispose() {
+		// Those are objects that are always being created if constructor doesn't throw exception
+		EventSemaphore.Dispose();
+		FarmingInitializationSemaphore.Dispose();
+
+		// Those are objects that might be null and the check should be in-place
+		IdleFarmingTimer?.Dispose();
+	}
+
+	public async ValueTask DisposeAsync() {
+		// Those are objects that are always being created if constructor doesn't throw exception
+		EventSemaphore.Dispose();
+		FarmingInitializationSemaphore.Dispose();
+
+		// Those are objects that might be null and the check should be in-place
+		if (IdleFarmingTimer != null) {
+			await IdleFarmingTimer.DisposeAsync().ConfigureAwait(false);
+		}
+	}
+
+	internal void OnDisconnected() {
+		if (!NowFarming) {
+			return;
+		}
+
+		Utilities.InBackground(StopFarming);
+	}
+
+	internal async Task OnNewGameAdded() {
+		// This update has a potential to modify local ignores, therefore we need to purge our cache
+		LocallyIgnoredAppIDs.Clear();
+
+		// We aim to have a maximum of 2 tasks, one already parsing, and one waiting in the queue
+		// This way we can call this function as many times as needed e.g. because of Steam events
+		ShouldResumeFarming = true;
+
+		// ReSharper disable once SuspiciousLockOverSynchronizationPrimitive - this is not a mistake, we need extra synchronization, and we can re-use the semaphore object for that
+		lock (EventSemaphore) {
+			if (ParsingScheduled) {
+				return;
+			}
+
+			ParsingScheduled = true;
+		}
+
+		await EventSemaphore.WaitAsync().ConfigureAwait(false);
+
+		try {
+			// ReSharper disable once SuspiciousLockOverSynchronizationPrimitive - this is not a mistake, we need extra synchronization, and we can re-use the semaphore object for that
+			lock (EventSemaphore) {
+				ParsingScheduled = false;
+			}
+
+			// If we're not farming yet, obviously it's worth it to make a check
+			if (!NowFarming) {
+				await StartFarming().ConfigureAwait(false);
+
+				return;
+			}
+
+			// We should restart the farming if the order or efficiency of the farming could be affected by the newly-activated product
+			// The order is affected when user uses farming order that isn't independent of the game data (it could alter the order in deterministic way if the game was considered in current queue)
+			// The efficiency is affected only in complex algorithm (entirely), as it depends on hours order that is not independent (as specified above)
+			if (!ShouldSkipNewGamesIfPossible && ((Bot.BotConfig.HoursUntilCardDrops > 0) || (!Bot.BotConfig.FarmingOrders.IsEmpty && Bot.BotConfig.FarmingOrders.Any(static farmingOrder => farmingOrder is not BotConfig.EFarmingOrder.Unordered and not BotConfig.EFarmingOrder.Random)))) {
+				await StopFarming().ConfigureAwait(false);
+				await StartFarming().ConfigureAwait(false);
+			}
+		} finally {
+			EventSemaphore.Release();
+		}
+	}
+
+	internal async Task OnNewItemsNotification() {
+		if (NowFarming) {
+			await FarmingInitializationSemaphore.WaitAsync().ConfigureAwait(false);
+
+			try {
+				if (NowFarming) {
+					FarmingResetEvent?.TrySetResult(true);
+
+					return;
+				}
+			} finally {
+				FarmingInitializationSemaphore.Release();
+			}
+		}
+
+		// If we're not farming, and we got new items, it's likely to be a booster pack or likewise
+		// In this case, perform a loot if user wants to do so
+		if (Bot.BotConfig.FarmingPreferences.HasFlag(BotConfig.EFarmingPreferences.SendOnFarmingFinished) && !Bot.BotConfig.LootableTypes.IsEmpty) {
+			await Bot.Actions.SendInventory(filterFunction: item => Bot.BotConfig.LootableTypes.Contains(item.Type)).ConfigureAwait(false);
+		}
+	}
+
+	internal async Task Pause(bool permanent) {
+		if (permanent) {
+			PermanentlyPaused = true;
+		}
+
+		Paused = true;
+
+		if (!NowFarming) {
+			return;
+		}
+
+		await StopFarming().ConfigureAwait(false);
+	}
+
+	internal async Task<bool> Resume(bool userAction) {
+		if (PermanentlyPaused) {
+			if (!userAction) {
+				Bot.TickrLogger.LogGenericInfo(Strings.IgnoredPermanentPauseEnabled);
+
+				return false;
+			}
+
+			PermanentlyPaused = false;
+		}
+
+		Paused = false;
+
+		if (NowFarming) {
+			return true;
+		}
+
+		if (!userAction && !ShouldResumeFarming) {
+			return false;
+		}
+
+		await StartFarming().ConfigureAwait(false);
+
+		return true;
+	}
+
+	internal void SetInitialState(bool paused) {
+		PermanentlyPaused = Paused = paused;
+		ShouldResumeFarming = ShouldSkipNewGamesIfPossible = false;
+	}
+
+	internal async Task StartFarming() {
+		if (NowFarming || Paused || !Bot.IsPlayingPossible) {
+			return;
+		}
+
+		if (!Bot.CanReceiveSteamCards || (Bot.BotConfig.FarmingPreferences.HasFlag(BotConfig.EFarmingPreferences.FarmPriorityQueueOnly) && (Bot.BotDatabase.FarmingPriorityQueueAppIDs.Count == 0))) {
+			Bot.TickrLogger.LogGenericInfo(Strings.NothingToIdle);
+			await Bot.OnFarmingFinished(false).ConfigureAwait(false);
+
+			return;
+		}
+
+		await FarmingInitializationSemaphore.WaitAsync().ConfigureAwait(false);
+
+		try {
+			if (NowFarming || Paused || !Bot.IsPlayingPossible) {
+				return;
+			}
+
+			bool? isAnythingToFarm = await IsAnythingToFarm().ConfigureAwait(false);
+
+			if (!isAnythingToFarm.HasValue) {
+				return;
+			}
+
+			if (!isAnythingToFarm.Value) {
+				Bot.TickrLogger.LogGenericInfo(Strings.NothingToIdle);
+				await Bot.OnFarmingFinished(false).ConfigureAwait(false);
+
+				return;
+			}
+
+			if (GamesToFarm.Count == 0) {
+				Bot.TickrLogger.LogNullError(GamesToFarm);
+
+				return;
+			}
+
+			// This is the last moment for final check if we can farm
+			if (Paused || !Bot.IsPlayingPossible) {
+				Bot.TickrLogger.LogGenericInfo(Strings.PlayingNotAvailable);
+
+				return;
+			}
+
+			if (Bot.PlayingWasBlocked) {
+				byte minFarmingDelayAfterBlock = TickrApp.GlobalConfig?.MinFarmingDelayAfterBlock ?? GlobalConfig.DefaultMinFarmingDelayAfterBlock;
+
+				if (minFarmingDelayAfterBlock > 0) {
+					Bot.TickrLogger.LogGenericInfo(Strings.FormatBotExtraIdlingCooldown(TimeSpan.FromSeconds(minFarmingDelayAfterBlock).ToHumanReadable()));
+
+					for (byte i = 0; (i < minFarmingDelayAfterBlock) && Bot is { IsConnectedAndLoggedOn: true, IsPlayingPossible: true, PlayingWasBlocked: true }; i++) {
+						await Task.Delay(1000).ConfigureAwait(false);
+					}
+
+					if (!Bot.IsConnectedAndLoggedOn) {
+						return;
+					}
+
+					if (Paused || !Bot.IsPlayingPossible) {
+						Bot.TickrLogger.LogGenericInfo(Strings.PlayingNotAvailable);
+
+						return;
+					}
+				}
+			}
+
+			NowFarming = true;
+			Utilities.InBackground(Farm, true);
+
+			await PluginsCore.OnBotFarmingStarted(Bot).ConfigureAwait(false);
+		} finally {
+			FarmingInitializationSemaphore.Release();
+		}
+	}
+
+	internal async Task StopFarming() {
+		if (!NowFarming) {
+			return;
+		}
+
+		await FarmingInitializationSemaphore.WaitAsync().ConfigureAwait(false);
+
+		try {
+			if (!NowFarming) {
+				return;
+			}
+
+			for (byte i = 0; (i < byte.MaxValue) && NowFarming; i++) {
+				FarmingResetEvent?.TrySetResult(false);
+
+				await Task.Delay(1000).ConfigureAwait(false);
+			}
+
+			if (NowFarming) {
+				Bot.TickrLogger.LogGenericError(Strings.WarningFailed);
+
+				NowFarming = false;
+
+				GamesToFarm.Clear();
+			}
+
+			Bot.TickrLogger.LogGenericInfo(Strings.IdlingStopped);
+			await Bot.OnFarmingStopped().ConfigureAwait(false);
+		} finally {
+			FarmingInitializationSemaphore.Release();
+		}
+	}
+
+	private async Task CheckGame(uint appID, string name, float hours, byte badgeLevel) {
+		ArgumentOutOfRangeException.ThrowIfZero(appID);
+		ArgumentException.ThrowIfNullOrEmpty(name);
+		ArgumentOutOfRangeException.ThrowIfNegative(hours);
+
+		Game? game = await GetGameCardsInfo(appID).ConfigureAwait(false);
+
+		if (game == null) {
+			Bot.TickrLogger.LogGenericWarning(Strings.FormatWarningCouldNotCheckCardsStatus(appID, name));
+
+			return;
+		}
+
+		if (game.CardsRemaining > 0) {
+			Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.Add(appID);
+
+			GamesToFarm.Add(new Game(appID, name, hours, game.CardsRemaining, badgeLevel));
+		}
+	}
+
+	private async void CheckGamesForFarming(object? state = null) {
+		if (NowFarming || Paused || !Bot.IsConnectedAndLoggedOn) {
+			return;
+		}
+
+		await StartFarming().ConfigureAwait(false);
+	}
+
+	private async Task CheckPage(IParentNode badgePage, ISet<uint> parsedAppIDs, IReadOnlyCollection<uint>? privateAppIDs = null) {
+		ArgumentNullException.ThrowIfNull(badgePage);
+		ArgumentNullException.ThrowIfNull(parsedAppIDs);
+
+		IHtmlCollection<IElement> htmlNodes = badgePage.QuerySelectorAll("div[class='badge_row_inner']");
+
+		HashSet<Task>? backgroundTasks = null;
+
+		foreach (IElement htmlNode in htmlNodes) {
+			IElement? statsNode = htmlNode.QuerySelector("div[class='badge_title_stats_content']");
+			IElement? appIDNode = statsNode?.QuerySelector("div[class='card_drop_info_dialog'][id]");
+
+			if (appIDNode == null) {
+				// It's just a badge, nothing more
+				continue;
+			}
+
+			string? appIDText = appIDNode.GetAttribute("id");
+
+			if (string.IsNullOrEmpty(appIDText)) {
+				Bot.TickrLogger.LogNullError(appIDText);
+
+				continue;
+			}
+
+			string[] appIDSplitted = appIDText.Split('_', 6);
+
+			if (appIDSplitted.Length < 5) {
+				Bot.TickrLogger.LogNullError(appIDSplitted);
+
+				continue;
+			}
+
+			appIDText = appIDSplitted[4];
+
+			if (!uint.TryParse(appIDText, out uint appID) || (appID == 0)) {
+				Bot.TickrLogger.LogNullError(appID);
+
+				continue;
+			}
+
+			if (!parsedAppIDs.Add(appID)) {
+				// Another task has already handled this appID
+				continue;
+			}
+
+			if (!ShouldIdle(appID)) {
+				// No point in evaluating further if we can determine that on appID alone
+				continue;
+			}
+
+			if (statsNode == null) {
+				Bot.TickrLogger.LogNullError(statsNode);
+
+				continue;
+			}
+
+			// Cards
+			IElement? progressNode = statsNode.QuerySelector("span[class='progress_info_bold']");
+
+			if (progressNode == null) {
+				Bot.TickrLogger.LogNullError(progressNode);
+
+				continue;
+			}
+
+			string progressText = progressNode.TextContent;
+
+			if (string.IsNullOrEmpty(progressText)) {
+				Bot.TickrLogger.LogNullError(progressText);
+
+				continue;
+			}
+
+			ushort cardsRemaining = 0;
+			Match progressMatch = GeneratedRegexes.Digits().Match(progressText);
+
+			// This might fail if we have no card drops remaining, 0 is not printed in this case - that's fine
+			if (progressMatch.Success) {
+				if (!ushort.TryParse(progressMatch.Value, out cardsRemaining) || (cardsRemaining == 0)) {
+					Bot.TickrLogger.LogNullError(cardsRemaining);
+
+					continue;
+				}
+			}
+
+			if (cardsRemaining == 0) {
+				// Normally we'd trust this information and simply skip the rest
+				// However, Steam is so fucked up that we can't simply assume that it's correct
+				// It's entirely possible that actual game page has different info, and badge page lied to us
+				// We can't check every single game though, as this will literally kill people with cards from games they don't own
+				// Luckily for us, it seems to happen only with some specific games
+				if (!UntrustedAppIDs.Contains(appID)) {
+					continue;
+				}
+
+				// To save us on extra work, check cards earned so far first
+				IElement? cardsEarnedNode = statsNode.QuerySelector("div[class='card_drop_info_header']");
+
+				if (cardsEarnedNode == null) {
+					Bot.TickrLogger.LogNullError(cardsEarnedNode);
+
+					continue;
+				}
+
+				string cardsEarnedText = cardsEarnedNode.TextContent;
+
+				if (string.IsNullOrEmpty(cardsEarnedText)) {
+					Bot.TickrLogger.LogNullError(cardsEarnedText);
+
+					continue;
+				}
+
+				Match cardsEarnedMatch = GeneratedRegexes.Digits().Match(cardsEarnedText);
+
+				if (!cardsEarnedMatch.Success) {
+					Bot.TickrLogger.LogNullError(cardsEarnedMatch);
+
+					continue;
+				}
+
+				if (!ushort.TryParse(cardsEarnedMatch.Value, out ushort cardsEarned)) {
+					Bot.TickrLogger.LogNullError(cardsEarned);
+
+					continue;
+				}
+
+				if (cardsEarned > 0) {
+					// If we already earned some cards for this game, it's very likely that it's done
+					// Let's hope that trusting cardsRemaining AND cardsEarned is enough
+					// If I ever hear that it's not, I'll most likely need a doctor
+					continue;
+				}
+
+				// If we have no cardsRemaining and no cardsEarned, it's either:
+				// - A game we don't own physically, but we have cards from it in inventory
+				// - F2P game that we didn't spend any money in, but we have cards from it in inventory
+				// - Steam issue
+				// As you can guess, we must follow the rest of the logic in case of Steam issue
+			}
+
+			// Hours
+			IElement? timeNode = statsNode.QuerySelector("div[class='badge_title_stats_playtime']");
+
+			if (timeNode == null) {
+				Bot.TickrLogger.LogNullError(timeNode);
+
+				continue;
+			}
+
+			string hoursText = timeNode.TextContent;
+
+			if (string.IsNullOrEmpty(hoursText)) {
+				Bot.TickrLogger.LogNullError(hoursText);
+
+				continue;
+			}
+
+			float hours = 0.0F;
+			Match hoursMatch = GeneratedRegexes.Decimal().Match(hoursText);
+
+			// This might fail if we have exactly 0.0 hours played, as it's not printed in that case - that's fine
+			if (hoursMatch.Success) {
+				if (!float.TryParse(hoursMatch.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out hours) || (hours <= 0.0F)) {
+					Bot.TickrLogger.LogNullError(hours);
+
+					continue;
+				}
+			}
+
+			if ((hours <= 0.0F) && Bot.BotConfig.FarmingPreferences.HasFlag(BotConfig.EFarmingPreferences.SkipUnplayedGames)) {
+				// User is skipping unplayed games, ignore this entry
+				continue;
+			}
+
+			// Names
+			IHtmlCollection<IElement> cardDropInfoNodes = statsNode.QuerySelectorAll("div[class='card_drop_info_body']");
+
+			if (cardDropInfoNodes.Count == 0) {
+				Bot.TickrLogger.LogNullError(cardDropInfoNodes);
+
+				continue;
+			}
+
+			IElement lastCardDropInfoNode = cardDropInfoNodes[^1];
+
+			string name = lastCardDropInfoNode.TextContent;
+
+			if (string.IsNullOrEmpty(name)) {
+				Bot.TickrLogger.LogNullError(name);
+
+				continue;
+			}
+
+			// We handle two cases here - normal one, and no card drops remaining
+			int nameStartIndex = name.IndexOf(" by playing ", StringComparison.Ordinal);
+
+			if (nameStartIndex <= 0) {
+				nameStartIndex = name.IndexOf("You don't have any more drops remaining for ", StringComparison.Ordinal);
+
+				if (nameStartIndex <= 0) {
+					Bot.TickrLogger.LogNullError(nameStartIndex);
+
+					continue;
+				}
+
+				nameStartIndex += 32; // + 12 below
+			}
+
+			nameStartIndex += 12;
+
+			int nameEndIndex = name.LastIndexOf('.');
+
+			if (nameEndIndex <= nameStartIndex) {
+				Bot.TickrLogger.LogNullError(nameEndIndex);
+
+				continue;
+			}
+
+			name = Uri.UnescapeDataString(name[nameStartIndex..nameEndIndex]).Trim();
+
+			if (string.IsNullOrEmpty(name)) {
+				Bot.TickrLogger.LogNullError(name);
+
+				continue;
+			}
+
+			if (privateAppIDs?.Contains(appID) == true) {
+				// This game is private, it won't drop any cards until removal
+				Bot.TickrLogger.LogGenericInfo(Strings.FormatIdlingGameNotPossiblePrivate(appID, name));
+
+				continue;
+			}
+
+			// Levels
+			byte badgeLevel = 0;
+
+			IElement? levelNode = htmlNode.QuerySelectorAll("div[class='badge_info_description'] > div").Skip(1).FirstOrDefault();
+
+			if (levelNode != null) {
+				// There is no levelNode if we didn't craft that badge yet (level 0)
+				string levelText = levelNode.TextContent;
+
+				if (string.IsNullOrEmpty(levelText)) {
+					Bot.TickrLogger.LogNullError(levelText);
+
+					continue;
+				}
+
+				int levelStartIndex = levelText.IndexOf("Level ", StringComparison.OrdinalIgnoreCase);
+
+				if (levelStartIndex < 0) {
+					Bot.TickrLogger.LogNullError(levelStartIndex);
+
+					continue;
+				}
+
+				levelStartIndex += 6;
+
+				if (levelText.Length <= levelStartIndex) {
+					Bot.TickrLogger.LogNullError(levelStartIndex);
+
+					continue;
+				}
+
+				int levelEndIndex = levelText.IndexOf(',', levelStartIndex);
+
+				if (levelEndIndex <= levelStartIndex) {
+					Bot.TickrLogger.LogNullError(levelEndIndex);
+
+					continue;
+				}
+
+				levelText = levelText[levelStartIndex..levelEndIndex];
+
+				if (!byte.TryParse(levelText, out badgeLevel) || badgeLevel is 0 or > 5) {
+					Bot.TickrLogger.LogNullError(badgeLevel);
+
+					continue;
+				}
+			}
+
+			// Done with parsing, we have two possible cases here
+			// Either we have decent info about appID, name, hours, cardsRemaining (cardsRemaining > 0) and level
+			// OR we strongly believe that Steam lied to us, in this case we will need to check game individually (cardsRemaining == 0)
+			if (cardsRemaining > 0) {
+				Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.Add(appID);
+
+				GamesToFarm.Add(new Game(appID, name, hours, cardsRemaining, badgeLevel));
+			} else {
+				Task task = CheckGame(appID, name, hours, badgeLevel);
+
+				switch (TickrApp.GlobalConfig?.OptimizationMode) {
+					case GlobalConfig.EOptimizationMode.MinMemoryUsage:
+						await task.ConfigureAwait(false);
+
+						break;
+					default:
+						backgroundTasks ??= [];
+
+						backgroundTasks.Add(task);
+
+						break;
+				}
+			}
+		}
+
+		// If we have any background tasks, wait for them
+		if (backgroundTasks?.Count > 0) {
+			await Task.WhenAll(backgroundTasks).ConfigureAwait(false);
+		}
+	}
+
+	private async Task<bool> CheckPage(byte page, ISet<uint> parsedAppIDs, IReadOnlyCollection<uint>? privateAppIDs = null) {
+		ArgumentOutOfRangeException.ThrowIfZero(page);
+		ArgumentNullException.ThrowIfNull(parsedAppIDs);
+
+		using IDocument? htmlDocument = await Bot.TickrWebHandler.GetBadgePage(page).ConfigureAwait(false);
+
+		if (htmlDocument == null) {
+			return false;
+		}
+
+		await CheckPage(htmlDocument, parsedAppIDs, privateAppIDs).ConfigureAwait(false);
+
+		return true;
+	}
+
+	private async Task Farm() {
+		do {
+			Bot.TickrLogger.LogGenericInfo(Strings.FormatGamesToIdle(GamesToFarm.Count, GamesToFarm.Sum(static game => game.CardsRemaining), TimeRemaining.ToHumanReadable()));
+
+			// Now the algorithm used for farming depends on whether account is restricted or not
+			if (Bot.BotConfig.HoursUntilCardDrops > 0) {
+				// If we have restricted card drops, we use complex algorithm
+				Bot.TickrLogger.LogGenericInfo(Strings.FormatChosenFarmingAlgorithm("Complex"));
+
+				while (GamesToFarm.Count > 0) {
+					// Initially we're going to farm games that passed our HoursUntilCardDrops
+					// This block is almost identical to Simple algorithm, we just copy appropriate items from GamesToFarm into innerGamesToFarm
+					HashSet<Game> innerGamesToFarm = [.. GamesToFarm.Where(game => game.HoursPlayed >= Bot.BotConfig.HoursUntilCardDrops)];
+
+					while (innerGamesToFarm.Count > 0) {
+						Game game = innerGamesToFarm.First();
+
+						if (!await IsPlayableGame(game).ConfigureAwait(false)) {
+							GamesToFarm.Remove(game);
+							innerGamesToFarm.Remove(game);
+
+							continue;
+						}
+
+						if (await FarmSolo(game).ConfigureAwait(false)) {
+							innerGamesToFarm.Remove(game);
+
+							continue;
+						}
+
+						NowFarming = false;
+
+						GamesToFarm.Clear();
+
+						return;
+					}
+
+					// At this point we have no games past HoursUntilCardDrops anymore, so we're going to farm all other ones
+					// In order to maximize efficiency, we'll take games that are closest to our HoursPlayed first
+
+					// We must call ToList() here as we can't remove items while enumerating
+					foreach (Game game in GamesToFarm.AsLinqThreadSafeEnumerable().OrderByDescending(static game => game.HoursPlayed).ToList()) {
+						if (!await IsPlayableGame(game).ConfigureAwait(false)) {
+							GamesToFarm.Remove(game);
+
+							continue;
+						}
+
+						innerGamesToFarm.Add(game);
+
+						// There is no need to check all games at once, allow maximum of MaxGamesPlayedConcurrently in this batch
+						if (innerGamesToFarm.Count >= TickrHandler.MaxGamesPlayedConcurrently) {
+							break;
+						}
+					}
+
+					// If we have no playable games to farm, we're done
+					if (innerGamesToFarm.Count == 0) {
+						break;
+					}
+
+					// Otherwise, we farm our innerGamesToFarm batch until any game hits HoursUntilCardDrops
+					if (await FarmMultiple(innerGamesToFarm).ConfigureAwait(false)) {
+						Bot.TickrLogger.LogGenericInfo(Strings.FormatIdlingFinishedForGames(string.Join(", ", innerGamesToFarm.Select(static game => game.AppID))));
+					} else {
+						NowFarming = false;
+
+						GamesToFarm.Clear();
+
+						return;
+					}
+				}
+			} else {
+				// If we have unrestricted card drops, we use simple algorithm
+				Bot.TickrLogger.LogGenericInfo(Strings.FormatChosenFarmingAlgorithm("Simple"));
+
+				while (GamesToFarm.Count > 0) {
+					// In simple algorithm we're going to farm anything that is playable, regardless of hours
+					Game game = GamesToFarm.First();
+
+					if (!await IsPlayableGame(game).ConfigureAwait(false)) {
+						GamesToFarm.Remove(game);
+
+						continue;
+					}
+
+					if (await FarmSolo(game).ConfigureAwait(false)) {
+						continue;
+					}
+
+					NowFarming = false;
+
+					return;
+				}
+			}
+		} while ((await IsAnythingToFarm().ConfigureAwait(false)).GetValueOrDefault());
+
+		NowFarming = false;
+
+		Bot.TickrLogger.LogGenericInfo(Strings.IdlingFinished);
+		await Bot.OnFarmingFinished(true).ConfigureAwait(false);
+	}
+
+	private async Task<bool> FarmCards(Game game) {
+		ArgumentNullException.ThrowIfNull(game);
+
+		if (game.AppID != game.PlayableAppID) {
+			Bot.TickrLogger.LogGenericWarning(Strings.FormatWarningIdlingGameMismatch(game.AppID, game.GameName, game.PlayableAppID));
+		}
+
+		await Bot.IdleGame(game).ConfigureAwait(false);
+
+		bool keepFarming = true;
+		DateTime endFarmingDate = DateTime.UtcNow.AddHours(TickrApp.GlobalConfig?.MaxFarmingTime ?? GlobalConfig.DefaultMaxFarmingTime);
+
+		while ((DateTime.UtcNow < endFarmingDate) && (await ShouldFarm(game).ConfigureAwait(false)).GetValueOrDefault(true)) {
+			Bot.TickrLogger.LogGenericInfo(Strings.FormatStillIdling(game.AppID, game.GameName));
+
+			DateTime startFarmingPeriod = DateTime.UtcNow;
+
+			if (FarmingResetEvent?.Task.IsCompleted != false) {
+				FarmingResetEvent = new TaskCompletionSource<bool>();
+			}
+
+			TimeSpan timeSpan = TimeSpan.FromMinutes(TickrApp.GlobalConfig?.FarmingDelay ?? GlobalConfig.DefaultFarmingDelay) + TimeSpan.FromSeconds(ExtraFarmingDelaySeconds);
+
+			try {
+				keepFarming = await FarmingResetEvent.Task.WaitAsync(timeSpan).ConfigureAwait(false);
+
+				if (keepFarming) {
+					// We've got an event that suggests item drop, wait for a brief moment to fight with potential cache issues
+					await Task.Delay(2000).ConfigureAwait(false);
+				}
+			} catch (TimeoutException e) {
+				Bot.TickrLogger.LogGenericDebuggingException(e);
+			}
+
+			// Don't forget to update our GamesToFarm hours
+			game.HoursPlayed += (float) DateTime.UtcNow.Subtract(startFarmingPeriod).TotalHours;
+
+			if (!keepFarming) {
+				break;
+			}
+		}
+
+		Bot.TickrLogger.LogGenericInfo(Strings.FormatStoppedIdling(game.AppID, game.GameName));
+
+		return keepFarming;
+	}
+
+	private async Task<bool> FarmHours(HashSet<Game> games) {
+		if ((games == null) || (games.Count == 0)) {
+			throw new ArgumentNullException(nameof(games));
+		}
+
+		float maxHour = games.Max(static game => game.HoursPlayed);
+
+		if (maxHour < 0) {
+			Bot.TickrLogger.LogNullError(maxHour);
+
+			return false;
+		}
+
+		if (maxHour >= Bot.BotConfig.HoursUntilCardDrops) {
+			Bot.TickrLogger.LogGenericError(Strings.FormatErrorIsInvalid(nameof(maxHour)));
+
+			return true;
+		}
+
+		await Bot.IdleGames(games).ConfigureAwait(false);
+
+		bool keepFarming = true;
+
+		while (maxHour < Bot.BotConfig.HoursUntilCardDrops) {
+			Bot.TickrLogger.LogGenericInfo(Strings.FormatStillIdlingList(string.Join(", ", games.Select(static game => game.AppID))));
+
+			DateTime startFarmingPeriod = DateTime.UtcNow;
+
+			if (FarmingResetEvent?.Task.IsCompleted != false) {
+				FarmingResetEvent = new TaskCompletionSource<bool>();
+			}
+
+			TimeSpan timeSpan = TimeSpan.FromMinutes(TickrApp.GlobalConfig?.FarmingDelay ?? GlobalConfig.DefaultFarmingDelay) + TimeSpan.FromSeconds(ExtraFarmingDelaySeconds);
+
+			try {
+				keepFarming = await FarmingResetEvent.Task.WaitAsync(timeSpan).ConfigureAwait(false);
+			} catch (TimeoutException e) {
+				Bot.TickrLogger.LogGenericDebuggingException(e);
+			}
+
+			// Don't forget to update our GamesToFarm hours
+			float timePlayed = (float) DateTime.UtcNow.Subtract(startFarmingPeriod).TotalHours;
+
+			foreach (Game game in games) {
+				game.HoursPlayed += timePlayed;
+			}
+
+			if (!keepFarming) {
+				break;
+			}
+
+			maxHour += timePlayed;
+		}
+
+		Bot.TickrLogger.LogGenericInfo(Strings.FormatStoppedIdlingList(string.Join(", ", games.Select(static game => game.AppID))));
+
+		return keepFarming;
+	}
+
+	private async Task<bool> FarmMultiple(HashSet<Game> games) {
+		if ((games == null) || (games.Count == 0)) {
+			throw new ArgumentNullException(nameof(games));
+		}
+
+		CurrentGamesFarming.ReplaceWith(games);
+
+		if (games.Count == 1) {
+			Game game = games.First();
+			Bot.TickrLogger.LogGenericInfo(Strings.FormatNowIdling(game.AppID, game.GameName));
+		} else {
+			Bot.TickrLogger.LogGenericInfo(Strings.FormatNowIdlingList(string.Join(", ", games.Select(static game => game.AppID))));
+		}
+
+		bool result = await FarmHours(games).ConfigureAwait(false);
+		CurrentGamesFarming.Clear();
+
+		return result;
+	}
+
+	private async Task<bool> FarmSolo(Game game) {
+		ArgumentNullException.ThrowIfNull(game);
+
+		CurrentGamesFarming.Add(game);
+
+		Bot.TickrLogger.LogGenericInfo(Strings.FormatNowIdling(game.AppID, game.GameName));
+
+		bool result = await FarmCards(game).ConfigureAwait(false);
+		CurrentGamesFarming.Clear();
+
+		if (!result) {
+			return false;
+		}
+
+		GamesToFarm.Remove(game);
+
+		Bot.TickrLogger.LogGenericInfo(Strings.FormatIdlingFinishedForGame(game.AppID, game.GameName, TimeSpan.FromHours(game.HoursPlayed).ToHumanReadable()));
+
+		return true;
+	}
+
+	private async Task<Game?> GetGameCardsInfo(uint appID) {
+		ArgumentOutOfRangeException.ThrowIfZero(appID);
+
+		using IDocument? htmlDocument = await Bot.TickrWebHandler.GetGameCardsPage(appID).ConfigureAwait(false);
+
+		if (htmlDocument == null) {
+			return null;
+		}
+
+		IHtmlCollection<IElement> profileHeaderNodes = htmlDocument.QuerySelectorAll("span[class='profile_small_header_location']");
+
+		if (profileHeaderNodes.Count == 0) {
+			// Normally we should log null error here, but here's why we don't: https://www.youtube.com/watch?v=nSKp2StlS6s&t=40s
+			Bot.TickrLogger.LogGenericWarning(Strings.FormatErrorIsInvalid(nameof(profileHeaderNodes)));
+
+			return null;
+		}
+
+		IElement lastProfileHeaderNode = profileHeaderNodes[^1];
+
+		string name = lastProfileHeaderNode.TextContent.Trim();
+
+		if (string.IsNullOrEmpty(name)) {
+			Bot.TickrLogger.LogNullError(name);
+
+			return null;
+		}
+
+		IElement? hoursNode = htmlDocument.QuerySelector("div[class='badge_title_stats_playtime']");
+
+		if (hoursNode == null) {
+			Bot.TickrLogger.LogNullError(hoursNode);
+
+			return null;
+		}
+
+		float hours = 0.0F;
+		Match hoursMatch = GeneratedRegexes.Decimal().Match(hoursNode.TextContent);
+
+		// This might fail if we have exactly 0.0 hours played, as it's not printed in that case - that's fine
+		if (hoursMatch.Success) {
+			if (!float.TryParse(hoursMatch.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out hours) || (hours <= 0.0F)) {
+				Bot.TickrLogger.LogNullError(hours);
+
+				return null;
+			}
+		}
+
+		IElement? progressNode = htmlDocument.QuerySelector("span[class='progress_info_bold']");
+
+		if (progressNode == null) {
+			Bot.TickrLogger.LogNullError(progressNode);
+
+			return null;
+		}
+
+		string progress = progressNode.TextContent;
+
+		if (string.IsNullOrEmpty(progress)) {
+			Bot.TickrLogger.LogNullError(progress);
+
+			return null;
+		}
+
+		ushort cardsRemaining = 0;
+
+		Match match = GeneratedRegexes.Digits().Match(progress);
+
+		if (match.Success) {
+			if (!ushort.TryParse(match.Value, out cardsRemaining) || (cardsRemaining == 0)) {
+				Bot.TickrLogger.LogNullError(cardsRemaining);
+
+				return null;
+			}
+		}
+
+		byte badgeLevel = 0;
+
+		IElement? levelNode = htmlDocument.QuerySelectorAll("div[class='badge_info_description']").Skip(1).FirstOrDefault();
+
+		// There is no levelNode if we didn't craft that badge yet (level 0)
+		if (levelNode != null) {
+			string levelText = levelNode.TextContent;
+
+			if (string.IsNullOrEmpty(levelText)) {
+				Bot.TickrLogger.LogNullError(levelText);
+
+				return null;
+			}
+
+			int levelStartIndex = levelText.IndexOf("Level ", StringComparison.OrdinalIgnoreCase);
+
+			if (levelStartIndex < 0) {
+				Bot.TickrLogger.LogNullError(levelStartIndex);
+
+				return null;
+			}
+
+			levelStartIndex += 6;
+
+			if (levelText.Length <= levelStartIndex) {
+				Bot.TickrLogger.LogNullError(levelStartIndex);
+
+				return null;
+			}
+
+			int levelEndIndex = levelText.IndexOf(',', levelStartIndex);
+
+			if (levelEndIndex <= levelStartIndex) {
+				Bot.TickrLogger.LogNullError(levelEndIndex);
+
+				return null;
+			}
+
+			levelText = levelText[levelStartIndex..levelEndIndex];
+
+			if (!byte.TryParse(levelText, out badgeLevel) || badgeLevel is 0 or > 5) {
+				Bot.TickrLogger.LogNullError(badgeLevel);
+
+				return null;
+			}
+		}
+
+		return new Game(appID, name, hours, cardsRemaining, badgeLevel);
+	}
+
+	private async Task<bool?> IsAnythingToFarm() {
+		// Find the number of badge pages
+		Bot.TickrLogger.LogGenericInfo(Strings.CheckingFirstBadgePage);
+
+		using IDocument? htmlDocument = await Bot.TickrWebHandler.GetBadgePage(1, Bot.BotConfig.FarmingPreferences.HasFlag(BotConfig.EFarmingPreferences.EnableRiskyCardsDiscovery) ? (byte) 2 : WebBrowser.MaxTries).ConfigureAwait(false);
+
+		if (htmlDocument == null) {
+			Bot.TickrLogger.LogGenericWarning(Strings.WarningCouldNotCheckBadges);
+
+			if (!Bot.BotConfig.FarmingPreferences.HasFlag(BotConfig.EFarmingPreferences.EnableRiskyCardsDiscovery)) {
+				return null;
+			}
+
+			return await IsAnythingToFarmRisky().ConfigureAwait(false);
+		}
+
+		ShouldSkipNewGamesIfPossible = false;
+
+		byte maxPages = 1;
+
+		IHtmlCollection<IElement> pageLinkNodes = htmlDocument.QuerySelectorAll("a[class='pagelink']");
+
+		if (pageLinkNodes.Count > 0) {
+			IElement lastPageLinkNode = pageLinkNodes[^1];
+
+			string lastPage = lastPageLinkNode.TextContent;
+
+			if (string.IsNullOrEmpty(lastPage)) {
+				Bot.TickrLogger.LogNullError(lastPage);
+
+				return null;
+			}
+
+			if (!byte.TryParse(lastPage, out maxPages) || (maxPages == 0)) {
+				Bot.TickrLogger.LogNullError(maxPages);
+
+				return null;
+			}
+		}
+
+		GamesToFarm.Clear();
+
+		HashSet<uint>? privateAppIDs = await Bot.TickrHandler.GetPrivateAppIDs().ConfigureAwait(false);
+
+		ConcurrentHashSet<uint> parsedAppIDs = [];
+
+		Task mainTask = CheckPage(htmlDocument, parsedAppIDs, privateAppIDs);
+
+		bool allTasksSucceeded = true;
+
+		switch (TickrApp.GlobalConfig?.OptimizationMode) {
+			case GlobalConfig.EOptimizationMode.MinMemoryUsage:
+				await mainTask.ConfigureAwait(false);
+
+				if (maxPages > 1) {
+					Bot.TickrLogger.LogGenericInfo(Strings.CheckingOtherBadgePages);
+
+					for (byte page = 2; page <= maxPages; page++) {
+						if (!await CheckPage(page, parsedAppIDs, privateAppIDs).ConfigureAwait(false)) {
+							allTasksSucceeded = false;
+						}
+					}
+				}
+
+				break;
+			default:
+				if (maxPages > 1) {
+					Bot.TickrLogger.LogGenericInfo(Strings.CheckingOtherBadgePages);
+
+					HashSet<Task<bool>> tasks = [with(maxPages - 1)];
+
+					for (byte page = 2; page <= maxPages; page++) {
+						// ReSharper disable once InlineTemporaryVariable - we need a copy of variable being passed when in for loops, as loop will proceed before our task is launched
+						byte currentPage = page;
+						tasks.Add(CheckPage(currentPage, parsedAppIDs, privateAppIDs));
+					}
+
+					bool[] taskResults = await Task.WhenAll(tasks).ConfigureAwait(false);
+
+					if (taskResults.Any(static result => !result)) {
+						allTasksSucceeded = false;
+					}
+				}
+
+				await mainTask.ConfigureAwait(false);
+
+				break;
+		}
+
+		if (allTasksSucceeded) {
+			Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.IntersectWith(GamesToFarm.Select(static game => game.AppID));
+		}
+
+		if (GamesToFarm.Count == 0) {
+			ShouldResumeFarming = false;
+
+			// Allow changing to risky algorithm only if we failed at least some badge pages and we have the prop enabled
+			if (allTasksSucceeded || !Bot.BotConfig.FarmingPreferences.HasFlag(BotConfig.EFarmingPreferences.EnableRiskyCardsDiscovery)) {
+				return false;
+			}
+
+			return await IsAnythingToFarmRisky().ConfigureAwait(false);
+		}
+
+		ShouldResumeFarming = true;
+		await SortGamesToFarm().ConfigureAwait(false);
+
+		return true;
+	}
+
+	private async Task<bool?> IsAnythingToFarmRisky() {
+		Task<ImmutableHashSet<BoosterCreatorEntry>?> boosterCreatorEntriesTask = Bot.TickrWebHandler.GetBoosterCreatorEntries();
+
+		HashSet<uint>? boosterElibility = await Bot.TickrWebHandler.GetBoosterEligibility().ConfigureAwait(false);
+
+		if (boosterElibility == null) {
+			Bot.TickrLogger.LogGenericWarning(Strings.WarningCouldNotCheckBadges);
+
+			return null;
+		}
+
+		ImmutableHashSet<BoosterCreatorEntry>? boosterCreatorEntries = await boosterCreatorEntriesTask.ConfigureAwait(false);
+
+		if (boosterCreatorEntries == null) {
+			Bot.TickrLogger.LogGenericWarning(Strings.WarningCouldNotCheckBadges);
+
+			return null;
+		}
+
+		GamesToFarm.Clear();
+
+		DateTime now = DateTime.UtcNow;
+
+		byte failuresInRow = 0;
+
+		// Normally we apply ordering after GamesToFarm are already found, but since this method is risky and greedy, we do as much as possible to allow user to optimize it
+		// In particular, firstly we give priority to appIDs that we already found out before, either rule them out, or prioritize
+		// Next, we apply farm priority queue right away, by both considering apps (if FarmPriorityQueueOnly) as well as giving priority to those that user specified
+		// Lastly, we forcefully apply random order to those considered the same in value, as we can't really afford massive amount of misses in a row
+		Dictionary<uint, string> gamesToFarm = boosterCreatorEntries.Where(entry => !boosterElibility.Contains(entry.AppID) && (!Bot.BotDatabase.FarmingRiskyIgnoredAppIDs.TryGetValue(entry.AppID, out DateTime ignoredUntil) || (ignoredUntil < now)) && ShouldIdle(entry.AppID)).ToDictionary(static entry => entry.AppID, static entry => entry.Name);
+
+		HashSet<uint>? privateAppIDs = await Bot.TickrHandler.GetPrivateAppIDs().ConfigureAwait(false);
+
+		if (privateAppIDs != null) {
+			foreach (uint appID in privateAppIDs) {
+				if (!gamesToFarm.TryGetValue(appID, out string? name)) {
+					continue;
+				}
+
+				// This game is private, it won't drop any cards until removal
+				Bot.TickrLogger.LogGenericInfo(Strings.FormatIdlingGameNotPossiblePrivate(appID, name));
+
+				gamesToFarm.Remove(appID);
+			}
+		}
+
+		foreach (uint appID in Bot.BotDatabase.FarmingRiskyIgnoredAppIDs.Keys.Where(appID => !gamesToFarm.ContainsKey(appID))) {
+			Bot.BotDatabase.FarmingRiskyIgnoredAppIDs.Remove(appID);
+		}
+
+		Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.IntersectWith(gamesToFarm.Keys);
+
+#pragma warning disable CA5394 // This call isn't used in a security-sensitive manner
+		IOrderedEnumerable<uint> gamesToFarmOrdered = gamesToFarm.Keys.OrderByDescending(Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.Contains).ThenByDescending(Bot.IsPriorityIdling).ThenBy(static _ => Random.Shared.Next());
+#pragma warning restore CA5394 // This call isn't used in a security-sensitive manner
+
+		DateTime ignoredUntil = now.AddDays(DaysToIgnoreRiskyAppIDs);
+
+		foreach (uint appID in gamesToFarmOrdered) {
+			Game? game = await GetGameCardsInfo(appID).ConfigureAwait(false);
+
+			if (game == null) {
+				if (++failuresInRow >= WebBrowser.MaxTries) {
+					// We're not going to check further
+					break;
+				}
+
+				continue;
+			}
+
+			failuresInRow = 0;
+
+			if (game.CardsRemaining == 0) {
+				Bot.BotDatabase.FarmingRiskyIgnoredAppIDs[appID] = ignoredUntil;
+				Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.Remove(appID);
+
+				continue;
+			}
+
+			Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.Add(appID);
+
+			GamesToFarm.Add(game);
+
+			if ((game.HoursPlayed >= Bot.BotConfig.HoursUntilCardDrops) || (GamesToFarm.Count >= TickrHandler.MaxGamesPlayedConcurrently)) {
+				// Avoid further parsing in this risky method, we have enough for now
+				break;
+			}
+		}
+
+		if (GamesToFarm.Count == 0) {
+			ShouldResumeFarming = ShouldSkipNewGamesIfPossible = false;
+
+			return false;
+		}
+
+		ShouldResumeFarming = ShouldSkipNewGamesIfPossible = true;
+		await SortGamesToFarm().ConfigureAwait(false);
+
+		return true;
+	}
+
+	private async Task<bool> IsPlayableGame(Game game) {
+		ArgumentNullException.ThrowIfNull(game);
+
+		(uint playableAppID, DateTime ignoredUntil, bool ignoredGlobally) = await Bot.GetAppDataForIdling(game.AppID, game.HoursPlayed).ConfigureAwait(false);
+
+		if (playableAppID == 0) {
+			ConcurrentDictionary<uint, DateTime> ignoredAppIDs = ignoredGlobally ? GloballyIgnoredAppIDs : LocallyIgnoredAppIDs;
+
+			ignoredAppIDs[game.AppID] = (ignoredUntil > DateTime.MinValue) && (ignoredUntil < DateTime.MaxValue) ? ignoredUntil : DateTime.UtcNow.AddHours(HoursToIgnore);
+			Bot.TickrLogger.LogGenericInfo(Strings.FormatIdlingGameNotPossible(game.AppID, game.GameName));
+
+			return false;
+		}
+
+		game.PlayableAppID = playableAppID;
+
+		return true;
+	}
+
+	private static async Task<(bool Success, FrozenSet<uint>? Result)> ResolveMarketableAppIDs(CancellationToken cancellationToken) {
+		Bot? bot = Bot.Bots?.Values.FirstOrDefault(static targetBot => targetBot.IsConnectedAndLoggedOn && !string.IsNullOrEmpty(targetBot.AccessToken));
+
+		if (bot == null) {
+			return (false, null);
+		}
+
+		HashSet<uint>? result = await bot.TickrWebHandler.GetAppList().ConfigureAwait(false);
+
+		return (result?.Count > 0, result?.ToFrozenSet());
+	}
+
+	private async Task<bool?> ShouldFarm(Game game) {
+		ArgumentNullException.ThrowIfNull(game);
+
+		Game? latestGameData = await GetGameCardsInfo(game.AppID).ConfigureAwait(false);
+
+		if (latestGameData == null) {
+			Bot.TickrLogger.LogGenericWarning(Strings.FormatWarningCouldNotCheckCardsStatus(game.AppID, game.GameName));
+
+			return null;
+		}
+
+		game.CardsRemaining = latestGameData.CardsRemaining;
+
+		Bot.TickrLogger.LogGenericInfo(Strings.FormatIdlingStatusForGame(game.AppID, game.GameName, game.CardsRemaining));
+
+		if (game.CardsRemaining == 0) {
+			Bot.BotDatabase.FarmingRiskyIgnoredAppIDs[game.AppID] = DateTime.UtcNow.AddDays(DaysToIgnoreRiskyAppIDs);
+			Bot.BotDatabase.FarmingRiskyPrioritizedAppIDs.Remove(game.AppID);
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private bool ShouldIdle(uint appID) {
+		ArgumentOutOfRangeException.ThrowIfZero(appID);
+
+		if (SalesBlacklist.Contains(appID) || (TickrApp.GlobalConfig?.Blacklist.Contains(appID) == true) || Bot.IsBlacklistedFromIdling(appID) || (Bot.BotConfig.FarmingPreferences.HasFlag(BotConfig.EFarmingPreferences.FarmPriorityQueueOnly) && !Bot.IsPriorityIdling(appID))) {
+			// We're configured to ignore this appID, so skip it
+			return false;
+		}
+
+		foreach (ConcurrentDictionary<uint, DateTime> sourceOfIgnoredAppIDs in SourcesOfIgnoredAppIDs) {
+			if (!sourceOfIgnoredAppIDs.TryGetValue(appID, out DateTime ignoredUntil)) {
+				continue;
+			}
+
+			if (ignoredUntil > DateTime.UtcNow) {
+				// This game is still ignored
+				return false;
+			}
+
+			// This game served its time as being ignored
+			sourceOfIgnoredAppIDs.TryRemove(appID, out _);
+		}
+
+		return true;
+	}
+
+	private async Task SortGamesToFarm() {
+		// Put priority idling appIDs on top
+		IOrderedEnumerable<Game> orderedGamesToFarm = GamesToFarm.AsLinqThreadSafeEnumerable().OrderByDescending(game => Bot.IsPriorityIdling(game.AppID));
+
+		foreach (BotConfig.EFarmingOrder farmingOrder in Bot.BotConfig.FarmingOrders) {
+			switch (farmingOrder) {
+				case BotConfig.EFarmingOrder.Unordered:
+					break;
+				case BotConfig.EFarmingOrder.AppIDsAscending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenBy(static game => game.AppID);
+
+					break;
+				case BotConfig.EFarmingOrder.AppIDsDescending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenByDescending(static game => game.AppID);
+
+					break;
+				case BotConfig.EFarmingOrder.BadgeLevelsAscending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenBy(static game => game.BadgeLevel);
+
+					break;
+				case BotConfig.EFarmingOrder.BadgeLevelsDescending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenByDescending(static game => game.BadgeLevel);
+
+					break;
+				case BotConfig.EFarmingOrder.CardDropsAscending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenBy(static game => game.CardsRemaining);
+
+					break;
+				case BotConfig.EFarmingOrder.CardDropsDescending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenByDescending(static game => game.CardsRemaining);
+
+					break;
+				case BotConfig.EFarmingOrder.MarketableAscending:
+				case BotConfig.EFarmingOrder.MarketableDescending:
+					(_, FrozenSet<uint>? marketableAppIDs) = await MarketableAppIDs.GetValue(ECacheFallback.SuccessPreviously).ConfigureAwait(false);
+
+					if (marketableAppIDs?.Count > 0) {
+						FrozenSet<uint> marketableAppIDsCopy = marketableAppIDs;
+
+						orderedGamesToFarm = farmingOrder switch {
+							BotConfig.EFarmingOrder.MarketableAscending => orderedGamesToFarm.ThenBy(game => marketableAppIDsCopy.Contains(game.AppID)),
+							BotConfig.EFarmingOrder.MarketableDescending => orderedGamesToFarm.ThenByDescending(game => marketableAppIDsCopy.Contains(game.AppID)),
+							_ => throw new InvalidOperationException(nameof(farmingOrder))
+						};
+					}
+
+					break;
+				case BotConfig.EFarmingOrder.HoursAscending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenBy(static game => game.HoursPlayed);
+
+					break;
+				case BotConfig.EFarmingOrder.HoursDescending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenByDescending(static game => game.HoursPlayed);
+
+					break;
+				case BotConfig.EFarmingOrder.NamesAscending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenBy(static game => game.GameName);
+
+					break;
+				case BotConfig.EFarmingOrder.NamesDescending:
+					orderedGamesToFarm = orderedGamesToFarm.ThenByDescending(static game => game.GameName);
+
+					break;
+				case BotConfig.EFarmingOrder.Random:
+#pragma warning disable CA5394 // This call isn't used in a security-sensitive manner
+					orderedGamesToFarm = orderedGamesToFarm.ThenBy(static _ => Random.Shared.Next());
+#pragma warning restore CA5394 // This call isn't used in a security-sensitive manner
+
+					break;
+				case BotConfig.EFarmingOrder.RedeemDateTimesAscending:
+				case BotConfig.EFarmingOrder.RedeemDateTimesDescending:
+					Dictionary<uint, DateTime> redeemDates = new(GamesToFarm.Count);
+
+					foreach (Game game in GamesToFarm) {
+						DateTime redeemDate = DateTime.MinValue;
+						HashSet<uint>? packageIDs = TickrApp.GlobalDatabase?.GetPackageIDs(game.AppID, Bot.OwnedPackages.Keys);
+
+						if (packageIDs != null) {
+							foreach (uint packageID in packageIDs) {
+								if (!Bot.OwnedPackages.TryGetValue(packageID, out LicenseData? packageData)) {
+									Bot.TickrLogger.LogNullError(packageData);
+
+									return;
+								}
+
+								if (packageData.TimeCreated > redeemDate) {
+									redeemDate = packageData.TimeCreated;
+								}
+							}
+						}
+
+						redeemDates[game.AppID] = redeemDate;
+					}
+
+					orderedGamesToFarm = farmingOrder switch {
+						// ReSharper disable once AccessToModifiedClosure - you're wrong
+						BotConfig.EFarmingOrder.RedeemDateTimesAscending => orderedGamesToFarm.ThenBy(game => redeemDates[game.AppID]),
+
+						// ReSharper disable once AccessToModifiedClosure - you're wrong
+						BotConfig.EFarmingOrder.RedeemDateTimesDescending => orderedGamesToFarm.ThenByDescending(game => redeemDates[game.AppID]),
+
+						_ => throw new InvalidOperationException(nameof(farmingOrder))
+					};
+
+					break;
+				default:
+					Bot.TickrLogger.LogGenericError(Strings.FormatWarningUnknownValuePleaseReport(nameof(farmingOrder), farmingOrder));
+
+					return;
+			}
+		}
+
+		// We must call ToList() here as we can't do in-place replace
+		List<Game> gamesToFarm = [.. orderedGamesToFarm];
+		GamesToFarm.ReplaceWith(gamesToFarm);
+	}
+}

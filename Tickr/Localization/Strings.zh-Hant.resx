@@ -1,0 +1,825 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns="" id="root">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string"/>
+							<xsd:attribute name="type" type="xsd:string"/>
+							<xsd:attribute name="mimetype" type="xsd:string"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string"/>
+							<xsd:attribute name="name" type="xsd:string"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+							<xsd:attribute ref="xml:space"/>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+		</value>
+	</resheader>
+	<data name="AcceptingTrade" xml:space="preserve">
+		<value>接受交易︰{0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="AutoUpdateCheckInfo" xml:space="preserve">
+		<value>Tickr 將每隔 {0} 自動檢查新版本。</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "24 hours")</comment>
+	</data>
+	<data name="Content" xml:space="preserve">
+		<value>內容︰
+{0}</value>
+		<comment>{0} will be replaced by content string. Please note that this string should include newline for formatting.</comment>
+	</data>
+	<data name="ErrorConfigPropertyInvalid" xml:space="preserve">
+		<value>設定的 {0} 屬性無效︰{1}</value>
+		<comment>{0} will be replaced by name of the configuration property, {1} will be replaced by invalid value</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionInfo" xml:space="preserve">
+		<value>Tickr V{0} 在能初始化核心紀錄模組之前就遇到嚴重錯誤！</value>
+		<comment>{0} will be replaced by version number</comment>
+	</data>
+	<data name="ErrorEarlyFatalExceptionPrint" xml:space="preserve">
+		<value>例外錯誤：{0}() {1}
+堆疊追踪：
+{2}</value>
+		<comment>{0} will be replaced by function name, {1} will be replaced by exception message, {2} will be replaced by entire stack trace. Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="ErrorExitingWithNonZeroErrorCode" xml:space="preserve">
+		<value>以 {0} 錯誤碼退出！</value>
+		<comment>{0} will be replaced by error code (number)</comment>
+	</data>
+	<data name="ErrorFailingRequest" xml:space="preserve">
+		<value>請求失敗︰ {0}</value>
+		<comment>{0} will be replaced by URL of the request</comment>
+	</data>
+	<data name="ErrorGlobalConfigNotLoaded" xml:space="preserve">
+		<value>無法載入全域設定檔，請確保 {0} 存在且有效！如果仍有問題，請參閱 Wiki 中的「新手上路」。</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorIsInvalid" xml:space="preserve">
+		<value>{0} 無效！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorNoBotsDefined" xml:space="preserve">
+		<value>沒有設定任何 Bot。您是否忘記設定 Tickr 了？如果您不明白發生了什麼，請閱讀 Wiki 上的「新手上路」。</value>
+	</data>
+	<data name="ErrorObjectIsNull" xml:space="preserve">
+		<value>{0} 為空值！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorParsingObject" xml:space="preserve">
+		<value>無法剖析 {0}！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="ErrorRequestFailedTooManyTimes" xml:space="preserve">
+		<value>嘗試請求 {0} 次後失敗！</value>
+		<comment>{0} will be replaced by maximum number of tries</comment>
+	</data>
+	<data name="ErrorUpdateCheckFailed" xml:space="preserve">
+		<value>無法檢查最新版本！</value>
+	</data>
+	<data name="ErrorUpdateNoAssetForThisVersion" xml:space="preserve">
+		<value>無法繼續進行更新，因為沒有與目前執行中的版本相關的資源檔案！無法自動更新到該版本。</value>
+	</data>
+	<data name="ErrorUpdateNoAssets" xml:space="preserve">
+		<value>無法繼續進行更新，因為該版本並未提供任何資源檔案！</value>
+	</data>
+	<data name="ErrorUserInputRunningInHeadlessMode" xml:space="preserve">
+		<value>收到一個使用者輸入請求，但程序目前正以無頭模式執行！</value>
+	</data>
+	<data name="Exiting" xml:space="preserve">
+		<value>正在退出…</value>
+	</data>
+	<data name="WarningFailed" xml:space="preserve">
+		<value>失敗！</value>
+	</data>
+	<data name="GlobalConfigChanged" xml:space="preserve">
+		<value>已修改全域設定檔！</value>
+	</data>
+	<data name="ErrorGlobalConfigRemoved" xml:space="preserve">
+		<value>已刪除全域設定檔！</value>
+	</data>
+	<data name="IgnoringTrade" xml:space="preserve">
+		<value>正在忽略交易：{0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="LoggingIn" xml:space="preserve">
+		<value>正在登入到 {0}…</value>
+		<comment>{0} will be replaced by service's name</comment>
+	</data>
+	<data name="NoBotsAreRunning" xml:space="preserve">
+		<value>沒有執行中的 Bot，正在退出…</value>
+	</data>
+	<data name="RefreshingOurSession" xml:space="preserve">
+		<value>正在更新工作階段！</value>
+	</data>
+	<data name="RejectingTrade" xml:space="preserve">
+		<value>正在拒絕交易︰{0}</value>
+		<comment>{0} will be replaced by trade number</comment>
+	</data>
+	<data name="Restarting" xml:space="preserve">
+		<value>正在重新啟動…</value>
+	</data>
+	<data name="Starting" xml:space="preserve">
+		<value>正在啟動…</value>
+	</data>
+	<data name="Success" xml:space="preserve">
+		<value>成功！</value>
+	</data>
+	<data name="UnlockingParentalAccount" xml:space="preserve">
+		<value>正在解鎖家庭監護帳號…</value>
+	</data>
+	<data name="UpdateCheckingNewVersion" xml:space="preserve">
+		<value>正在檢查新版本…</value>
+	</data>
+	<data name="UpdateDownloadingNewVersion" xml:space="preserve">
+		<value>正在下載新版本：{0} ({1} MB)…等待期間，若您喜歡這個軟體，請考慮贊助 Tickr！:)</value>
+		<comment>{0} will be replaced by version string, {1} will be replaced by update size (in megabytes)</comment>
+	</data>
+	<data name="UpdateFinished" xml:space="preserve">
+		<value>更新完成！</value>
+	</data>
+	<data name="UpdateNewVersionAvailable" xml:space="preserve">
+		<value>Tickr 有新版本可用！請考慮手動更新！</value>
+	</data>
+	<data name="UpdateVersionInfo" xml:space="preserve">
+		<value>目前版本：{0} | 最新版本：{1}</value>
+		<comment>{0} will be replaced by current version, {1} will be replaced by remote version</comment>
+	</data>
+	<data name="UserInputDeviceConfirmation" xml:space="preserve">
+		<value>請查看您的 Steam 行動裝置應用程式，您應該已收到登入請求通知。若您已收到且確認了登入請求，請輸入 Y；若您想要提供登入代碼，則輸入 N：</value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteam2FA" xml:space="preserve">
+		<value>請輸入您的 Steam 行動驗證器上的雙重驗證代碼：</value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamGuard" xml:space="preserve">
+		<value>請輸入寄送至您的電子郵件的 Steam Guard 驗證碼：</value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamLogin" xml:space="preserve">
+		<value>請輸入您的 Steam 帳號：</value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamParentalCode" xml:space="preserve">
+		<value>請輸入 Steam 家庭監護 PIN 碼：</value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="UserInputSteamPassword" xml:space="preserve">
+		<value>請輸入您的 Steam 密碼：</value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="WarningUnknownValuePleaseReport" xml:space="preserve">
+		<value>收到 {0} 的未知值，請回報這個問題：{1}</value>
+		<comment>{0} will be replaced by object's name, {1} will be replaced by value for that object</comment>
+	</data>
+	<data name="IPCReady" xml:space="preserve">
+		<value>IPC 伺服器已就緒！</value>
+	</data>
+	<data name="IPCStarting" xml:space="preserve">
+		<value>正在啟動 IPC 伺服器…</value>
+	</data>
+	<data name="BotAlreadyStopped" xml:space="preserve">
+		<value>這個 Bot 已經停止了！</value>
+	</data>
+	<data name="BotNotFound" xml:space="preserve">
+		<value>找不到任何名稱為 {0} 的 Bot！</value>
+		<comment>{0} will be replaced by bot's name query (string)</comment>
+	</data>
+	<data name="BotStatusOverview" xml:space="preserve">
+		<value>正在執行 {0}/{1} 個 Bot，共有 {2} 個遊戲（{3} 張卡片）等待掛卡。</value>
+		<comment>{0} will be replaced by number of active bots, {1} will be replaced by total number of bots, {2} will be replaced by total number of games left to farm, {3} will be replaced by total number of cards left to farm</comment>
+	</data>
+	<data name="BotStatusIdling" xml:space="preserve">
+		<value>Bot 正在掛卡的遊戲：{0}（{1}，還有 {2} 張卡片會掉落），共有 {3} 個遊戲（{4} 張卡片）等待掛卡（仍需約 {5}）。</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm, {3} will be replaced by total number of games to farm, {4} will be replaced by total number of cards to farm, {5} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="BotStatusIdlingList" xml:space="preserve">
+		<value>Bot 正在掛卡的遊戲：{0}，共有 {1} 個遊戲（{2} 張卡片）等待掛卡（仍需約 {3}）。</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), {1} will be replaced by total number of games to farm, {2} will be replaced by total number of cards to farm, {3} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="CheckingFirstBadgePage" xml:space="preserve">
+		<value>正在檢查徽章頁面第一頁…</value>
+	</data>
+	<data name="CheckingOtherBadgePages" xml:space="preserve">
+		<value>正在檢查其他徽章頁面…</value>
+	</data>
+	<data name="ChosenFarmingAlgorithm" xml:space="preserve">
+		<value>選擇的掛卡演算法：{0}</value>
+		<comment>{0} will be replaced by the name of chosen farming algorithm</comment>
+	</data>
+	<data name="Done" xml:space="preserve">
+		<value>完成！</value>
+	</data>
+	<data name="GamesToIdle" xml:space="preserve">
+		<value>共有 {0} 個遊戲（{1} 張卡片）需要掛卡（仍需約 {2}）…</value>
+		<comment>{0} will be replaced by number of games, {1} will be replaced by number of cards, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinished" xml:space="preserve">
+		<value>完成掛卡！</value>
+	</data>
+	<data name="IdlingFinishedForGame" xml:space="preserve">
+		<value>完成掛卡：{0}（{1}），共耗時 {2}！</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by translated TimeSpan string (such as "1 day, 5 hours and 30 minutes")</comment>
+	</data>
+	<data name="IdlingFinishedForGames" xml:space="preserve">
+		<value>已完成掛卡的遊戲：{0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="IdlingStatusForGame" xml:space="preserve">
+		<value>{0}（{1}）的掛卡狀態：還剩 {2} 張卡片</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by number of cards left to farm</comment>
+	</data>
+	<data name="IdlingStopped" xml:space="preserve">
+		<value>已停止掛卡！</value>
+	</data>
+	<data name="IgnoredPermanentPauseEnabled" xml:space="preserve">
+		<value>正在忽略此請求，因為強制暫停已啟用！</value>
+	</data>
+	<data name="NothingToIdle" xml:space="preserve">
+		<value>本帳號目前沒有需要掛卡的遊戲！</value>
+	</data>
+	<data name="NowIdling" xml:space="preserve">
+		<value>正在掛卡：{0}（{1}）</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="NowIdlingList" xml:space="preserve">
+		<value>正在掛卡：{0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="PlayingNotAvailable" xml:space="preserve">
+		<value>目前無法執行掛卡，我們將稍後再試！</value>
+	</data>
+	<data name="StillIdling" xml:space="preserve">
+		<value>仍在掛卡：{0}（{1}）</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StillIdlingList" xml:space="preserve">
+		<value>仍在掛卡：{0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="StoppedIdling" xml:space="preserve">
+		<value>停止掛卡：{0}（{1}）</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="StoppedIdlingList" xml:space="preserve">
+		<value>停止掛卡：{0}</value>
+		<comment>{0} will be replaced by list of the games (IDs, numbers), separated by a comma</comment>
+	</data>
+	<data name="UnknownCommand" xml:space="preserve">
+		<value>未知的指令！</value>
+	</data>
+	<data name="WarningCouldNotCheckBadges" xml:space="preserve">
+		<value>無法取得徽章資訊，我們將稍後再試！</value>
+	</data>
+	<data name="WarningCouldNotCheckCardsStatus" xml:space="preserve">
+		<value>無法檢查卡片狀態：{0}（{1}），我們將稍後再試！</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotAcceptingGift" xml:space="preserve">
+		<value>正在接受禮物：{0}…</value>
+		<comment>{0} will be replaced by giftID (number)</comment>
+	</data>
+	<data name="BotAccountLimited" xml:space="preserve">
+		<value>本帳號為受限帳號，在限制解除前將無法掛卡！</value>
+	</data>
+	<data name="BotAddLicense" xml:space="preserve">
+		<value>ID：{0} | 狀態：{1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotAddLicenseWithItems" xml:space="preserve">
+		<value>ID：{0} | 狀態：{1} | 物品：{2}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by status string, {2} will be replaced by list of granted IDs (numbers), separated by a comma</comment>
+	</data>
+	<data name="BotAlreadyRunning" xml:space="preserve">
+		<value>Bot 已在執行中！</value>
+	</data>
+	<data name="BotAuthenticatorConverting" xml:space="preserve">
+		<value>正在將 .maFile 轉換成 Tickr 的檔案格式…</value>
+	</data>
+	<data name="BotAuthenticatorImportFinished" xml:space="preserve">
+		<value>已成功匯入行動驗證器！</value>
+	</data>
+	<data name="BotAuthenticatorToken" xml:space="preserve">
+		<value>雙重驗證權杖：{0}</value>
+		<comment>{0} will be replaced by generated 2FA token (string)</comment>
+	</data>
+	<data name="BotAutomaticIdlingNowPaused" xml:space="preserve">
+		<value>已暫停自動掛卡！</value>
+	</data>
+	<data name="BotAutomaticIdlingNowResumed" xml:space="preserve">
+		<value>已繼續自動掛卡！</value>
+	</data>
+	<data name="BotAutomaticIdlingPausedAlready" xml:space="preserve">
+		<value>已經暫停自動掛卡！</value>
+	</data>
+	<data name="BotAutomaticIdlingResumedAlready" xml:space="preserve">
+		<value>已經繼續自動掛卡！</value>
+	</data>
+	<data name="BotConnected" xml:space="preserve">
+		<value>已連線至 Steam！</value>
+	</data>
+	<data name="BotDisconnected" xml:space="preserve">
+		<value>已與 Steam 中斷連線！</value>
+	</data>
+	<data name="BotDisconnecting" xml:space="preserve">
+		<value>正在中斷連線…</value>
+	</data>
+	<data name="BotInstanceNotStartingBecauseDisabled" xml:space="preserve">
+		<value>這個 Bot 將不會啟動，因為它在設定檔中被停用！</value>
+	</data>
+	<data name="BotInvalidAuthenticatorDuringLogin" xml:space="preserve">
+		<value>已連續收到 {0} 次 TwoFactorCodeMismatch 錯誤碼。您的雙重驗證憑證可能已失效，或者時間不同步，正在中止！</value>
+		<comment>{0} will be replaced by maximum allowed number of failed 2FA attempts</comment>
+	</data>
+	<data name="BotLoggedOff" xml:space="preserve">
+		<value>已從 Steam 登出：{0}</value>
+		<comment>{0} will be replaced by logging off reason (string)</comment>
+	</data>
+	<data name="BotLoggedOn" xml:space="preserve">
+		<value>已成功登入帳號 {0}。</value>
+		<comment>{0} will be replaced by steam ID (number)</comment>
+	</data>
+	<data name="BotLoggingIn" xml:space="preserve">
+		<value>正在登入…</value>
+	</data>
+	<data name="BotLogonSessionReplaced" xml:space="preserve">
+		<value>這個帳號似乎正被另一個 Tickr 使用著，這是個未被定義的行為，拒絕讓它繼續執行！</value>
+	</data>
+	<data name="BotLootingFailed" xml:space="preserve">
+		<value>交易提案失敗！</value>
+	</data>
+	<data name="BotLootingMasterNotDefined" xml:space="preserve">
+		<value>無法發送交易提案，因為沒有帳號設有 Master 權限！</value>
+	</data>
+	<data name="BotLootingSuccess" xml:space="preserve">
+		<value>交易提案發送成功！</value>
+	</data>
+	<data name="BotSendingTradeToYourself" xml:space="preserve">
+		<value>您無法對自己發送交易提案！</value>
+	</data>
+	<data name="BotNoTickrAuthenticator" xml:space="preserve">
+		<value>這個 Bot 並未啟用 Tickr 雙重驗證！您是否忘記將雙重驗證匯入至 Tickr？</value>
+	</data>
+	<data name="BotNotConnected" xml:space="preserve">
+		<value>這個 Bot 尚未連線！</value>
+	</data>
+	<data name="BotNotOwnedYet" xml:space="preserve">
+		<value>未擁有：{0}</value>
+		<comment>{0} will be replaced by query (string)</comment>
+	</data>
+	<data name="BotOwnedAlreadyWithName" xml:space="preserve">
+		<value>已擁有：{0} | {1}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="BotPointsBalance" xml:space="preserve">
+		<value>點數餘額：{0}</value>
+		<comment>{0} will be replaced by the points balance value (integer)</comment>
+	</data>
+	<data name="BotRateLimitExceeded" xml:space="preserve">
+		<value>超過頻率限制，我們將在 {0} 後重試…</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "25 minutes")</comment>
+	</data>
+	<data name="BotReconnecting" xml:space="preserve">
+		<value>正在重新連線…</value>
+	</data>
+	<data name="BotRedeem" xml:space="preserve">
+		<value>產品序號：{0} | 狀態：{1}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string</comment>
+	</data>
+	<data name="BotRedeemWithItems" xml:space="preserve">
+		<value>產品序號：{0} | 狀態：{1} | 物品：{2}</value>
+		<comment>{0} will be replaced by cd-key (string), {1} will be replaced by status string, {2} will be replaced by list of key-value pairs, separated by a comma</comment>
+	</data>
+	<data name="BotRemovedExpiredLoginKey" xml:space="preserve">
+		<value>已移除過期的登入金鑰！</value>
+	</data>
+	<data name="BotStatusNotIdling" xml:space="preserve">
+		<value>Bot 目前沒有在掛卡。</value>
+	</data>
+	<data name="BotStatusLimited" xml:space="preserve">
+		<value>Bot 為受限狀態，無法透過掛卡得到卡片。</value>
+	</data>
+	<data name="BotStatusConnecting" xml:space="preserve">
+		<value>Bot 正在連線至 Steam 網路。</value>
+	</data>
+	<data name="BotStatusNotRunning" xml:space="preserve">
+		<value>Bot 未在執行。</value>
+	</data>
+	<data name="BotStatusPaused" xml:space="preserve">
+		<value>Bot 已暫停或正以手動模式執行。</value>
+	</data>
+	<data name="BotStatusPlayingNotAvailable" xml:space="preserve">
+		<value>Bot 使用中。</value>
+	</data>
+	<data name="BotUnableToLogin" xml:space="preserve">
+		<value>無法登入到 Steam：{0}/{1}</value>
+		<comment>{0} will be replaced by failure reason (string), {1} will be replaced by extended failure reason (string)</comment>
+	</data>
+	<data name="ErrorIsEmpty" xml:space="preserve">
+		<value>{0} 是空的！</value>
+		<comment>{0} will be replaced by object's name</comment>
+	</data>
+	<data name="UnusedKeys" xml:space="preserve">
+		<value>未使用的產品序號：{0}</value>
+		<comment>{0} will be replaced by list of cd-keys (strings), separated by a comma</comment>
+	</data>
+	<data name="WarningFailedWithError" xml:space="preserve">
+		<value>因發生錯誤而失敗：{0}</value>
+		<comment>{0} will be replaced by failure reason (string)</comment>
+	</data>
+	<data name="BotConnectionLost" xml:space="preserve">
+		<value>與 Steam 網路的連線中斷，正在重新連線…</value>
+	</data>
+	<data name="BotAccountFree" xml:space="preserve">
+		<value>帳號不再被佔用，已恢復掛卡！</value>
+	</data>
+	<data name="BotAccountOccupied" xml:space="preserve">
+		<value>帳號目前使用中，Tickr 將在該帳號空閒時繼續掛卡…</value>
+	</data>
+	<data name="BotConnecting" xml:space="preserve">
+		<value>正在連線…</value>
+	</data>
+	<data name="BotHeartBeatFailed" xml:space="preserve">
+		<value>無法與用戶端中斷連線，正在中止此 Bot！</value>
+	</data>
+	<data name="BotStopping" xml:space="preserve">
+		<value>正在停止…</value>
+	</data>
+	<data name="ErrorBotConfigInvalid" xml:space="preserve">
+		<value>您的 Bot 設定無效，請確認 {0} 的內容然後再試一次！</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="ErrorDatabaseInvalid" xml:space="preserve">
+		<value>無法載入持久性資料庫，如果問題仍然存在，請刪除 {0} 以重建資料庫！</value>
+		<comment>{0} will be replaced by file's path</comment>
+	</data>
+	<data name="Initializing" xml:space="preserve">
+		<value>正在初始化 {0}…</value>
+		<comment>{0} will be replaced by service name that is being initialized</comment>
+	</data>
+	<data name="WarningPrivacyPolicy" xml:space="preserve">
+		<value>如果您對 Tickr 的實際運作方式有疑慮，請查看 Wiki 中的隱私權政策章節！</value>
+	</data>
+	<data name="Welcome" xml:space="preserve">
+		<value>看來這是您首次使用本程式，歡迎！</value>
+	</data>
+	<data name="ErrorInvalidCurrentCulture" xml:space="preserve">
+		<value>您所提供的 CurrentCulture 無效，Tickr 將以預設值繼續執行！</value>
+	</data>
+	<data name="TranslationIncomplete" xml:space="preserve">
+		<value>Tickr 將使用您的偏好語系 {0}，但該語言的翻譯只完成了 {1}。或許您能協助我們完善 Tickr 的翻譯。</value>
+		<comment>{0} will be replaced by culture code, such as "en-US", {1} will be replaced by completeness percentage, such as "78.5%"</comment>
+	</data>
+	<data name="IdlingGameNotPossible" xml:space="preserve">
+		<value>{0}（{1}）的掛卡暫時停用，因 Tickr 目前無法執行該遊戲。</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningIdlingGameMismatch" xml:space="preserve">
+		<value>Tickr 偵測到 {0}（{1}）的 ID 不相符，將改為使用 ID {2}。</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotVersion" xml:space="preserve">
+		<value>{0} V{1}</value>
+		<comment>{0} will be replaced by program's name (e.g. "Tickr"), {1} will be replaced by program's version (e.g. "1.0.0.0"). This string typically has nothing to translate and you should leave it as it is, unless you need to change the format, e.g. in RTL languages.</comment>
+	</data>
+	<data name="BotAccountLocked" xml:space="preserve">
+		<value>此帳號已被封鎖，永久無法掛卡！</value>
+	</data>
+	<data name="BotStatusLocked" xml:space="preserve">
+		<value>Bot 已被封鎖，無法透過掛卡得到卡片。</value>
+	</data>
+	<data name="ErrorFunctionOnlyInHeadlessMode" xml:space="preserve">
+		<value>此功能只能在無頭模式下使用！</value>
+	</data>
+	<data name="BotOwnedAlready" xml:space="preserve">
+		<value>已擁有：{0}</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="ErrorAccessDenied" xml:space="preserve">
+		<value>存取被拒！</value>
+	</data>
+	<data name="WarningPreReleaseVersion" xml:space="preserve">
+		<value>您目前使用的版本高於最新的正式版本。請注意：預覽版本是專門給了解如何回報錯誤、處理問題並提供回饋的使用者使用（將不會提供任何技術支援）。</value>
+	</data>
+	<data name="BotStats" xml:space="preserve">
+		<value>目前記憶體使用量：{0} MB。
+已執行時間：{1}</value>
+		<comment>{0} will be replaced by number (in megabytes) of memory being used, {1} will be replaced by translated TimeSpan string (such as "25 minutes"). Please note that this string should include newlines for formatting.</comment>
+	</data>
+	<data name="BotOwnsOverviewPerGame" xml:space="preserve">
+		<value>{0}/{1} 個 Bot 已擁有遊戲 {2}。</value>
+		<comment>{0} will be replaced by number of bots that already own particular game being checked, {1} will be replaced by total number of bots that were checked during the process, {2} will be replaced by game's ID (number)</comment>
+	</data>
+	<data name="BotRefreshingPackagesData" xml:space="preserve">
+		<value>正在更新軟體套件資料…</value>
+	</data>
+	<data name="WarningDeprecated" xml:space="preserve">
+		<value>{0} 的用法已被棄用，並且將在未來的版本中移除，請改用 {1}。</value>
+		<comment>{0} will be replaced by the name of deprecated property (such as argument, config property or likewise), {1} will be replaced by the name of valid replacement (such as another argument or config property)</comment>
+	</data>
+	<data name="BotAcceptedDonationTrade" xml:space="preserve">
+		<value>接受捐贈交易：{0}</value>
+		<comment>{0} will be replaced by trade's ID (number)</comment>
+	</data>
+	<data name="WarningWorkaroundTriggered" xml:space="preserve">
+		<value>已觸發對於 {0} 錯誤的權變措施（臨時解決方案）。</value>
+		<comment>{0} will be replaced by the bug's name provided by Tickr</comment>
+	</data>
+	<data name="TargetBotNotConnected" xml:space="preserve">
+		<value>目標 Bot 未連線！</value>
+	</data>
+	<data name="BotWalletBalance" xml:space="preserve">
+		<value>錢包餘額：{0} {1}</value>
+		<comment>{0} will be replaced by wallet balance value, {1} will be replaced by currency name</comment>
+	</data>
+	<data name="BotHasNoWallet" xml:space="preserve">
+		<value>Bot 無錢包餘額。</value>
+	</data>
+	<data name="BotLevel" xml:space="preserve">
+		<value>Bot 的等級為 {0}。</value>
+		<comment>{0} will be replaced by bot's level</comment>
+	</data>
+	<data name="BotInventory" xml:space="preserve">
+		<value>{0}/{1} ({2}/{3})：{4} 資源檔案</value>
+		<comment>{0} will be replaced by appID (number), {1} will be replaced by contextID (number), {2} will be replaced by app's name (string), {3} will be replaced by name of the context (string), {4} will be replaced by number of assets in the specified inventory (number).</comment>
+	</data>
+	<data name="ActivelyMatchingItems" xml:space="preserve">
+		<value>正在比對 Steam 物品，第 #{0} 輪…</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="DoneActivelyMatchingItems" xml:space="preserve">
+		<value>已完成比對 Steam 物品，第 #{0} 輪。</value>
+		<comment>{0} will be replaced by round number</comment>
+	</data>
+	<data name="ErrorAborted" xml:space="preserve">
+		<value>已中止！</value>
+	</data>
+	<data name="WarningExcessiveBotsCount" xml:space="preserve">
+		<value>您執行的個人 Bot 帳號數量超過我們的建議上限（{0}）。請留意，此設定不受支援，且可能會造成各種 Steam 相關問題，包括帳號停權。請參閱常見問題以了解詳情。</value>
+		<comment>{0} will be replaced by our maximum recommended bots count (number)</comment>
+	</data>
+	<data name="PluginLoaded" xml:space="preserve">
+		<value>{0} 載入成功！</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin</comment>
+	</data>
+	<data name="PluginLoading" xml:space="preserve">
+		<value>正在載入 {0} V{1}…</value>
+		<comment>{0} will be replaced by the name of the custom Tickr plugin, {1} will be replaced by its version</comment>
+	</data>
+	<data name="NothingFound" xml:space="preserve">
+		<value>未找到任何內容！</value>
+	</data>
+	<data name="PluginsWarning" xml:space="preserve">
+		<value>您已載入一個以上的自訂外掛程式。由於我們無法支援修改過的設定，如遭遇任何問題，請向相關外掛程式的開發人員尋求協助。</value>
+	</data>
+	<data name="PleaseWait" xml:space="preserve">
+		<value>請稍候…</value>
+	</data>
+	<data name="EnterCommand" xml:space="preserve">
+		<value>輸入指令：</value>
+	</data>
+	<data name="Executing" xml:space="preserve">
+		<value>正在執行…</value>
+	</data>
+	<data name="InteractiveConsoleEnabled" xml:space="preserve">
+		<value>已開啟互動式控制台，按「C」進入指令模式。</value>
+	</data>
+	<data name="BotGamesToRedeemInBackgroundCount" xml:space="preserve">
+		<value>Bot 的背景佇列中剩餘 {0} 個遊戲。</value>
+		<comment>{0} will be replaced by remaining number of games in BGR's queue</comment>
+	</data>
+	<data name="ErrorSingleInstanceRequired" xml:space="preserve">
+		<value>Tickr 程序已執行於當前的資料夾中，正在中止！</value>
+	</data>
+	<data name="BotHandledConfirmations" xml:space="preserve">
+		<value>成功處理 {0} 個交易確認！</value>
+		<comment>{0} will be replaced by number of confirmations</comment>
+	</data>
+	<data name="BotExtraIdlingCooldown" xml:space="preserve">
+		<value>最多等待 {0} 以確保我們可以開始掛卡…</value>
+		<comment>{0} will be replaced by translated TimeSpan string (such as "1 minute")</comment>
+	</data>
+	<data name="UpdateCleanup" xml:space="preserve">
+		<value>正在清理更新後的過時檔案…</value>
+	</data>
+	<data name="BotGeneratingSteamParentalCode" xml:space="preserve">
+		<value>正在產生 Steam 家庭監護 PIN 碼，這會需要一段時間，請考慮將它寫入設定檔中…</value>
+	</data>
+	<data name="IPCConfigChanged" xml:space="preserve">
+		<value>IPC 設定檔已變更！</value>
+	</data>
+	<data name="BotTradeOfferResult" xml:space="preserve">
+		<value>交易提案 {0} 因 {2} 而決定 {1}。</value>
+		<comment>{0} will be replaced by trade offer ID (number), {1} will be replaced by internal Tickr enum name, {2} will be replaced by technical reason why the trade was determined to be in this state</comment>
+	</data>
+	<data name="BotInvalidPasswordDuringLogin" xml:space="preserve">
+		<value>連續收到 InvalidPassword 錯誤碼 {0} 次。您的帳號密碼大概是錯的，正在中止！</value>
+		<comment>{0} will be replaced by maximum allowed number of failed login attempts</comment>
+	</data>
+	<data name="Result" xml:space="preserve">
+		<value>結果：{0}</value>
+		<comment>{0} will be replaced by generic result of various functions that use this string</comment>
+	</data>
+	<data name="WarningUnsupportedEnvironment" xml:space="preserve">
+		<value>您正嘗試於不支援的環境（{1}）中執行 {0} 版本的 Tickr。如果您真的知道您在做什麼的話，請加上 --ignore-unsupported-environment 引數。</value>
+	</data>
+	<data name="WarningUnknownCommandLineArgument" xml:space="preserve">
+		<value>未知的命令列引數：{0}</value>
+		<comment>{0} will be replaced by unrecognized command that has been provided</comment>
+	</data>
+	<data name="ErrorConfigDirectoryNotFound" xml:space="preserve">
+		<value>無法找到設定檔所在的資料夾，正在中止！</value>
+	</data>
+	<data name="BotIdlingSelectedGames" xml:space="preserve">
+		<value>正在掛 {0} 指定的遊玩時數：{1}</value>
+		<comment>{0} will be replaced by internal name of the config property (e.g. "GamesPlayedWhileIdle"), {1} will be replaced by comma-separated list of appIDs that user has chosen</comment>
+	</data>
+	<data name="AutomaticFileMigration" xml:space="preserve">
+		<value>{0} 設定檔將會改版成最新的語法…</value>
+		<comment>{0} will be replaced with the relative path to the affected config file</comment>
+	</data>
+	<data name="WarningTooShortCryptKey" xml:space="preserve">
+		<value>您的加密金鑰太短。我們建議使用 {0} 位元組（字元）以上長度的金鑰。</value>
+		<comment>{0} will be replaced by the number of bytes (characters) recommended</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForHashing" xml:space="preserve">
+		<value>您正在使用 {0} 設定 {1} 屬性。但您沒有提供自訂的 --cryptkey。若您需要，可以提供自訂 --cryptkey 以提高安全性。</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "SCrypt"), {1} will be replaced by the name of the property (e.g. "IPCPassword")</comment>
+	</data>
+	<data name="WarningDefaultCryptKeyUsedForEncryption" xml:space="preserve">
+		<value>您正在使用 {0} 設定 {1} 屬性。但您沒有提供自訂的 --cryptkey。這完全破壞了保護，因為 Tickr 被迫使用自己的（已知）金鑰。您應提供自訂 --cryptkey 以使用本設定所提供的安全優勢。</value>
+		<comment>{0} will be replaced by the name of a particular setting (e.g. "AES"), {1} will be replaced by the name of the property (e.g. "SteamPassword")</comment>
+	</data>
+	<data name="WarningRunningAsRoot" xml:space="preserve">
+		<value>您正以管理員權限（Root）執行 Tickr。這會給您的設備帶來重大的安全風險，且由於 Tickr 的操作不需要管理員權限，我們建議盡可能以非管理員使用者身份執行它。</value>
+	</data>
+	<data name="WarningRunningInUnsupportedEnvironment" xml:space="preserve">
+		<value>您在不受支援的環境中執行 Tickr，並提供 --ignore-unsupported-environment 引數。請注意，我們不對這種情形提供任何形式的支援，您完全需要自行承擔風險。您已經被警告過了。</value>
+	</data>
+	<data name="FetchingChecksumFromRemoteServer" xml:space="preserve">
+		<value>正在從遠端伺服器擷取核對和…</value>
+	</data>
+	<data name="VerifyingChecksumWithRemoteServer" xml:space="preserve">
+		<value>正在驗證已下載的二進制檔案與來自遠端伺服器的核對和…</value>
+	</data>
+	<data name="ChecksumMissing" xml:space="preserve">
+		<value>遠端伺服器對我們要更新到的版本一無所知。若該版本是最近發布的，則可能出現這種情形⸺作為額外的安全措施，已立刻拒絕進行更新程序。</value>
+	</data>
+	<data name="ChecksumTimeout" xml:space="preserve">
+		<value>無法提取已下載二進制檔案的核對和⸺出於安全考量，拒絕繼續執行更新程序。</value>
+	</data>
+	<data name="ChecksumWrong" xml:space="preserve">
+		<value>遠端伺服器回覆了不同的核對和，這可能代表下載的檔案已損壞或遭到了中間人攻擊，拒絕繼續更新程序！</value>
+	</data>
+	<data name="PatchingFiles" xml:space="preserve">
+		<value>正在更新 Tickr 檔案…</value>
+	</data>
+	<data name="UserInputCryptkey" xml:space="preserve">
+		<value>請輸入您的 cryptkey：</value>
+		<comment>Please note that this translation should end with space</comment>
+	</data>
+	<data name="ErrorIPNotBanned" xml:space="preserve">
+		<value>IP 位址 {0} 並未被封鎖！</value>
+		<comment>{0} will be replaced by an IP address which was requested to be unbanned from using IPC</comment>
+	</data>
+	<data name="WarningNoLicense" xml:space="preserve">
+		<value>您正在嘗試使用付費功能 {0}，但您尚未在 Tickr 全域設定中設定有效的 LicenseID。請檢查您的設定，因為如果沒有額外資訊，該功能將會無法運作。</value>
+		<comment>{0} will be replaced by feature name (e.g. MatchActively)</comment>
+	</data>
+	<data name="WarningRegionRestrictedPackage" xml:space="preserve">
+		<value>Tickr 無法執行應用程式 {0}，因為它擁有地區限制 {1}，並持續至 {2}。</value>
+		<comment>{0} will be replaced by app ID (number), {1} will be replaced by short country code (string, such as "PL"), {2} will be replaced by human-readable date (string).</comment>
+	</data>
+	<data name="WarningUnsupportedOfficialPlugins" xml:space="preserve">
+		<value>您正嘗試執行 {0} 官方外掛程式於錯誤的 Tickr 版本：{1}（應為 {2}）。這代表您的行為具有嚴重錯誤，請改正您的設定值，或者，若您知道您在做什麼，請提供 --ignore-unsupported-environment 引數。</value>
+		<comment>{0} will be replaced by plugin name, {1} will be replaced by plugin's version number, {2} will be replaced by Tickr's version number.</comment>
+	</data>
+	<data name="ErrorTooManyCrashes" xml:space="preserve">
+		<value>您的 Tickr 最近崩潰太多次了，因此程序初始化已被停用。您需要自行調查原因、修正您的設定，然後從您的設定資料夾中刪除 TickrApp.crash 檔案；要是如果您知道您在做什麼，可以提供 --ignore-unsupported-environment 引數。</value>
+	</data>
+	<data name="IdlingGameNotPossiblePrivate" xml:space="preserve">
+		<value>已停用 {0}（{1}）的掛卡，因為該遊戲目前被標示為私人。若您想要 Tickr 掛該遊戲，請更改它的隱私設定。</value>
+		<comment>{0} will be replaced by game's ID (number), {1} will be replaced by game's name</comment>
+	</data>
+	<data name="WarningSkipping" xml:space="preserve">
+		<value>正在跳過：{0}…</value>
+		<comment>{0} will be replaced by text value (string) of entry being skipped.</comment>
+	</data>
+	<data name="PluginUpdatesChecking" xml:space="preserve">
+		<value>正在檢查外掛程式更新…</value>
+	</data>
+	<data name="PluginUpdateChecking" xml:space="preserve">
+		<value>正在檢查外掛程式 {0} 的更新…</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateNotFound" xml:space="preserve">
+		<value>外掛程式 {0} 沒有可供使用的更新：{1} ≥ {2}。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNewVersionAvailable" xml:space="preserve">
+		<value>外掛程式 {0} 有新版本可用！請考慮手動更新！</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFound" xml:space="preserve">
+		<value>找到外掛程式 {0} 的更新，版本 {1} 至 {2}…</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateNoAssetFound" xml:space="preserve">
+		<value>外掛程式 {0} 版本 {1} 至 {2} 的更新沒有可供使用的資源檔案，這通常代表稍後才能更新。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateConflictingAssetsFound" xml:space="preserve">
+		<value>無法確定外掛程式 {0} 版本 {1} 至 {2} 的更新資源檔案。若檔案尚未發布完成，則可能會出現這種情形；如果此問題持續發生，您應通知外掛程式作者。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by current plugin's version, {2} will be replaced by remote plugin's version.</comment>
+	</data>
+	<data name="PluginUpdateInProgress" xml:space="preserve">
+		<value>正在更新外掛程式 {0}…</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateFinished" xml:space="preserve">
+		<value>成功更新外掛程式 {0}，變更將於 Tickr 下次啟動時生效。</value>
+		<comment>{0} will be replaced by plugin name (string).</comment>
+	</data>
+	<data name="PluginUpdateEnabled" xml:space="preserve">
+		<value>外掛程式 {0}/{1} 已被登錄，並已啟用自動更新。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="PluginUpdateDisabled" xml:space="preserve">
+		<value>外掛程式 {0} ({1}) 已被停用自動更新，但它支援此功能。</value>
+		<comment>{0} will be replaced by plugin name (string), {1} will be replaced by plugin assembly name (string).</comment>
+	</data>
+	<data name="CustomPluginUpdatesEnabled" xml:space="preserve">
+		<value>自訂外掛程式已被登錄自動更新。Tickr 團隊提醒您，為了您的安全，您應僅為受信任的內容啟用自動更新。若您不想啟用，您可以在 Tickr 全域設定中停用外掛程式更新。</value>
+	</data>
+	<data name="Input" xml:space="preserve">
+		<value>輸入：{0}</value>
+		<comment>{0} will be replaced by text input from the user.</comment>
+	</data>
+	<data name="WarningNoSystemRequiredLinuxDependencies" xml:space="preserve">
+		<value>您宣告了 --system-required，但您的作業系統缺少該功能所需的相依套件。請考慮安裝 dbus。如果您不需要此功能，則可以直接忽略這個警告。</value>
+	</data>
+	<data name="WarningBotDatabaseComponentDecryptionFailed" xml:space="preserve">
+		<value>無法解密資料庫 {0}。若您剛剛更改了 Bot 的 {1}，可能是正常現象，在下次執行時就不會再看到這則警告。否則您應檢查並找出失敗的確切原因。</value>
+		<comment>{0} will be replaced by bot database component's name (string), {1} will be replaced by bot config component's name (string).</comment>
+	</data>
+	<data name="WarningNoValidKeysFound" xml:space="preserve">
+		<value>在您的 .keys 檔案中沒有找到可以兌換的有效序號。請確保您的序號格式正確。</value>
+	</data>
+	<data name="InfoKeysImported" xml:space="preserve">
+		<value>成功從您的 .keys 檔案中匯入了 {0} 個序號。</value>
+		<comment>{0} will be replaced by number of imported keys (integer).</comment>
+	</data>
+	<data name="InfoKeysImportedSkipped" xml:space="preserve">
+		<value>成功從您的 .keys 檔案中匯入了 {0} 個序號。{1} 行被跳過，因格式錯誤、為註解或空行。</value>
+		<comment>{0} will be replaced by number of imported keys (integer), {1} will be replaced by number of skipped lines (integer).</comment>
+	</data>
+	<data name="InfoKeysLoaded" xml:space="preserve">
+		<value>從佇列載入了 {0} 個序號。</value>
+		<comment>{0} will be replaced by number of keys (integer) in the queue.</comment>
+	</data>
+</root>

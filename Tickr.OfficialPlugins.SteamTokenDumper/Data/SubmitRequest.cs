@@ -1,0 +1,81 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Globalization;
+using System.Text.Json.Serialization;
+using Tickr.Core;
+using SteamKit2;
+
+namespace Tickr.OfficialPlugins.SteamTokenDumper.Data;
+
+internal sealed class SubmitRequest {
+	private readonly ulong SteamID;
+
+#pragma warning disable CA1822 // We can't make it static, STJ doesn't serialize it otherwise
+	[JsonInclude]
+	[JsonPropertyName("guid")]
+	private string Guid => TickrApp.GlobalDatabase?.Identifier.ToString("N") ?? throw new InvalidOperationException(nameof(TickrApp.GlobalDatabase.Identifier));
+#pragma warning restore CA1822 // We can't make it static, STJ doesn't serialize it otherwise
+
+	[JsonInclude]
+	[JsonPropertyName("steamid")]
+	private string SteamIDText => new SteamID(SteamID).Render();
+
+#pragma warning disable CA1822 // We can't make it static, STJ doesn't serialize it otherwise
+	[JsonInclude]
+	[JsonPropertyName("token")]
+	private string Token => SharedInfo.Token;
+#pragma warning restore CA1822 // We can't make it static, STJ doesn't serialize it otherwise
+
+#pragma warning disable CA1822 // We can't make it static, STJ doesn't serialize it otherwise
+	[JsonInclude]
+	[JsonPropertyName("v")]
+	private byte Version => SharedInfo.ApiVersion;
+#pragma warning restore CA1822 // We can't make it static, STJ doesn't serialize it otherwise
+
+	[JsonInclude]
+	[JsonPropertyName("apps")]
+	[JsonRequired]
+	private ImmutableDictionary<string, string> Apps { get; init; }
+
+	[JsonInclude]
+	[JsonPropertyName("depots")]
+	[JsonRequired]
+	private ImmutableDictionary<string, string> Depots { get; init; }
+
+	[JsonInclude]
+	[JsonPropertyName("subs")]
+	[JsonRequired]
+	private ImmutableDictionary<string, string> Subs { get; init; }
+
+	internal SubmitRequest(ulong steamID, IReadOnlyCollection<KeyValuePair<uint, ulong>> apps, IReadOnlyCollection<KeyValuePair<uint, ulong>> accessTokens, IReadOnlyCollection<KeyValuePair<uint, string>> depots) {
+		if ((steamID == 0) || !new SteamID(steamID).IsIndividualAccount) {
+			throw new ArgumentOutOfRangeException(nameof(steamID));
+		}
+
+		ArgumentNullException.ThrowIfNull(apps);
+		ArgumentNullException.ThrowIfNull(accessTokens);
+		ArgumentNullException.ThrowIfNull(depots);
+
+		SteamID = steamID;
+
+		Apps = apps.ToImmutableDictionary(static app => app.Key.ToString(CultureInfo.InvariantCulture), static app => app.Value.ToString(CultureInfo.InvariantCulture), StringComparer.Ordinal);
+		Subs = accessTokens.ToImmutableDictionary(static package => package.Key.ToString(CultureInfo.InvariantCulture), static package => package.Value.ToString(CultureInfo.InvariantCulture), StringComparer.Ordinal);
+		Depots = depots.ToImmutableDictionary(static depot => depot.Key.ToString(CultureInfo.InvariantCulture), static depot => depot.Value, StringComparer.Ordinal);
+	}
+}

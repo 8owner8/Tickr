@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>JetBrains.Annotations.Sources</id>
+    <version>2026.2.0</version>
+    <title></title>
+    <authors>JetBrains</authors>
+    <owners>JetBrains</owners>
+    <developmentDependency>true</developmentDependency>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>icon.png</icon>
+    <readme>readme.md</readme>
+    <projectUrl>https://www.jetbrains.com/help/resharper/Code_Analysis__Code_Annotations.html</projectUrl>
+    <description>JetBrains.Annotations help reduce false positive warnings, explicitly declare purity and nullability in your code, deal with implicit usages of members, support special semantics of APIs in ASP.NET and XAML frameworks and otherwise increase accuracy of JetBrains Rider and ReSharper code inspections.</description>
+    <summary>Annotations to increase accuracy of JetBrains Rider and ReSharper code inspections</summary>
+    <releaseNotes>• Added DebuggerGlobalWatchAttribute.</releaseNotes>
+    <copyright>Copyright (c) 2016-2025 JetBrains s.r.o.</copyright>
+    <tags>jetbrains resharper rider annotations canbenull notnull</tags>
+    <repository type="git" url="https://github.com/JetBrains/JetBrains.Annotations.git" />
+  </metadata>
+</package>

@@ -1,0 +1,140 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Text.Json.Serialization;
+using Tickr.Core;
+using Markdig;
+using Markdig.Renderers;
+using Markdig.Syntax;
+using Markdig.Syntax.Inlines;
+
+namespace Tickr.Web.GitHub.Data;
+
+[SuppressMessage("ReSharper", "ClassCannotBeInstantiated")]
+public sealed class ReleaseResponse {
+	internal string? ChangelogHTML {
+		get {
+			if (field != null) {
+				return field;
+			}
+
+			if (Changelog == null) {
+				TickrApp.TickrLogger.LogNullError(Changelog);
+
+				return null;
+			}
+
+			using StringWriter writer = new();
+
+			HtmlRenderer renderer = new(writer);
+
+			renderer.Render(Changelog);
+			writer.Flush();
+
+			return field = writer.ToString();
+		}
+	}
+
+	internal string? ChangelogPlainText {
+		get {
+			if (field != null) {
+				return field;
+			}
+
+			if (Changelog == null) {
+				TickrApp.TickrLogger.LogNullError(Changelog);
+
+				return null;
+			}
+
+			using StringWriter writer = new();
+
+			HtmlRenderer renderer = new(writer) {
+				EnableHtmlForBlock = false,
+				EnableHtmlForInline = false,
+				EnableHtmlEscape = false
+			};
+
+			renderer.Render(Changelog);
+			writer.Flush();
+
+			return field = writer.ToString();
+		}
+	}
+
+	private MarkdownDocument? Changelog {
+		get {
+			if (field != null) {
+				return field;
+			}
+
+			if (string.IsNullOrEmpty(MarkdownBody)) {
+				TickrApp.TickrLogger.LogNullError(MarkdownBody);
+
+				return null;
+			}
+
+			return field = ExtractChangelogFromBody(MarkdownBody);
+		}
+	}
+
+	[JsonInclude]
+	[JsonPropertyName("assets")]
+	[JsonRequired]
+	public ImmutableHashSet<ReleaseAsset> Assets { get; private init; } = [];
+
+	[JsonInclude]
+	[JsonPropertyName("prerelease")]
+	[JsonRequired]
+	public bool IsPreRelease { get; private init; }
+
+	[JsonInclude]
+	[JsonPropertyName("body")]
+	[JsonRequired]
+	public string MarkdownBody { get; private init; } = "";
+
+	[JsonInclude]
+	[JsonPropertyName("published_at")]
+	[JsonRequired]
+	public DateTime PublishedAt { get; private init; }
+
+	[JsonInclude]
+	[JsonPropertyName("tag_name")]
+	[JsonRequired]
+	public string Tag { get; private init; } = "";
+
+	[JsonConstructor]
+	private ReleaseResponse() { }
+
+	private static MarkdownDocument ExtractChangelogFromBody(string markdownText) {
+		ArgumentException.ThrowIfNullOrEmpty(markdownText);
+
+		MarkdownDocument markdownDocument = Markdown.Parse(markdownText);
+		MarkdownDocument result = [];
+
+		foreach (Block block in markdownDocument.SkipWhile(static block => block is not HeadingBlock { Inline.FirstChild: LiteralInline literalInline } || (literalInline.Content.ToString()?.Equals("Changelog", StringComparison.OrdinalIgnoreCase) != true)).Skip(1).TakeWhile(static block => block is not ThematicBreakBlock).ToList()) {
+			// All blocks that we're interested in must be removed from original markdownDocument firstly
+			markdownDocument.Remove(block);
+			result.Add(block);
+		}
+
+		return result;
+	}
+}

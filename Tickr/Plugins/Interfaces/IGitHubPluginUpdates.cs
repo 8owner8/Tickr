@@ -1,0 +1,234 @@
+// Copyright 2015-2026 Tickr
+// Contact: support@TickrApp.dev
+// |
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// |
+// http://www.apache.org/licenses/LICENSE-2.0
+// |
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Tickr.Core;
+using Tickr.Localization;
+using Tickr.Storage;
+using Tickr.Web.GitHub;
+using Tickr.Web.GitHub.Data;
+using JetBrains.Annotations;
+
+namespace Tickr.Plugins.Interfaces;
+
+/// <inheritdoc />
+/// <summary>
+///     Implementing this interface allows your plugin to update from published releases on GitHub.
+///     At the minimum you must provide <see cref="RepositoryName" />.
+///     If you're not following our Tickr-PluginTemplate flow, that is, providing release asset named differently than "{PluginName}.zip" then you may also need to override <see cref="GetTargetReleaseAsset" /> function in order to select target asset based on custom rules.
+///     If you have even more complex needs for updating your plugin, you should probably consider implementing base <see cref="IPluginUpdates" /> interface instead, where you can provide your own <see cref="GetTargetReleaseURL" /> implementation, with optional help from our <see cref="GitHubService" />.
+/// </summary>
+[PublicAPI]
+public interface IGitHubPluginUpdates : IPluginUpdates {
+	/// <summary>
+	///     Boolean value that determines whether your plugin is able to update at the time of calling. You may provide false if, for example, you're inside a critical section and you don't want to update at this time, despite supporting updates otherwise.
+	///     This effectively skips unnecessary request to GitHub if you're certain that you're not interested in any updates right now.
+	/// </summary>
+	public bool CanUpdate => true;
+
+	/// <summary>
+	///     Tickr will use this property as a target for GitHub updates. GitHub repository specified here must have valid releases that will be used for updates.
+	/// </summary>
+	/// <returns>Repository name in format of {Author}/{Repository}.</returns>
+	/// <example>Tickr/Tickr</example>
+	public string RepositoryName { get; }
+
+	Task<Uri?> IPluginUpdates.GetTargetReleaseURL(Version tickrVersion, string TickrVariant, bool tickrUpdate, GlobalConfig.EUpdateChannel updateChannel, bool forced) {
+		ArgumentNullException.ThrowIfNull(tickrVersion);
+		ArgumentException.ThrowIfNullOrEmpty(TickrVariant);
+
+		if (!Enum.IsDefined(updateChannel)) {
+			throw new InvalidEnumArgumentException(nameof(updateChannel), (int) updateChannel, typeof(GlobalConfig.EUpdateChannel));
+		}
+
+		return GetTargetReleaseURL(tickrVersion, TickrVariant, tickrUpdate, updateChannel == GlobalConfig.EUpdateChannel.Stable, forced);
+	}
+
+	/// <summary>
+	///     Tickr will call this function for determining the target asset name to update to. This asset should be available in specified release. It's permitted to return null if you want to cancel update to given version. Default implementation provides vastly universal generic matching, see remarks for more info.
+	/// </summary>
+	/// <param name="tickrVersion">Target Tickr version that plugin update should be compatible with. In rare cases, this might not match currently running Tickr version, in particular when updating to newer release and checking if any plugins are compatible with it.</param>
+	/// <param name="TickrVariant">Tickr variant of current instance, which may be useful if you're providing different versions for different Tickr variants.</param>
+	/// <param name="newPluginVersion">The target (new) version of the plugin found available in <see cref="RepositoryName" />.</param>
+	/// <param name="releaseAssets">Available release assets for auto-update. Those come directly from your release on GitHub.</param>
+	/// <remarks>
+	///     Default implementation will select release asset in following order:
+	///     - {Name}-V{Major}-{Minor}-{Build}-{Revision}.zip
+	///     - {Name}-V{Major}-{Minor}-{Build}.zip
+	///     - {Name}-V{Major}-{Minor}.zip
+	///     - {Name}-V{Major}.zip
+	///     - {Name}.zip
+	///     - *.zip, if exactly 1 release asset matching in the release
+	///     Where:
+	///     - {Name} will be tried out of <see cref="IPlugin.Name" /> and assembly name that provides your plugin type
+	///     - {Major} is target major Tickr version (A from A.B.C.D)
+	///     - {Minor} is target minor Tickr version (B from A.B.C.D)
+	///     - {Build} is target build (patch) Tickr version (C from A.B.C.D)
+	///     - {Revision} is target revision Tickr version (D from A.B.C.D)
+	///     - * is a wildcard matching any string value
+	///     For example, when updating MyAwesomePlugin declared in Tickr.MyAwesomePlugin assembly with Tickr version V6.0.1.3, it will select the first zip file available from those below:
+	///     - MyAwesomePlugin-V6-0-1-3.zip
+	///     - MyAwesomePlugin-V6-0-1.zip
+	///     - MyAwesomePlugin-V6-0.zip
+	///     - MyAwesomePlugin-V6.zip
+	///     - MyAwesomePlugin.zip
+	///     - Tickr.MyAwesomePlugin-V6-0-1-3.zip
+	///     - Tickr.MyAwesomePlugin-V6-0-1.zip
+	///     - Tickr.MyAwesomePlugin-V6-0.zip
+	///     - Tickr.MyAwesomePlugin-V6.zip
+	///     - Tickr.MyAwesomePlugin.zip
+	///     - *.zip, if exactly one match is found
+	/// </remarks>
+	/// <returns>Target release asset from those provided that should be used for auto-update. You may return null if the update is unavailable, for example, because Tickr version/variant is determined unsupported, or due to any other reason.</returns>
+	public Task<ReleaseAsset?> GetTargetReleaseAsset(Version tickrVersion, string TickrVariant, Version newPluginVersion, IReadOnlyCollection<ReleaseAsset> releaseAssets) {
+		ArgumentNullException.ThrowIfNull(tickrVersion);
+		ArgumentException.ThrowIfNullOrEmpty(TickrVariant);
+		ArgumentNullException.ThrowIfNull(newPluginVersion);
+
+		if ((releaseAssets == null) || (releaseAssets.Count == 0)) {
+			throw new ArgumentNullException(nameof(releaseAssets));
+		}
+
+		return Task.FromResult(FindPossibleMatch(tickrVersion, newPluginVersion, releaseAssets));
+	}
+
+	protected ReleaseAsset? FindPossibleMatch(Version tickrVersion, Version newPluginVersion, IReadOnlyCollection<ReleaseAsset> releaseAssets) {
+		ArgumentNullException.ThrowIfNull(tickrVersion);
+		ArgumentNullException.ThrowIfNull(newPluginVersion);
+
+		if ((releaseAssets == null) || (releaseAssets.Count == 0)) {
+			throw new ArgumentNullException(nameof(releaseAssets));
+		}
+
+		// Since we only find assets from available .zip files, we can filter out other assets right away
+		Dictionary<string, ReleaseAsset> assetsByName = releaseAssets.Where(static asset => asset.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)).ToDictionary(static asset => asset.Name, StringComparer.OrdinalIgnoreCase);
+
+		switch (assetsByName.Count) {
+			case 0:
+				// Release does not have a single zip file, so the matching has failed
+				TickrApp.TickrLogger.LogGenericWarning(Strings.FormatPluginUpdateNoAssetFound(Name, Version, newPluginVersion));
+
+				return null;
+			case 1:
+				// If exactly one match is found, we can return it right away, as it'd be used as a fallback regardless of our matching
+				return assetsByName.Values.First();
+			default:
+				// Otherwise, we have 2+ zip files, so either we match one of those, or fail
+				foreach (string possibleMatch in GetPossibleMatches(tickrVersion)) {
+					if (assetsByName.TryGetValue(possibleMatch, out ReleaseAsset? targetAsset)) {
+						return targetAsset;
+					}
+				}
+
+				// We can't possibly determine which zip file to use, the plugin author should either fix the release, or provide custom GetTargetReleaseAsset() implementation
+				TickrApp.TickrLogger.LogGenericWarning(Strings.FormatPluginUpdateConflictingAssetsFound(Name, Version, newPluginVersion));
+
+				return null;
+		}
+	}
+
+	protected async Task<Uri?> GetTargetReleaseURL(Version tickrVersion, string TickrVariant, bool tickrUpdate, bool stable, bool forced) {
+		ArgumentNullException.ThrowIfNull(tickrVersion);
+		ArgumentException.ThrowIfNullOrEmpty(TickrVariant);
+
+		if (!CanUpdate) {
+			return null;
+		}
+
+		if (string.IsNullOrEmpty(RepositoryName) || (RepositoryName == SharedInfo.DefaultPluginTemplateGithubRepo)) {
+			TickrApp.TickrLogger.LogGenericError(Strings.FormatWarningFailedWithError(nameof(RepositoryName)));
+
+			return null;
+		}
+
+		ReleaseResponse? releaseResponse = await GitHubService.GetLatestRelease(RepositoryName, stable).ConfigureAwait(false);
+
+		if (releaseResponse == null) {
+			return null;
+		}
+
+		Version newVersion = new(releaseResponse.Tag.TrimStart('v', 'V'));
+
+		if (!forced && (Version >= newVersion)) {
+			// Normally we should skip the update in this case, as the update is non-forced and there is no new version available
+			// However, allow the same version to be re-updated when we're updating Tickr release and more than one asset is found - this allows us to update to a different variant of the same plugin version that happened due to Tickr version change
+
+			// Start from evaluating whether the version is the same and we're actually updating Tickr as part of this call
+			// Then calculate assets that can possibly take part in the update process, in order to determine whether the change of plugin variant is possible
+			// The base condition is that the release must have at least 2 total assets, therefore we need to only take into account GetPossibleMatchesByName() logic, while assuming that version is flexible
+			// If by the end we have at least 2 assets we're considering for an update, then that's a possible variant change and in this case we should proceed to cover for the edge case explained above
+			if ((Version > newVersion) || !tickrUpdate || (releaseResponse.Assets.Count < 2) || GetPossibleNames().All(pluginName => releaseResponse.Assets.Count(asset => asset.Name.Equals($"{pluginName}.zip", StringComparison.OrdinalIgnoreCase) || (asset.Name.StartsWith($"{pluginName}-V", StringComparison.OrdinalIgnoreCase) && asset.Name.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))) < 2)) {
+				TickrApp.TickrLogger.LogGenericInfo(Strings.FormatPluginUpdateNotFound(Name, Version, newVersion));
+
+				return null;
+			}
+		}
+
+		if (releaseResponse.Assets.IsEmpty) {
+			TickrApp.TickrLogger.LogGenericWarning(Strings.FormatPluginUpdateNoAssetFound(Name, Version, newVersion));
+
+			return null;
+		}
+
+		ReleaseAsset? asset = await GetTargetReleaseAsset(tickrVersion, TickrVariant, newVersion, releaseResponse.Assets).ConfigureAwait(false);
+
+		if ((asset == null) || !releaseResponse.Assets.Contains(asset)) {
+			TickrApp.TickrLogger.LogGenericWarning(Strings.FormatPluginUpdateNoAssetFound(Name, Version, newVersion));
+
+			return null;
+		}
+
+		TickrApp.TickrLogger.LogGenericInfo(Strings.FormatPluginUpdateFound(Name, Version, newVersion));
+
+		return asset.DownloadURL;
+	}
+
+	private IEnumerable<string> GetPossibleMatches(Version version) {
+		ArgumentNullException.ThrowIfNull(version);
+
+		foreach (string possibleMatch in GetPossibleNames().SelectMany(pluginName => GetPossibleMatchesByName(version, pluginName))) {
+			yield return possibleMatch;
+		}
+	}
+
+	private static IEnumerable<string> GetPossibleMatchesByName(Version version, string name) {
+		ArgumentNullException.ThrowIfNull(version);
+		ArgumentException.ThrowIfNullOrEmpty(name);
+
+		yield return $"{name}-V{version.Major}-{version.Minor}-{version.Build}-{version.Revision}.zip";
+		yield return $"{name}-V{version.Major}-{version.Minor}-{version.Build}.zip";
+		yield return $"{name}-V{version.Major}-{version.Minor}.zip";
+		yield return $"{name}-V{version.Major}.zip";
+		yield return $"{name}.zip";
+	}
+
+	private IEnumerable<string> GetPossibleNames() {
+		string pluginName = Name;
+
+		if (!string.IsNullOrEmpty(pluginName)) {
+			yield return pluginName;
+		}
+
+		string? assemblyName = GetType().Assembly.GetName().Name;
+
+		if (!string.IsNullOrEmpty(assemblyName) && !assemblyName.Equals(pluginName, StringComparison.OrdinalIgnoreCase)) {
+			yield return assemblyName;
+		}
+	}
+}

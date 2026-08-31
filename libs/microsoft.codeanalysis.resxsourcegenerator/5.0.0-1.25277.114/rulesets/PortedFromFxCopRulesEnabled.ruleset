@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<RuleSet Name="PortedFromFxCop Rules Enabled as build warnings" Description="All PortedFromFxCop Rules are enabled as build warnings. PortedFromFxCop Rules with IsEnabledByDefault = false are force enabled as build warning. Non-PortedFromFxCop Rules are disabled." ToolsVersion="15.0">
+   <!-- PortedFromFxCop Rules -->
+
+
+
+   <!-- Other Rules -->
+</RuleSet>
