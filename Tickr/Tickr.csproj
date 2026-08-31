@@ -76,16 +76,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe">
+		<Content Include="..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe;..\libs\steamkit2\3.4.0\gup.xml;..\libs\steamkit2\3.4.0\libcurl.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<Link>SteamKit2.Tools.exe</Link>
+			<Link>%(Filename)%(Extension)</Link>
 		</Content>
 	</ItemGroup>
 
-	<!-- Hard build requirement: SteamKit2.Tools.exe must be present at libs/steamkit2/3.4.0 - fail the build with a clear error otherwise -->
+	<!-- The working tool is a three-file bundle. Keep every companion beside the EXE in build and release output. -->
 	<Target Name="RequireSteamKit2Tools" BeforeTargets="BeforeBuild">
 		<Error Condition="!Exists('$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe')" Text="SteamKit2.Tools.exe is required to build Tickr but was not found at '$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe'. The file is committed to the repository (libs/steamkit2/3.4.0) - restore it and build again." />
+		<Error Condition="!Exists('$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\gup.xml')" Text="gup.xml is required beside SteamKit2.Tools.exe but was not found in 'libs/steamkit2/3.4.0'." />
+		<Error Condition="!Exists('$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\libcurl.dll')" Text="libcurl.dll is required beside SteamKit2.Tools.exe but was not found in 'libs/steamkit2/3.4.0'." />
 	</Target>
 
 	<Target Name="RunSteamKitTools" BeforeTargets="BeforeBuild" DependsOnTargets="RequireSteamKit2Tools" Condition="'$(OS)' == 'Windows_NT' AND '$(CI)' != 'true' AND Exists('$(MSBuildProjectDirectory)\..\libs\steamkit2\3.4.0\SteamKit2.Tools.exe')">
